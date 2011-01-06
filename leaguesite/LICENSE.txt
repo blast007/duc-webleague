@@ -1,5 +1,0 @@
-All the source code (exceptions: CMS/bzbb_login/checkToken.php, Servertracker/bzfquery.php and styles/GUlogo.png are LGPL v2 and ) is licensed under the lgpl version 3 (see the lgpl-3.0.txt file in the same directory) with the following  addition to that license:
-
-Remote Network Interaction:
- 
-Notwithstanding any other provision of this License, if you modify the Program, your modified version must prominently offer all users interacting with it remotely through a computer network (if your version supports such interaction) an opportunity to receive the Corresponding Source of your version by providing access to the Corresponding Source from a network server at no charge, through some standard or customary means of facilitating copying of software.
