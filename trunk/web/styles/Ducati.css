@@ -49,7 +49,7 @@ a.button:visited:hover, a.button:hover, a.loginbutton
 	color: #000;
 }
 
-td a , th a
+td a , th a, .msg_nav a
 {
 	color: 	#005981;
 }	

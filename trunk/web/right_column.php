@@ -8,14 +8,7 @@
 		</div>
 	</div>
 	
-	<!-- 
-	<h2>Shout box</h2>	
-	<div class="main-box">
-	
-	</div>
-	 -->
-	
-	
+
 	<div class="tabs">	
 		<ul class="tabNavigation">
 			<li><a href="#last-matches" class="matches">Last matches</a></li>
@@ -143,7 +136,8 @@ function display_top_teams($limit)
 	global $connection;
 	
 		$table_name = 'teams_overview';	
-	$query = 'SELECT * FROM `teams` t LEFT JOIN teams_overview tov ON tov.teamid = t.id ORDER BY tov.score DESC LIMIT 0,' . $limit;
+	$query = 'SELECT * FROM `teams` t LEFT JOIN teams_overview tov ON tov.teamid = t.id ' 
+	. ' WHERE deleted = 1 AND SUBSTRING(activity, 1, 4) != \'0.00\' ORDER BY tov.score DESC LIMIT 0,' . $limit;
 			
 	$result = ($site->execute_query($table_name, $query, $connection));
 	if (!$result)

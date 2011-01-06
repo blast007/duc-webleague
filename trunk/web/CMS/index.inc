@@ -43,6 +43,7 @@
 	echo '</title>' . "\n";
 
 ?>
+<link rel="shortcut icon" href="styles/favicon.ico">
 
 <script src='/js/jquery-1.4.2.min.js' type='text/javascript'></script>
 </head>
