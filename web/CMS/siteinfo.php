@@ -321,6 +321,7 @@
 		// give ability to use a limited custom style
 		function bbcode($string)
 		{
+					
 			if (strcmp(bbcode_lib_path(), '') === 0)
 			{
 				// no bbcode library specified

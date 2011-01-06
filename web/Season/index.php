@@ -1,3 +1,4 @@
+
 <?php
 	ini_set ('session.use_trans_sid', 0);
 	ini_set ('session.name', 'SID');
@@ -132,7 +133,7 @@
 	$query = ('SELECT sr.*, p.name AS leader_name, t.name AS teamname, t.leader_playerid, tov.score AS rating '
 	. ' FROM seasons_results sr '
 	. ' LEFT JOIN teams t ON (t.id = sr.teamid) '
-	. ' LEFT JOIN teams_overview tov ON (tov.id = sr.teamid) '
+	. ' LEFT JOIN teams_overview tov ON (tov.teamid = sr.teamid) '
 	. ' LEFT JOIN players p ON (p.id = t.leader_playerid) '
 	. ' WHERE seasonid = ' . $seasonid
 	. ' ORDER BY score DESC, wins DESC, draws DESC, losts DESC'	);
