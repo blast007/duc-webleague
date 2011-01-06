@@ -1,0 +1,81 @@
+/* @override http://192.168.1.10/~ts/BZFlag/Ligen/spieler.css */
+
+hr 
+{
+	clear:both;
+}
+
+*.schurke
+{
+	color: #121200;
+	font-weight: bold;
+}
+
+*.violett {
+	color: #800080;
+	font-weight: bold;
+}
+
+*.rot
+{
+	color: #f90f0f;
+	font-weight: bold;
+}
+
+*.gruen
+{
+	color: #0d990c;
+	font-weight: bold;
+}
+
+*.blau {
+	color: #1a09fc;
+	font-weight: bold;
+}
+
+*.zuschauer {
+	color: #999;
+	font-weight: bold;
+}
+
+*.mehl {
+	color: #999;
+}
+
+*.team {
+	color: #545454;
+	font-style: italic;
+}
+
+
+/*
+p.zaehler {
+	color: #353535;
+}
+*/
+
+span.zaehler {
+	font-weight: bold;
+}
+
+table.punkte {
+	margin-left:5em;
+	float: left;
+}
+
+table.spieler {
+	width: auto;
+	float: left;
+	clear: both;
+}
+
+tr:nth-child(even)
+{
+	background-color: transparent;
+}
+
+/* uneven (odd) table rows */
+tr:nth-child(odd)
+{
+	background-color: transparent;
+}
