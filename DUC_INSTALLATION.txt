@@ -12,6 +12,7 @@ Required permissions:
 	PHP's variable register_globals is required to be off.
 	PHP's variable magic_quotes_gpc is required to be off, see also
 		http://www.php.net/manual/en/info.configuration.php#ini.magic-quotes-gpc
+6. 	php-curl library  must be installed. 
 
 Installation steps:
 -------------------
@@ -36,6 +37,8 @@ Troubleshooting:
 
 Hard to predict what will fail, so also hard to predict what to do :) 
 But be sure error logs are set and accessible. 
+If there will be any problems with database import, probably webleague-importer must be launched again but without some importers (those which works fine).
+
 
 Possible problems:
 1. Site maintenance will not launch (could be done by editing match)
