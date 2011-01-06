@@ -6,11 +6,11 @@
 	@session_start();
 	
 	$display_page_title = 'BBCode libary updater';
-	require_once (dirname(__FILE__) . '/web/CMS/index.inc');
+	require_once (dirname(__FILE__) . '/CMS/index.inc');
 	
 	if (!isset($site))
 	{
-		require_once (dirname(__FILE__) . '/web/CMS/siteinfo.php');
+		require_once (dirname(__FILE__) . '/CMS/siteinfo.php');
 		$site = new siteinfo();
 	}
 	
@@ -96,7 +96,7 @@
 			// skip empty entries
 			if (!(strcmp($row['raw_description'], '') === 0))
 			{				
-				$query = ('UPDATE `players_profile` SET `description`=' . sqlSafeStringQuotes($site->bbcode($row['raw_description']))
+				$query = ('UPDATE `teams_profile` SET `description`=' . sqlSafeStringQuotes($site->bbcode($row['raw_description']))
 						  . ' WHERE `id`=' . sqlSafeStringQuotes($row['id']) . ' LIMIT 1');
 				// execute query, ignore result
 				@$site->execute_query('teams_profile', $query, $connection);
@@ -112,7 +112,7 @@
 		global $connection;
 		
 		$query = 'SELECT `id`, `raw_announcement` from `news`';
-		if (!($result = @$site->execute_query($db_to_be_imported, 'news', $query, $connection)))
+		if (!($result = @$site->execute_query('news', $query, $connection)))
 		{
 			// query was bad, error message was already given in $site->execute_query(...)
 			$site->dieAndEndPage('');
@@ -132,13 +132,13 @@
 	
 	
 	// ban entries
-	function import_bans()
+	function update_bans()
 	{
 		global $site;
 		global $connection;
 		
 		$query = 'SELECT `id`, `raw_announcement` from `bans`';
-		if (!($result = @$site->execute_query($db_to_be_imported, 'bans', $query, $connection)))
+		if (!($result = @$site->execute_query('bans', $query, $connection)))
 		{
 			// query was bad, error message was already given in $site->execute_query(...)
 			$site->dieAndEndPage('');
