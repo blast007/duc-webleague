@@ -6,12 +6,12 @@
 	@session_start();
 	
 	$display_page_title = 'Webleague DB importer';
-	require_once (dirname(__FILE__) . '/web/CMS/index.inc');
+	require_once (dirname(__FILE__) . '/CMS/index.inc');
 	//	require realpath('../CMS/navi.inc');
 	
 	if (!isset($site))
 	{
-		require_once (dirname(__FILE__) . '/web/CMS/siteinfo.php');
+		require_once (dirname(__FILE__) . '/CMS/siteinfo.php');
 		$site = new siteinfo();
 	}
 	
@@ -78,6 +78,89 @@
 //	{
 //		@$site->execute_query('all!', $one_call, $connection);
 //	}
+	
+	
+	
+	function clear_current_tables()
+	{
+		
+		global $site;
+		global $connection;
+		
+		$site->selectDB($site->db_used_name(), $connection);
+		$query = 'DELETE FROM `bans`';
+		// execute query, ignore result
+		$site->execute_query('bans', $query, $connection);
+		
+		$query = 'DELETE FROM  `countries` ';
+		// execute query, ignore result
+		$site->execute_query('countries', $query, $connection);
+		
+		$query = 'DELETE FROM  `invitations` ';
+		// execute query, ignore result
+		$site->execute_query('invitations', $query, $connection);
+		
+		$query = 'DELETE FROM  `matches` ';
+		// execute query, ignore result
+		$site->execute_query('matches', $query, $connection);
+		
+		$query = 'DELETE FROM  `matches_edit_stats` ';
+		// execute query, ignore result
+		$site->execute_query('matches_edit_stats', $query, $connection);
+		
+		$query = 'DELETE FROM  `messages_storage` ';
+		// execute query, ignore result
+		$site->execute_query('messages_storage', $query, $connection);
+		
+		$query = 'DELETE FROM  `messages_users_connection` ';
+		// execute query, ignore result
+		$site->execute_query('messages_users_connection', $query, $connection);
+		
+		$query = 'DELETE FROM  `news` ';
+		// execute query, ignore result
+		$site->execute_query('news', $query, $connection);
+		
+		$query = 'DELETE FROM  `online_users` ';
+		// execute query, ignore result
+		$site->execute_query('online_users', $query, $connection);
+		
+		$query = 'DELETE FROM  `players` ';
+		// execute query, ignore result
+		$site->execute_query('players', $query, $connection);
+		
+		$query = 'DELETE FROM  `players_profile` ';
+		// execute query, ignore result
+		$site->execute_query('players_profile', $query, $connection);
+		
+		$query = 'DELETE FROM  `static_pages` ';
+		// execute query, ignore result
+		$site->execute_query('static_pages', $query, $connection);
+		
+		$query = 'DELETE FROM `teams` ';
+		// execute query, ignore result
+		$site->execute_query('teams', $query, $connection);
+		
+		$query = 'DELETE FROM  `teams_overview` ';
+		// execute query, ignore result
+		$site->execute_query('teams_overview', $query, $connection);
+		
+		$query = 'DELETE FROM  `teams_permissions` ';
+		// execute query, ignore result
+		$site->execute_query('teams_permissions', $query, $connection);
+		
+		$query = 'DELETE FROM  `teams_profile` ';
+		// execute query, ignore result
+		$site->execute_query('teams_profile', $query, $connection);
+		
+		$query = 'DELETE FROM `visits` ';
+		// execute query, ignore result
+		$site->execute_query('visits', $query, $connection);
+		
+		$query = 'DELETE FROM  `seasons` ';
+		// execute query, ignore result
+		$site->execute_query('seasons', $query, $connection);
+		
+	}
 	
 	// reset auto-increment values of each table
 	function reset_auto_increment()
@@ -724,10 +807,9 @@
 					  . ',' . sqlSafeStringQuotes($row['points_win'])
 					  . ',' . sqlSafeStringQuotes($row['points_draw'])
 					  . ',' . sqlSafeStringQuotes($row['points_lost'])
-					  . ',' . sqlSafeStringQuotes($row['active'])
-					  . ')');
+					  . ',`yes`)');
 			// execute query, ignore result
-			@$site->execute_query('bans', $query, $connection);
+			@$site->execute_query('seasons', $query, $connection);
 		}
 		recalculate_all_seasons();
 	}
@@ -740,7 +822,8 @@
 		
 		//going through seasons
 		$site->selectDB($site->db_used_name(), $connection);
-		$query = 'SELECT * FROM `seasons` ORDER BY `startdate`';
+	
+		$query = 'SELECT * FROM `seasons` WHERE startdate != enddate ORDER BY `startdate`';
 		if (!($result_seasons = @$site->execute_query('seasons', $query, $connection)))
 		{
 			$site->dieAndEndPage('');
@@ -766,94 +849,98 @@
 				$site->dieAndEndPage('Could not recalculate seasons results due to a sql problem!');
 			}
 		
-			//clear old season data
-			$query = ('DELETE FROM `seasons_results` WHERE seasonid =' . sqlSafeStringQuotes($seasonid));
-				if (!($resultdelete = @$site->execute_query('seasons_results', $query, $connection)))
+			if (mysql_num_rows($result) > 0 )
 			{
-				$site->dieAndEndPage('Could not recalculate seasons results due to a sql problem!');
-			}
-			//go trough teams:	
-			while ($row = mysql_fetch_array($result))
-			{
-				$teamid = $row['id'];
-				$startdate = $row['startdate'];
-				$enddate = $row['enddate'];
-				$pointswin = $row['points_win'];
-				$pointslost = $row['points_lost'];
-				$pointsdraw = $row['points_draw'];
-				//update teamwins, losts, and draws 
-				$query = ('INSERT INTO  `seasons_results` (seasonid, teamid, wins, losts, draws) '
-				. ' VALUES (' . sqlSafeStringQuotes($seasonid) . ',' . sqlSafeStringQuotes($teamid)
-				. ' , ( ' //wins
+				//clear old season data
+				$query = ('DELETE FROM `seasons_results` WHERE seasonid =' . sqlSafeStringQuotes($seasonid));
+					if (!($resultdelete = @$site->execute_query('seasons_results', $query, $connection)))
+				{
+					$site->dieAndEndPage('Could not recalculate seasons results due to a sql problem!');
+				}
+				//go trough teams:	
+				while ($row = mysql_fetch_array($result))
+				{
+					$teamid = $row['id'];
+					$startdate = $row['startdate'];
+					$enddate = $row['enddate'];
+					$pointswin = $row['points_win'];
+					$pointslost = $row['points_lost'];
+					$pointsdraw = $row['points_draw'];
+					//update teamwins, losts, and draws 
+					$query = ('INSERT INTO  `seasons_results` (seasonid, teamid, wins, losts, draws) '
+					. ' VALUES (' . sqlSafeStringQuotes($seasonid) . ',' . sqlSafeStringQuotes($teamid)
+					. ' , ( ' //wins
+						. ' SELECT COUNT(matches.id) FROM `teams` LEFT JOIN matches '
+						. ' ON (`timestamp` between ' . sqlSafeStringQuotes($startdate) . ' AND ' . sqlSafeStringQuotes($enddate)
+						. ' AND ((team1_teamid = ' . sqlSafeStringQuotes($teamid) . ' AND team1_points > team2_points )'
+						. ' OR ( team2_teamid = ' . sqlSafeStringQuotes($teamid) . ' AND team2_points > team1_points )) )'
+						. ' WHERE `teams`.id = ' . sqlSafeStringQuotes($teamid) 
+					. ' ) , ( ' //losts
+					. ' SELECT COUNT(matches.id) FROM `teams` LEFT JOIN matches'
+						. ' ON (`timestamp` between ' . sqlSafeStringQuotes($startdate) . ' AND ' . sqlSafeStringQuotes($enddate)
+						. ' AND ((team1_teamid = ' . sqlSafeStringQuotes($teamid) . ' AND team1_points < team2_points )'
+						. ' OR ( team2_teamid = ' . sqlSafeStringQuotes($teamid) . ' AND team2_points < team1_points )) )'
+						. ' WHERE `teams`.id = ' . sqlSafeStringQuotes($teamid) 
+					. ' ) , ( ' //draws
 					. ' SELECT COUNT(matches.id) FROM `teams` LEFT JOIN matches '
-					. ' ON (`timestamp` between ' . sqlSafeStringQuotes($startdate) . ' AND ' . sqlSafeStringQuotes($enddate)
-					. ' AND ((team1_teamid = ' . sqlSafeStringQuotes($teamid) . ' AND team1_points > team2_points )'
-					. ' OR ( team2_teamid = ' . sqlSafeStringQuotes($teamid) . ' AND team2_points > team1_points )) )'
-					. ' WHERE `teams`.id = ' . sqlSafeStringQuotes($teamid) 
-				. ' ) , ( ' //losts
-				. ' SELECT COUNT(matches.id) FROM `teams` LEFT JOIN matches'
-					. ' ON (`timestamp` between ' . sqlSafeStringQuotes($startdate) . ' AND ' . sqlSafeStringQuotes($enddate)
-					. ' AND ((team1_teamid = ' . sqlSafeStringQuotes($teamid) . ' AND team1_points < team2_points )'
-					. ' OR ( team2_teamid = ' . sqlSafeStringQuotes($teamid) . ' AND team2_points < team1_points )) )'
-					. ' WHERE `teams`.id = ' . sqlSafeStringQuotes($teamid) 
-				. ' ) , ( ' //draws
-				. ' SELECT COUNT(matches.id) FROM `teams` LEFT JOIN matches '
-					. ' ON (`timestamp` between ' . sqlSafeStringQuotes($startdate) . ' AND ' . sqlSafeStringQuotes($enddate)
-					. ' AND ( ( team1_teamid = ' . sqlSafeStringQuotes($teamid) . ' OR team2_teamid = ' . sqlSafeStringQuotes($teamid) . ' )'
-					. ' AND team2_points = team1_points ) )'
-					. ' WHERE `teams`.id = ' . sqlSafeStringQuotes($teamid) 
-				. ' ) )');
-				
-				if (!($updateresult = $site->execute_query('seasons_results', $query, $connection)))
-				{
-					$site->dieAndEndPage('The seasons results match calulations could not be updated due to a sql problem!');
-				}
-				unset($teamid);
-				unset($startdate);
-				unset($enddate);
-				
-			}
-			
-			mysql_free_result($result);
-			//calculate teampoints
-			
-			$query = ('UPDATE `seasons_results` SET score = wins * ' . $pointswin . ' + losts * ' . $pointslost
-			. ' + draws * ' . $pointsdraw . ', num_matches_played = wins + losts + draws'
-			. ' WHERE seasonid = ' . sqlSafeStringQuotes($seasonid)		
-			);
-				
-			if (!($result = $site->execute_query('seasons_results', $query, $connection)))
-				{
-					$site->dieAndEndPage('The seasons results points could not be updated due to a sql problem!');
-				}
-				
-			unset($pointswin);
-			unset($pointslost);
-			unset($pointsdraw);
-			
-			//getting best 3 teams
-			$query = ('SELECT seasons.id, seasons_results.* FROM `seasons` ' 
-			. ' LEFT JOIN seasons_results ON (seasons_results.seasonid = seasons.id) '
-			. ' WHERE seasons.id = ' . sqlSafeStringQuotes($seasonid)		
-			. ' ORDER BY seasons_results.score DESC, seasons_results.wins DESC, seasons_results.draws DESC LIMIT 0,3');
-			
-			if (!($result = @$site->execute_query('seasons, seasons_results', $query, $connection)))
-			{
-				$site->dieAndEndPage('Could not get best teams due to a sql problem!');
-			}
-			//go trough teams:	
-			$place_no=1;
-			while ($row = mysql_fetch_array($result))
-			{		
-				$teamid =  $row['teamid'];
-				$query = ('UPDATE `seasons` SET team_' . $place_no . ' = ' . $teamid 
-				. ' WHERE id = ' . sqlSafeStringQuotes($seasonid));
+						. ' ON (`timestamp` between ' . sqlSafeStringQuotes($startdate) . ' AND ' . sqlSafeStringQuotes($enddate)
+						. ' AND ( ( team1_teamid = ' . sqlSafeStringQuotes($teamid) . ' OR team2_teamid = ' . sqlSafeStringQuotes($teamid) . ' )'
+						. ' AND team2_points = team1_points ) )'
+						. ' WHERE `teams`.id = ' . sqlSafeStringQuotes($teamid) 
+					. ' ) )');
 					
-				if (!($resultupdate = $site->execute_query('seasons', $query, $connection)))
+					if (!($updateresult = $site->execute_query('seasons_results', $query, $connection)))
 					{
-						$site->dieAndEndPage('The seasons best teams could not be updated due to a sql problem!');
+						$site->dieAndEndPage('The seasons results match calulations could not be updated due to a sql problem!');
 					}
-				$place_no++;
+					unset($teamid);
+					unset($startdate);
+					unset($enddate);
+				
+				
+				}
+				
+				mysql_free_result($result);
+				//calculate teampoints
+				
+				$query = ('UPDATE `seasons_results` SET score = wins * ' . $pointswin . ' + losts * ' . $pointslost
+				. ' + draws * ' . $pointsdraw . ', num_matches_played = wins + losts + draws'
+				. ' WHERE seasonid = ' . sqlSafeStringQuotes($seasonid)		
+				);
+					
+				if (!($result = $site->execute_query('seasons_results', $query, $connection)))
+					{
+						$site->dieAndEndPage('The seasons results points could not be updated due to a sql problem!');
+					}
+					
+				unset($pointswin);
+				unset($pointslost);
+				unset($pointsdraw);
+				
+				//getting best 3 teams
+				$query = ('SELECT seasons.id, seasons_results.* FROM `seasons` ' 
+				. ' LEFT JOIN seasons_results ON (seasons_results.seasonid = seasons.id) '
+				. ' WHERE seasons.id = ' . sqlSafeStringQuotes($seasonid)		
+				. ' ORDER BY seasons_results.score DESC, seasons_results.wins DESC, seasons_results.draws DESC LIMIT 0,3');
+				
+				if (!($result = @$site->execute_query('seasons, seasons_results', $query, $connection)))
+				{
+					$site->dieAndEndPage('Could not get best teams due to a sql problem!');
+				}
+				//go trough teams:	
+				$place_no=1;
+				while ($row = mysql_fetch_array($result))
+				{		
+					$teamid =  $row['teamid'];
+					$query = ('UPDATE `seasons` SET team_' . $place_no . ' = ' . $teamid 
+					. ' WHERE id = ' . sqlSafeStringQuotes($seasonid));
+						
+					if (!($resultupdate = $site->execute_query('seasons', $query, $connection)))
+						{
+							$site->dieAndEndPage('The seasons best teams could not be updated due to a sql problem!');
+						}
+					$place_no++;
+				}
 			}
 		}
 	}
@@ -869,7 +956,8 @@
 		global $connection;
 		
 		// get a rough max estimate of entries to be updated
-		$query = 'SELECT COUNT(*) AS `n` FROM `visits` WHERE `host`=' . sqlSafeStringQuotes('');
+		$query = 'SELECT COUNT(*) AS `n` FROM `visits` WHERE `host`=' . sqlSafeStringQuotes('') 
+		. ' AND `ip-address` <> ' . sqlSafeStringQuotes('NULL')	;
 		if (!($result = @$site->execute_query('visits', $query, $connection)))
 		{
 			$site->dieAndEndPage('Could not get list of entries where hostname is empty');
@@ -884,7 +972,8 @@
 		for ($i = 1; $i <= $n; $i++)
 		{
 			// select only 1 entry
-			$query = 'SELECT `ip-address` FROM `visits` WHERE `host`=' . sqlSafeStringQuotes('') . ' LIMIT 1';
+			$query = 'SELECT `ip-address` FROM `visits` WHERE `host`=' . sqlSafeStringQuotes('') 
+			. ' AND `ip-address` <> ' . sqlSafeStringQuotes('NULL') . ' LIMIT 1';
 			if (!($result = @$site->execute_query('visits', $query, $connection)))
 			{
 				$site->dieAndEndPage('Could not get list of entries where hostname is empty');
@@ -925,6 +1014,9 @@
 	$deleted_players['0']['callsign'] = 'CTF League System';
 	$deleted_players['0']['dummy'] = true;
 	
+	//this should be set with initial import on clear database;
+	//clear_current_tables();
+	
 	reset_auto_increment();
 	import_players();
 	import_teams();
@@ -932,7 +1024,7 @@
 	import_mails();
 	import_visits_log();
 	import_news();
-	import_bans();
+	import_bans(); 
 	import_seasons();
 	
 	// lookup array no longer needed
@@ -940,11 +1032,11 @@
 	
 	// do maintenance after importing the database to clean it
 	// a check inside the maintenance logic will make sure it will be only performed one time per day at max
-	require_once('web/CMS/maintenance/index.php');
+	require_once('CMS/maintenance/index.php');
 	
 	// (should take about 3 minutes to import the data until this point)
 	// disable this when not doing the final import because this last step would take 90 minutes
-	resolve_visits_log_hosts();
+//	resolve_visits_log_hosts();
 	
 	// done
 ?>
