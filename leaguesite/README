@@ -1,0 +1,42 @@
+
+Installing
+====================================
+
+Installing is not easy. It is recommended you have basic PHP knowledge before proceeding.
+
+First of all PHP 5.3 is recommended.
+PHP's variable register_globals is required to be off.
+PHP's variable magic_quotes_gpc is required to be off, see also
+	http://www.php.net/manual/en/info.configuration.php#ini.magic-quotes-gpc
+
+You need to set up two configuration files
+	CMS/siteoptions_path.php: file that shows the code where the actual config resides.
+				  A template is available at CMS/siteoptions_path_example.php
+	siteoptions.php: The actual config. This file should not reside in the webserver dir.
+			 Also it is required to be readable by PHP.
+			 A template is at CMS/siteoptions_example.php
+
+You may use the examples to modify them. :)
+	cp siteoptions_path_example.php siteoptions_path.php
+Note that in this example commands it is assumed you would use the default path in siteoptions_path.php
+	cp siteoptions_example.php ../../siteoptions.php
+
+Now you need to set up the relational database management system.
+At the moment only using mysql is possible.
+
+A database structure dump can be found in ts-CMS_structure.sql within this directory.
+To avoid concurrent access and performance issues it is recommended to use a database only for this league software.
+
+It is highly recommended to use a BBCode library. See the CMS/nbbc-wrapper.php example file.
+
+Updates
+-----------
+
+By using svn up you should get a new version of the source code, if available.
+However the database structure may has changed. It is planned to provide an updater between major stable versions.
+
+If you upgrade your BBCode library it is recommended to run the bbcode-library-updater.php (requires the website to be in the web dir) but keep in mind
+this will break legacy data in the database.
+
+
+

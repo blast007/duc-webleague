@@ -1,0 +1,40 @@
+New ducati site installation and migration
+==================================================
+
+Required permissions:
+------------------------
+1.	Read/write access to a database with creating new database perms 
+2.	IMPORTANT: database user we use in new application should have access to old database too! 
+	Could be old user or new one with granted permissions.
+3.	PHP conf access (for creating new, temporary domain - recommended)
+4.	File read/write access for application directory, via ssh or sftp/ftp
+5.	PHP 5.3 is recommended.
+	PHP's variable register_globals is required to be off.
+	PHP's variable magic_quotes_gpc is required to be off, see also
+		http://www.php.net/manual/en/info.configuration.php#ini.magic-quotes-gpc
+
+Installation steps:
+-------------------
+1.	Prepare a database backup for current site (just in case)
+2.	Create new database for new site (using ducati-CMS_structure.sql file)
+3.	Create new location on server for new application  
+4.	Set new domain for new site (i.e. league2.bzflag.net)
+5.	Upload application files into new location
+6.	Update configuration files: 
+		/CMS/siteoptions.php
+		/CMS/siteoptions_path.php
+7.	Run webleague-importer.php
+8.	Run bbcode-library-updater.php
+9.	Delete webleague-importer.php
+10.	Delete bbcode-library-updater.php 
+11. Check if site works :)
+12. Check if servertracker in background works
+	There is a command: exec('php ' . dirname(__FILE__) . '/cli/servertracker_query_backend.php >/dev/null &');
+	It will not work if php alias is not set. 
+	
+	
+Troubleshooting:
+----------------
+
+Hard to predict what will fail, so also hard to predict what to do :) 
+But be sure error logs are set and accessible. 

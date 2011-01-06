@@ -1,0 +1,252 @@
+
+Information for the League Website Developer
+====================================
+
+BZFlag source code lives in the following directories:
+
+often re-used code
+------------
+CMS/				- the central storage for important files
+CMS/announcements	- the code to handle bzmails, news and ban entries
+CMS/*_login			- the modules that handle the backend login logic
+CMS/maintenance		- maintenance script to clean and to update the database
+
+pages in navigation
+------------------------
+*/			- source code of the page in navigation, usually with same name
+index.php	- home page
+
+"other stuff"
+-------------
+rss/		- exporting data to 3rd party sites
+
+Note that only a few directories contain code directly related to the
+game BZFlag.  In particular: CMS/bzbb_login and Servertracker.
+
+Coding conventions
+==================
+
+If you plan on contributing any source code to this website, we would like
+you to follow certain conventions.  Contributions that don't conform are
+likely to be ridiculed and rejected until they do.
+
+Code Organization
+-----------------
+PHP files use the .php extension. Include files use the .inc extension. Javascript files use the .js extension.
+References in the outputted markup must not include the extension.
+If you link to Login/index.php the produced link in the (X)HTML must point to Login/ and NOT to Login/index.php.
+
+Formatting
+----------
+Everybody has their own style and has things they don't like about any
+other style.  Well, we can't have a zillion styles in the code, so
+follow this league website style if you want your contribution included.  The
+source code serves for examples of the following rules.
+
+  1)  Indents are done using tabs. The tab width is 4.
+
+  2)  The opening brace of all blocks goes on the following line after the
+      statement introducing it.  The closing brace is indented
+      like the statement except for functions where it aligns with the
+      open brace.  For example:
+
+	void foo()
+	{
+		for (;;)
+		{
+			if (expr)
+			{
+				
+			}
+		}
+	}
+
+  3)  An else clause goes on the following line (there are many unacceptable
+      alternatives):
+
+	if (expr)
+	{
+		
+	} else
+	{
+		
+	}
+
+  4)  Defines names are all capitals, class names have the first letter
+      of each word capitalized, all other names have the first letter
+      of each word except the first capitalized.  Only macros may use
+      underscores, except for in the names of method parameters where
+      a leading underscore is allowed to make it different from a
+      member variable.
+
+  5)  Put spaces after statements followed by expressions and spaces
+      around operators.  For example:
+	if (a == b)
+      not
+	if(a==b)
+
+  6)  Do not leave old commented code hanging around and do not submit
+      patches with "// Added by foo on xx" comments.  This is what
+      version control software is for.
+
+ 10)  Do not code very long lines.  Try to stay within 130 columns if
+      possible, but don't go over 155 if you should raise that limit
+      for some reason.
+
+Violations of these rules in the existing code are not excuses to
+follow suit.  Non-conforming code may be fixed.  Patches to
+non-conforming code should follow the non-conforming code's style if
+following the rules would cause an ugly mess.
+
+Performance
+-----------
+
+If the code you are editing is in a performance-critical section of
+the code (that is, if it is called very often, you should profile the
+proposed changes.  The new code does not necessarily need to be
+faster, but a quantitative analysis is required.
+
+
+Committing Changes
+==================
+
+Make atomic changes in a way that a system will be working, or at least
+will compile successfully, before and after committing a set of changes.
+
+Try to separate out bigger commits into smaller ones.  In particular,
+if a change involves multiple functionality changes, the commit should
+be broken up into smaller coherent chunks.  This way if a bug or other
+issue with a particular commit is later encountered, the change can be
+more easily isolated and undone or fixed.
+
+Making Patches
+--------------
+
+If you do not have source code commit access and would like to propose
+a change for inclusion, you should create a patch.  Patches should be
+submitted to the maintainer at BZBB:
+
+http://my.bzflag.org/bb/
+
+You can create a patch for submission from a source
+checkout using the following command:
+
+svn diff -u > my_patch_name.diff
+
+If your patch results in the deletion of existing files, you can
+annotate that deletion by adding it to the patch like this:
+
+diff -u */somefile.php /dev/null >> my_patch_name.diff
+
+If your patch requires the addition of new files, simply include these
+new files individually or in a tarball as part of the patch submission.
+
+In general, patches should be relatively small succinct changes that
+can be readily reviewed, tested, and applied.  Patches that are
+difficult to review, test, or apply will likely not be accepted.  That
+said, creating useful patches that have been discussed with the
+existing developers is one of the more immediate means to become a
+developer for this league website yourself.
+
+Licensing
+---------
+
+By committing to a source code repository or submitting a patch, you
+the developer are giving the project maintainer (Thomas Stauer), and his
+successors various rights to the work submitted, as defined below.
+
+Grant of Copyright License.
+Each Contributor hereby grants to The Project Maintainer a perpetual,
+worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+copyright license to reproduce, prepare Derivative Works of, publicly
+display, publicly perform, sublicense, and distribute the Work and
+such Derivative Works in Source or Object form.
+
+Grant of Patent License.
+Each Contributor hereby grants to The Project Maintainer a perpetual,
+worldwide, non-exclusive, no-charge, royalty-free, irrevocable (except
+as stated in this section) patent license to make, have made, use,
+offer to sell, sell, import, and otherwise transfer the Work, where
+such license applies only to those patent claims licensable by such
+Contributor that are necessarily infringed by their Contribution(s)
+alone or by combination of their Contribution(s) with the Work to
+which such Contribution(s) was submitted.  If the Contributor
+institutes patent litigation against any entity (including a
+cross-claim or counterclaim in a lawsuit) alleging that the Work or a
+Contribution incorporated within the Work constitutes direct or
+contributory patent infringement, then any patent licenses granted to
+the Contributor under this License for that Work shall terminate as of
+the date such litigation is filed.
+
+Submission of Contributions.
+Any Contribution intentionally submitted for inclusion in the Work by
+Contributors to the Project shall be under the terms and conditions of
+this License, without any additional terms or conditions.
+Notwithstanding the above, nothing herein shall supersede or modify
+the terms of any separate license agreement you may have executed with
+Licensor regarding such Contributions.
+
+Notes.
+As the original author you may distribute, modify, transfer, and
+relicense your copy of a submitted work as you see fit, provided it
+does not have additional licensing restrictions from being a derived
+work.  You may not place any restrictions on how the project
+maintainer maintains or handles your submitted works.
+Works that are derivations of existing works in the project are
+subject to the current project license ("modified LGPL").  Authors that submit
+works must have the legal right to agree to these terms, either as
+original author or authorized licensee of derived works.
+
+Testing
+=======
+You should, of course, test if your changes do work before commiting changes.
+
+
+Sounds
+======
+Do not use sounds.
+
+
+Images
+======
+Images are stored as portable network graphics (.png).  Compression is
+okay, but no additional options such as interlacing.
+
+
+BZDB
+====
+BZDB is the generic name:value pair database within bzflag and
+bzfs.  It is useful for data that can be serialized to a string that
+needs to be accessible to many areas of the code.  It also provides
+facilities for saving persistent pairs to the config file and
+downloading variables from the server.
+
+BZDB is not an object broker, and isn't meant to be.  If you have data
+within an object that needs to be accessible from a number of places,
+but don't want to pass the object around, you could store that data
+within BZDB (if accessed often, such as game variables like gravity,
+you will need a cached version anyway to avoid the overhead of
+lookup).  Using BZDB adds unnecessary overhead if objects generally
+keep their data hidden without needing persistent state.
+
+Basically, if your data can be serialized to a string, and it makes
+sense to do so (eg: config file option, game variable downloaded from
+server), use BZDB.  If you wanted an object broker, use a freakin'
+global.
+
+
+Making a Release
+================
+In order to make a release, there are handful of steps that need to be
+taken.  If any step fails to be completed successfully, the release
+cannot proceed.  A checklist of items to be completed follows:
+
+- All code is committed to the repository.
+
+- NEWS includes a comment for all items added since the previous
+  release, preferably denoting who made what changes.
+
+- Version numbers are updated to the next expected release number.
+
+- Tag the release.  Tag format should be consistent with the other
+  tags using the format of vMAJOR_MINOR_RELEASE
