@@ -1,0 +1,1539 @@
+
+html 
+{
+	background:#000000;
+	height:100%;
+	padding:0px;
+}
+	
+
+body
+{
+	background: #161616 url(Ducati_misc/tank.png) 100% 100% no-repeat;
+	color: white;
+	max-width: 100em;
+	min-width: 80em;
+	min-height:100%;
+	margin:0px auto; 
+	font-size:75%;
+	font-family: Verdana, sans-serif;
+}
+
+.footer 
+{
+	clear: both;
+	color: #666;
+	font-size:0.6em;
+}
+/* remove underline from links */
+a
+{
+	color:  #33DDFF;
+	text-decoration: none;
+}
+
+
+a:hover
+{
+	color: #ddaf08;
+}
+
+
+a:visited:hover
+{
+	color: #ddaf08;
+}
+
+a.button:visited:hover, a.button:hover, a.loginbutton
+{
+	color: #000;
+}
+
+td a , th a
+{
+	color: 	#005981;
+}	
+	
+td a:hover, td a:visited:hover, .msg_nav a:hover
+{
+	color: #005981;
+	text-decoration:underline;
+}	
+
+a:active
+{
+	color : #EDD57E;
+}
+
+.p0 
+{
+	padding:0px !important;	
+}
+
+#top 
+{
+	background: url(Ducati_misc/bg_top.png) repeat-x;
+	height:139px;
+	position:relative;	
+	border-bottom:1px solid #666666;
+}
+
+#infobar 
+{
+	position:absolute;
+	bottom:0px;
+	width:100%;
+}
+
+
+/* navigation */
+
+ul.navigation, ul.small-navigation
+{
+	font: bold 1em Verdana, "Lucida Grande", Lucida, sans-serif;
+	display: block;
+	margin-top: 0;
+	list-style: none;
+	color:white;
+	text-transform: uppercase;
+}	
+
+ul.navigation
+{
+	text-align: center;	
+	margin-right: 0.2em;
+	margin-bottom: 0.5em;
+	padding: 0px 0.5em 0.2em 0.5em;
+	margin-left:300px;
+	min-width:56em;
+}
+
+ul.navigation li
+{
+	list-style: none;
+	display: block;
+	float:left;
+	position:relative;
+}
+
+ul.navigation li ul 
+{
+	display:none;
+	background-color:#000000;
+	position:absolute;
+	top:110px;
+	left:0px;
+	padding:0px;
+	z-index:10;
+	border-top:1px solid #AAAAAA;
+	
+}
+	
+ul.navigation li:hover ul 
+{
+	display:block;	
+}
+
+ul.navigation ul li 
+{
+	float:none;	
+	padding:1px 10px;
+	border-bottom:1px solid #AAAAAA;
+	border-right:1px solid #AAAAAA;
+	border-left:1px solid #AAAAAA;
+}
+
+
+
+ul.navigation li a , ul.navigation li span
+{
+	padding:0px 1em;
+	background-position: 50% 90%;
+	background-repeat: no-repeat;
+	height:110px;
+	display:block;
+}
+
+
+
+ul.navigation ul li a, ul.navigation ul li span 
+{
+	padding:5px;
+	height:auto;
+	background-image:none !important;	
+	display:inline;
+	line-height:1.4em;
+	white-space:nowrap;
+	
+}
+
+ul.navigation a:focus
+{
+	outline:none;
+}
+ul.navigation a, ul.navigation span
+{
+	line-height:200px;
+	color: #FFFFFF;
+	text-decoration : none;
+	font-weight: bold;
+	font-variant: normal;
+	padding-top:70px;
+}
+
+ul.navigation .info span, ul.navigation .tools span {color: #FFF;}
+ul.navigation .info li span, ul.navigation .tools li span {color: #ddaf08;}
+
+ul.navigation a.current_nav_entry  , ul.navigation li span, .small-navigation a.current_nav_entry, .small-navigation li span
+{
+	color: #ddaf08;
+}
+
+
+
+ul.navigation a:active, .small-navigation a:active
+{
+	color : #ddaf08;
+	text-decoration : underline;
+}
+
+ul.navigation a:hover, .small-navigation a:hover
+{
+		color: #ddaf08;
+}
+
+ul.navigation li:hover {
+	background: url(Ducati_misc/bg_transparent.png) repeat;
+}
+
+ul.navigation li li:hover 
+{
+	background-image:none;	
+} 
+
+ul.navigation .home a, ul.navigation .home span {background-image: url(Ducati_misc/menu_home.png);}
+ul.navigation .news a, ul.navigation .news span {background-image: url(Ducati_misc/menu_news.png);}
+ul.navigation .players a, ul.navigation .players span {background-image: url(Ducati_misc/menu_players.png);}
+ul.navigation .teams a, ul.navigation .teams span {background-image: url(Ducati_misc/menu_teams.png);}
+ul.navigation .matches a, ul.navigation .matches span {background-image: url(Ducati_misc/menu_matches.png);}
+ul.navigation .seasons a, ul.navigation .seasons span {background-image: url(Ducati_misc/menu_seasons.png);}
+ul.navigation .forum a, ul.navigation .forum span {background-image: url(Ducati_misc/menu_forum.png);}
+ul.navigation .info a, ul.navigation .info span {background-image: url(Ducati_misc/menu_info.png);}
+ul.navigation .tools a, ul.navigation .tools span {background-image: url(Ducati_misc/menu_tools.png);}
+
+
+/* login / mail menu */
+.small-navigation 
+{
+	position:absolute;
+	top:0.5em;
+	right:2em;	
+}
+
+.small-navigation li
+{
+	display:inline;
+	padding:1px 15px;
+}
+
+
+.small-navigation li a
+{
+	color:#FFF;
+}
+
+.unread 
+{
+	background:url(Ducati_misc/ico_mail.gif) 0px 50% no-repeat;	
+}
+.unread a 
+{	
+	color:#FF0000 !important;
+	padding-left:10px;
+}	
+	
+/* wrap lines when there is not enough space */
+pre
+{
+	white-space: pre-wrap;
+}
+
+div.logo
+{
+	background: url(Ducati_misc/ducati_logo.png) no-repeat center;
+	position:absolute;
+	top:20px;
+	left:20px;
+	height: 88px;
+	width:247px;	
+}
+
+
+.toolbar
+{
+	text-align:right;	
+	padding-right:0.1em;
+	padding-left: 3em;
+}
+
+.toolbar a 
+{
+	padding:2px 10px;
+	border-bottom:1px solid #333;
+	font-weight:bold;
+	color: #FFF;	
+}
+
+.toolbar a.button , .simple-paging a, input.button, #chat #submit
+{	
+	background: #ddaf08;
+	color:#000;
+	border: 1px solid #fff;
+	font-weight:bold;
+	-moz-border-radius: 0.5em 0.5em 0.5em 0.5em;
+	/* Don't know what the final CSS 3 spec will be */
+	border-radius: 0.5em 0.5em 0.5em 0.5em;
+	margin:5px;
+}
+
+.toolbar a:hover
+{
+	color: #DDAF08;
+}
+
+.toolbar a.button:hover,  .simple-paging a:hover
+{	
+	color:#000;
+}
+
+.simple-paging
+{
+	clear:both;
+	padding:5px;
+	height:2.5em;
+	float:left;
+	
+}
+p.simple-paging 
+{
+	float:none;
+}
+	
+	
+
+.simple-paging a 
+{
+	font-weight:bold;
+	padding:3px 10px;
+}
+ .simple-paging a.button 
+ {
+ 	float:left;
+ }
+
+.simple-paging a.next, .next 
+{
+	float:right;
+}
+
+.previous
+{
+	float:left;
+}
+
+.next:after 
+{
+	content: " >>";	
+}
+
+.previous:before
+{
+	content: "<< ";	
+}
+	
+
+p.first_p
+{
+	position: relative;
+	margin-top: 0;
+}
+
+
+/* I want fancy tables */
+table
+{
+	display: inline-block;
+	color: black;
+}
+
+table.big
+{
+	display: block;
+	width:100%;
+}
+
+.home-right table
+{
+	display:block;
+	width:100%;	
+	font-size:0.8em;
+}
+th
+{
+	height: 1.5em;
+	max-width: 80%;
+	padding: 7px;
+	background-color: #b5910e;
+	border-collapse: collapse;
+}
+
+th a:hover , th a:visited:hover
+{
+	color: #005981;
+    text-decoration: underline; 	
+}
+
+.home-right td, .home-right th
+{
+	padding:2px 5px;
+	width:1%;
+}
+
+table.big td,  table.teams-list td 
+{
+	width: 1%;
+	line-height: 19px;
+}
+
+.teams-list td+td, .matches-list td+td
+{
+	width: 40%;
+}
+.teams-list td+td+td, .matches-list td, .matches-list td+td+td
+{
+	width: 20%;
+}
+td
+{
+	padding: 7px;
+	background: #e4d49b;
+}
+
+#chart-summary 
+{
+	float:left; 
+	width:20em;
+	height:11em;
+	margin: 5px;	
+}
+
+.team-results
+{
+	float:right;
+}
+
+/* even table rows */
+tr:nth-child(even) td
+{
+	background: #e4d49b;
+}
+
+/* uneven (odd) table rows */
+tr:nth-child(odd) td
+{
+	background: #fFF;
+}
+
+/* content boxes */
+div.content
+{
+	color: white;
+	text-align: left;
+	padding:1em 2em;
+}
+
+.simpleform
+{
+	display:block;
+	border: 1px solid #2f2f2f;
+	background: #1f1f1f;
+	text-align:center;
+	padding:10px;
+}
+
+.simpleform .formrow 
+{
+	display:inline;
+	padding:0px 5px;
+}
+
+.simpleform .button , .msg_buttons input, .loginbutton
+{
+	padding:2px 5px;
+	background: #ddaf08;
+	border: 1px solid #fff;
+	font-weight:bold;
+	-moz-border-radius: 0.5em 0.5em 0.5em 0.5em;
+	/* Don't know what the final CSS 3 spec will be */
+	border-radius: 0.5em 0.5em 0.5em 0.5em;
+}
+
+#season_startdate, #season_enddate {width:12em;}
+
+
+
+h1 
+{
+	background:url(Ducati_misc/bg_h1.png) repeat-x;
+	text-transform:uppercase;
+	font-weight:normal;
+	font-size:2em;
+	line-height:2em;
+	letter-spacing:condensed;
+	color: #ddaf08;
+	height:49px;
+	margin:10px 0px;
+	padding:0px 25px 0px 65px;
+	float:left;
+	-webkit-border-top-left-radius: 0.5em;
+	-webkit-border-top-right-radius: 0.5em;
+	-webkit-border-bottom-right-radius: 0.5em;
+	-webkit-border-bottom-left-radius: 0.5em;
+	-moz-border-radius: 0.5em 0.5em 0.5em 0.5em;
+	/* Don't know what the final CSS 3 spec will be */
+	border-radius: 0.5em 0.5em 0.5em 0.5em;
+	position:relative;
+}	
+
+h1 span 
+{
+	color: #FFF;
+}
+h1:before 
+{
+	content: " ";
+	display:block;
+	position:absolute;
+	top:0px;
+	left:5px;
+	height:48px;
+	width:60px;
+	margin-right:5px;	
+}	
+
+h1:after 
+{
+	content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+h1.seasons:before { background: url(Ducati_misc/ico_seasons.png) 50% 50% no-repeat;	 }
+h1.teams:before { background: url(Ducati_misc/ico_teams.png) 50% 50% no-repeat;	 }
+h1.matches:before { background: url(Ducati_misc/ico_matches.png) 50% 50% no-repeat;	 }
+h1.players:before { background: url(Ducati_misc/ico_players.png) 50% 50% no-repeat;	 }
+h1.info:before { background: url(Ducati_misc/ico_info.png) 50% 50% no-repeat;	 }
+h1.tools:before { background: url(Ducati_misc/ico_tools.png) 50% 50% no-repeat;	 }
+h1.news:before { background: url(Ducati_misc/ico_news.png) 50% 50% no-repeat;	 }
+
+
+
+
+div.userbuttons
+{
+	text-align: right;
+	color: #edd57e;
+	margin:0.2em 1em;
+	font-size: 0.9em;
+	padding: 0.2em 0.5em;
+}
+
+div.userbuttons span.date
+{
+	float: left;
+}
+
+.userbuttons a 
+{
+	font-weight:bold;
+	color:#FFF;		
+}
+span.Servers + span.onlineUsers:before
+{
+	content: " - ";
+}
+
+div.online_user
+{
+	text-align: center;
+}
+
+.main-box, .static_page_box
+{
+	clear:both;
+	border: 1px solid #4e4e4e;
+	background: url(Ducati_misc/bg_dark_box.png) repeat;
+	padding:10px;
+	margin-bottom:10px;
+}	
+	
+.home-left
+{
+	width:55%;
+	float: left;
+	margin-right:2%;
+}	
+
+.home-right 
+{
+	margin-top: -40px;
+	float: right;
+	width: 40%;
+		
+}
+
+
+.tabNavigation 
+{
+	padding: 0px;
+	margin: 0px;
+}
+.tabNavigation li 
+{
+	list-style: none;
+	display:block;
+	float: left;
+}	
+
+.tabNavigation li
+{
+	margin-bottom: -1px;
+	display:inline;
+	margin-right:1px;
+	background: #121212;
+	text-transform: uppercase;
+
+}
+
+
+.tabNavigation li a
+{
+	border: 1px solid #4e4e4e;
+	-webkit-border-radius: 0.5em 0.5em 0 0;
+	-moz-border-radius: 0.5em 0.5em 0 0;
+	border-radius:  0.5em 0.5em 0 0;
+	background-color: #333;
+	padding: 3px 5px 3px 27px;
+	line-height:1.4em;
+	display:block;
+	color: #ddaf08;
+	background-position:1px 1px;
+	background-repeat: no-repeat;
+}
+
+.tabNavigation li A.selected, .tabNavigation li A:hover 
+{
+    background-color: #121212;
+    border-bottom-color: #121212;    
+    color: #ddaf08;
+ }
+.tabNavigation li a:focus
+{
+	outline: none;
+} 
+
+
+a.teams { background-image: url(Ducati_misc/ico_teams_small.png) 	 }
+a.matches { background-image: url(Ducati_misc/ico_matches_small.png)  }
+a.players{ background-image: url(Ducati_misc/ico_players_small.png)  }
+
+/* that's for single blocks with small header (like news block) */ 
+.home-right h2 
+{
+	background:url(Ducati_misc/bg_h2.png) repeat-x;
+	text-transform:uppercase;
+	font-weight:normal;
+	font-size:1em;
+	line-height:2em;
+	letter-spacing:condensed;
+	color: #ddaf08;
+	height:25px;
+	margin:10px 0px 5px;
+	padding:0px 25px 0px 35px;
+	float:left;
+	position:relative;
+	-webkit-border-radius: 0.5em 0.5em 0.5em 0.5em;
+	-moz-border-radius: 0.5em 0.5em 0.5em 0.5em;
+	/* Don't know what the final CSS 3 spec will be */
+	border-radius: 0.5em 0.5em 0.5em 0.5em;
+}	
+
+.home-right h2 span 
+{
+	color: #FFF;
+}
+.home-right h2:before 
+{
+	content: " ";
+	display:block;
+	position:absolute;
+	top:0px;
+	left:5px;
+	height:24px;
+	width:25px;
+	margin-right:5px;	
+}	
+
+.home-right h2:after 
+{
+	content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.home-right h2.teams:before { background: url(Ducati_misc/ico_teams_small.png) 50% 50% no-repeat;	 }
+.home-right h2.matches:before { background: url(Ducati_misc/ico_matches_small.png) 50% 50% no-repeat;	 }
+.home-right h2.news:before { background: url(Ducati_misc/ico_news_small.png) 50% 50% no-repeat;	 }
+.home-right h2.players:before { background: url(Ducati_misc/ico_players_small.png) 50% 50% no-repeat;	 }
+
+.home-right .button 
+{
+	padding:1px 3px;
+	font-size:0.8em;
+	font-weight:normal;
+}
+.home-right .simple-paging
+{
+	height:1.5em;
+	margin:5px 0px 0px;
+}
+	
+	
+
+/* private messages */
+
+.msg-box 
+{
+	width:60em;
+}
+
+div.msg_nav
+{
+	display: block;
+	clear:both;
+	margin: 0;
+	text-align: left;
+}
+
+.msg_nav *
+{
+	border: 1px solid #4e4e4e;
+	margin-bottom: -1px;
+	padding:1em 2em;
+	display:block;
+	float:left;
+	margin-right:1px;
+	background: #121212;
+	-webkit-border-radius: 0.5em 0.5em 0 0;
+	-moz-border-radius: 0.5em 0.5em 0 0;
+	border-radius:  0.5em 0.5em 0 0;
+	font-weight:bold;
+}
+.msg_nav a 
+{
+	background: #c4bda5;	
+}
+
+.msg_nav span, .msg_nav a.active
+{
+	border-bottom-color: #121212;
+	background: #121212;
+}	
+	
+
+
+span.prev_next_msg_buttons
+{
+	margin-left: 1em;
+}
+
+span.unread_messages
+{
+	color: #dd4718;
+}
+
+a.msg_overview_unread:link
+{
+	color: #dd4718;
+	font-weight: bold;
+}
+
+label.msg_send
+{
+	width: 15em;
+	text-align: right;
+	float: left;
+	padding: 1mm 2mm 0 0;
+}
+
+label.msg_ann, label.msg_edit
+{
+	width: 7em;
+	text-align: right;
+	float: left;
+	padding: 0.1em 0.2em 0 0;
+}
+
+
+.msg_buttons
+{
+	margin-left:7.2em;
+	margin-top:0.4em;
+}
+
+
+label.team_change
+{
+	width: 9em;
+	text-align: right;
+	float: left;
+	padding: 1mm 2mm 0 0;
+}
+
+* + div.team_change
+{
+	margin-top: 0.2em;
+	margin-left: -9.3em;
+}
+
+input[type=text]
+{
+	width: 10cm;
+	max-width: 100%;
+	margin-bottom: 2mm;
+	-webkit-border-radius: 0.5em;
+	-moz-border-radius: 0.5em;
+	border-radius: 0.5em;
+}
+
+textarea
+{
+	-webkit-border-radius: 0.5em;
+	-moz-border-radius: 0.5em;
+	border-radius: 0.5em;
+	width: 59em;
+	height: 25em;
+}
+
+input[type=text].small_input_field
+{
+	width: auto;
+	margin-bottom: 2mm;
+}
+
+input[type=text][readonly]
+{
+	background-color: #f4f4f4;
+}
+
+
+input[type=submit]
+{
+	padding:2px 10px;
+}
+
+
+div.invisi
+{
+	visibility: hidden;
+}
+
+
+textarea#msg_send_announcement
+{
+	width: 10.1cm;
+	max-width: 100%;
+	height: 10em;
+	max-height: 90%;
+}
+
+/* news announcements */
+a#new_entry.button + br +br + span
+{
+	display: block;
+	text-align: right;
+	margin-bottom: 0.15em;
+	margin-top: -2.6em;
+}
+
+.edit_and_delete_links
+{
+	text-align: right;
+	margin-bottom: 0.1em;
+}
+
+.edit_and_delete_links a 
+{
+	background: #ddaf08;
+	color:#000;
+	border: 1px solid #fff;
+	-moz-border-radius: 0.3em 0.3em 0.3em 0.3em;
+	/* Don't know what the final CSS 3 spec will be */
+	border-radius: 0.3em 0.3em 0.3em 0.3em;
+	margin:2px;
+	padding:1px 5px;
+	font-size: 0.8em;
+}
+
+div.article, .msg_area
+{
+	display:block;
+	border: 1px solid #2f2f2f;
+	background: #1f1f1f;
+	padding:10px;
+}
+
+div.article_header, div.msg_header_full
+{
+	color: #EDD57E;
+	border-bottom: 1px solid #aaa;
+	font-size:0.9em;
+	margin:0px 0px 5px 0px;
+	padding: 2px 10px;
+	
+}
+
+
+div.timestamp
+{
+	text-align: left;
+	float: left;
+}
+
+
+div.author
+{
+	text-align: right;
+	color:white;
+}
+
+div.article p
+{
+	margin-bottom: 0;
+	margin-top: 0.5em;
+	color: #FFF;
+	text-align:left;
+	padding: 1em;
+	
+}
+
+/* this  is only a theoretical case but handle it because a new message
+ might get an id previously used by a deleted message */
+a.msg_overview_unread:visited
+{
+	color: #dd4718;
+	font-weight: bold;
+}
+
+
+
+div.msg_view_full
+{
+	padding: 1em;
+	margin-bottom: 1em;
+}
+
+
+span.msg_subject
+{
+	font-weight: bold;
+}
+
+span.msg_author
+{
+	font-style: normal;
+	padding-left: 1em;
+	font-weight: normal;
+	color: #FFF;
+}
+
+span.msg_timestamp
+{
+	font-style: italic;
+	padding-left: 1em;
+	float:right;
+}
+
+span.msg_recipient_seperator
+{
+    color: #808080;
+}
+
+div.msg_contents
+{
+	margin-top: 0.2em;
+}
+
+/*team profile*/
+div.team_area
+{
+	display: block;
+	overflow: auto;
+}
+
+div.team_header
+{
+	display: block;
+	min-width: 84%;
+	margin-bottom: 1em;
+	line-height: 1.5em;
+}
+
+h2 
+{
+	color: #DDAF08;	
+}
+
+.team_header .label , .user_area .label
+{
+	color:#AFAFAF;	
+	display:block;
+	float:left;
+	width:8em;
+	text-align:right;
+	padding-right: 5px;
+}
+
+img.team_logo
+{
+	float: right;
+	margin-top: 1em;
+}
+
+div.team_profile_box img
+{
+	max-width: 100%;
+	max-height: 100%;
+}
+
+
+table.nested_table
+{
+	display: inline-block;
+	margin-top: 1em;
+	padding-bottom: 0.5em;
+}
+
+
+
+table caption 
+{
+	color: #DDAF08;
+	text-align:left;
+	padding: 5px;
+	font-weight:bold;
+} 
+
+table.nested_table td
+{
+	padding-right: 1em;
+}
+
+div.team_profile_box
+{
+	display: block;
+	margin-bottom: 1em;
+	overflow: hidden;
+	padding: 1em;
+}
+
+div.box-caption , h3
+{
+	display: block;
+	padding: 0.5em 1em 0.5em 0em;
+	color: #DDAF08;
+	font-weight:bold;
+}
+
+
+
+/* user profile */
+div.user_areas_container
+{
+	display: block;
+	clear:both;
+	overflow: auto;
+}
+
+div.user_area
+{
+	display: block;
+	overflow: hidden;
+}
+
+
+
+span.user_profile_name
+{
+	margin-bottom: 1em;
+	font-weight: bold;
+	display: block;
+}
+span.user_description_banned
+{
+	color: red;
+	display: block;
+	text-align: right;
+	margin-top: -2em;
+	margin-bottom: 1em;
+}
+span.user_profile_name + div.user_profile_team_name
+{
+	margin-top: -1em;
+	margin-bottom: 1em;
+}
+
+
+div.user_profile_location_timezone_row
+{
+	margin-bottom: 1em;
+}
+img.country_flag
+{
+	margin-bottom: -2px;
+}
+
+div.user_description
+{
+    text-align: left;
+	margin-top: 0.5em;
+	margin-bottom: 0.2em;
+	line-height: 1.5em;
+}
+
+img.player_logo
+{
+	float: right;
+}
+
+span.user_description_deleted
+{
+	color: #dd4718;
+	display: block;
+	text-align: right;
+	margin-top: -2em;
+	margin-bottom: 1em;
+}
+
+
+span.user_comment
+{
+	display:block;
+	margin-top: 0.5em;
+}
+
+span.no_user_comment
+{
+	color: #4f4f4f;
+	display: block;
+}
+
+
+div.user_admin_comments
+{
+	overflow: auto;
+	text-align: left;
+	margin-top: 0.2em;
+}
+
+
+/* edit section */
+label.player_edit
+{
+	width: 7.5em;
+	text-align: right;
+	float: left;
+	padding: 1mm 2mm 0 0;
+}
+
+.player-form label
+{
+	display: block;
+	float: left;
+	width: 15em;
+	color: #cfcfcf;
+	text-align:right;
+	padding-right:0.5em;
+}
+
+.player-form .formrow
+{
+	clear:both;
+	padding:0.2em 0em;
+}
+
+textarea.player_edit
+{
+	width: 10.1cm;
+	max-width: 100%;
+	height: 10em;
+	max-height: 90%;
+}
+
+/* ban section */
+form p#edit_user_suspended_status_description
+{
+	display: inline;
+}
+
+div.edit_user_suspended_status_send
+{
+	display: inline;
+}
+
+div.edit_user_suspended_status_send
+{
+	display: inline;
+}
+
+/* matches */
+
+.match-form .formrow 
+{
+	margin:5px 0px;
+	height: 2em;
+	line-height:1.8em;
+}
+
+.match-form label
+{
+	display: block;
+	float: left;
+	width: 9em;
+	color: #cfcfcf;
+	text-align:right;
+	padding-right:0.5em;
+	
+}
+.match-form .formrow select, .match-form .formrow input
+{
+	float:left;	
+}
+	
+.match-form label.long 
+{
+	width: 15em;
+}
+
+.error-msg 
+{
+	color: #FF6666;
+	padding:10px 0px;
+}
+
+.l9 
+{
+	margin-left: 9.5em !important;
+}
+
+.l10 
+{
+	margin-left: 10.5em;
+}
+.l15 
+{
+	margin-left: 15.5em !important;
+}
+
+/* result bold */
+table#table_matches_played tr td:nth-child(3)
+{
+	font-weight: bold;
+}
+table#table_matches_played tr td:nth-child(2), #table_team_members_active_teams  tr td:nth-child(1), #table_seasons_results tr td:nth-child(2)
+{
+	width:5%;
+}
+
+table#table_matches_played tr td:nth-child(2) a 
+{
+	padding-right: 20px;
+}
+
+table#table_matches_played tr td:nth-child(2) a + a
+{
+	padding-left: 20px;
+}
+
+
+/* hack because it's not possible to say to display something blocking using :before */
+div.p
+{
+	margin-top: 1em;
+}
+
+/* common links */
+
+
+
+div.msg_view_button_list
+{
+	text-align: center;
+}
+
+form.msg_buttons
+{
+	text-align: center;
+	display: inline-block;
+}
+
+/* no need for a br tag after the form*/
+form
+{
+	margin-bottom: 1em;
+}
+
+
+/* some links should be displayed as butttons */
+a.button
+{
+	white-space: nowrap;
+	display: inline-block;
+	margin-bottom: 1px;
+}
+
+
+table a.button:before
+{
+	content: "[";
+}
+
+table a.button:after
+{
+	content: "]";
+}
+
+
+
+.score 
+{
+	background-position: 0% 50%;
+	background-image: url(rankings/default.png); 
+	background-repeat: no-repeat;
+	padding:3px 0px 3px 25px;
+}
+
+.s700 {	background-image: url(Ducati_misc/rankings/700.png); }
+.s800 {	background-image: url(Ducati_misc/rankings/800.png); }
+.s900 {	background-image: url(Ducati_misc/rankings/900.png); }
+.s1000 {	background-image: url(Ducati_misc/rankings/1000.png); }
+.s1100 {	background-image: url(Ducati_misc/rankings/1100.png); }
+.s1200 {	background-image: url(Ducati_misc/rankings/1200.png); }
+.s1300 {	background-image: url(Ducati_misc/rankings/1300.png); }
+.s1400 {	background-image: url(Ducati_misc/rankings/1400.png); }
+.s1500 {	background-image: url(Ducati_misc/rankings/1500.png); }
+.s1600 {	background-image: url(Ducati_misc/rankings/1600.png); }
+.s1700 {	background-image: url(Ducati_misc/rankings/1700.png); }
+.s1800 {	background-image: url(Ducati_misc/rankings/1800.png); }
+.s1900 {	background-image: url(Ducati_misc/rankings/1900.png); }
+
+
+
+/*  DataTables sorting  */
+
+.sorting_asc
+{
+	background-image: url(Ducati_misc/sort_asc.png);
+	background-repeat: no-repeat;
+	background-position: 95% 50%;
+}
+
+.sorting_desc 	
+{
+	background-image: url(Ducati_misc/sort_desc.png);
+	background-repeat: no-repeat;
+	background-position: 95% 50%;
+}
+
+.sorting
+{
+	background-image: url(Ducati_misc/sort_both.png);
+	background-repeat: no-repeat;
+	background-position: 95% 50%;
+}
+.dataTables_wrapper
+{
+	position:relative;
+}
+.dataTables_filter 
+{
+	position:absolute;
+	right:1px;
+	text-transform: lowercase;
+}
+.dataTables_filter:before
+{ 
+	content: "Quick ";
+} 
+
+
+.dataTables_filter input 
+{
+	width: 15em;
+}	
+
+/* SHOUTBOX */
+
+
+/* #chat div is nested inside the #box div and
+containing all other divs of the shoutbox layout */
+#chat {
+height: 226px;
+background: #1f1f1f;
+border:1px solid #2f2f2f;
+position:relative;
+}
+
+
+#cform textarea 
+{
+	height:1.2em;	
+	width: 70%;
+	float:left;
+}
+
+#cform textarea[readonly=true]
+{
+	background:#999;
+}
+
+/*------ Start of the the shoutbox menu --------------------------------------*/
+#chat_menu {
+float:left;
+position:relative;
+height: 1.2em;
+font-size: 10px;
+line-height:2.2em;
+padding-bottom:3em;
+}
+#chat #container
+{
+	overflow:auto;
+	height: 190px;
+}
+
+#chat_menu p {
+	padding:0px;
+	line-height:2.2em;
+	margin:0px;
+}
+
+/* Smileys panel */
+#emo {
+height:20px;
+width: 74px;
+font-size: 10px;
+text-align:center;
+cursor:pointer;
+padding:0px;
+float:left;
+}
+
+#emo ul {
+list-style-type:none;
+color: #3DF;
+margin:0px;
+text-decoration:none;
+background-color: transparent;
+padding:0px;
+}
+
+#emo li:hover,  #emo li.over {
+color: #00BFFF;
+background-color: transparent;
+cursor:pointer;
+padding-bottom:10px;
+}
+
+#emo li ul {
+display: none;
+cursor:default;
+list-style-type:none;
+}
+
+#emo li:hover ul {
+position:absolute;
+right:-1px;
+display:block;
+top:18px;
+width:202px;
+height:60px;
+background-color: #eee;
+border: 1px solid #ccc;
+cursor:default;
+list-style-type:none;
+padding-left:8px;
+z-index:97;
+}
+ 
+#emo li:hover ul li, #emo li.over ul li{
+display: inline;
+cursor:default;
+margin-right:9px;
+}
+
+/* Position smiley images */
+.smileys {margin-top:8px;}
+
+/* Submit button */
+#chat #submit {
+float:left;
+width: 69px;
+font-size: 10px;
+text-align:center;
+cursor:pointer;
+margin:0px;
+font-weight:normal;
+
+}
+
+
+#chat .user 
+{
+	padding:2px 10px 2px 5px;
+	line-height:1.4em;
+}
+#chat .date 
+{
+	color: #999;
+	padding-right: 10px;
+}
+#chat .name 
+{
+	color: #ddaf08;
+	padding-right: 10px;
+}
+
+
+/*------ The CSS below this comment is for Opera only ------------------------*/
+
+html:first-child #emo li:hover>ul {
+display:block;
+width:210px;
+padding-left:0px;
+}
+
+html:first-child #emo li:hover>ul li {
+margin-right:10px;
+}
+
+
+html:first-child li>.smileys {
+margin-top:10px;   
+}
+	
+	
