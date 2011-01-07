@@ -58,7 +58,23 @@
         });
 
                 
-        </script>
+      if(jQuery('#article_body').height()>195){
+		jQuery('#article_body').wrap('<div id="article"/>');
+		jQuery('#moreD').show().toggle(function(){
+			jQuery(this).text('<<<');
+			jQuery('#article').animate({
+				'height':jQuery('#article_body').height()
+			},100);
+		},function(){
+			jQuery('#article').animate({
+				'height':195
+			},100);
+			jQuery(this).text('>>>');
+		});
+	}
+
+	  
+	  </script>
 	
 	
 	
@@ -122,10 +138,10 @@ function display_last_news($limit)
 		}
 		echo '</div>' . "\n";
 		echo '</div>' . "\n";
-		echo '<p>';
+		echo '<div id="article_body">';
 		echo $row['announcement'];
-		echo '</p>' . "\n";
-		
+		echo '</div>' . "\n";
+		echo '<a href="javascript:void(0);" id="moreD" style="display: inline;">&gt;&gt;&gt;</a>';
 		echo '<p class="simple-paging p0"><a href="/News/" class="button next">More news</a></p>';
 	}
 }

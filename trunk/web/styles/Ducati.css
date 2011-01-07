@@ -372,6 +372,22 @@ table.big
 	width:100%;
 }
 
+.home-right #article_body
+{
+	padding:1em;
+}
+
+#article 
+{
+	height:195px;
+	overflow:hidden;
+}
+#moreD 
+{
+	padding:5px 1em;
+	font-size:0.8em;
+	display:none;
+}
 .home-right table
 {
 	display:block;
@@ -991,6 +1007,24 @@ div.team_header
 	min-width: 84%;
 	margin-bottom: 1em;
 	line-height: 1.5em;
+	
+}
+.team_header h2 
+{
+	margin-right: 370px;
+}
+
+.team_header .team_logo
+{
+	max-width:350px; 
+	max-height:270px;
+	margin-top:-50px;
+}
+
+.player_logo 
+{
+	max-width:350px; 
+	max-height:200px;
 }
 
 h2 
@@ -1254,7 +1288,8 @@ table#table_matches_played tr td:nth-child(3)
 {
 	font-weight: bold;
 }
-table#table_matches_played tr td:nth-child(2), #table_team_members_active_teams  tr td:nth-child(1), #table_seasons_results tr td:nth-child(2)
+table#table_matches_played tr td:nth-child(2), #table_team_members_active_teams  tr td:nth-child(1), 
+#table_team_members_inactive_teams  tr td:nth-child(1), #table_seasons_results tr td:nth-child(2)
 {
 	width:5%;
 }
