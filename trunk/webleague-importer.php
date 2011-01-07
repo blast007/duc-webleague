@@ -132,10 +132,6 @@
 		// execute query, ignore result
 		$site->execute_query('players_profile', $query, $connection);
 		
-		$query = 'DELETE FROM  `static_pages` ';
-		// execute query, ignore result
-		$site->execute_query('static_pages', $query, $connection);
-		
 		$query = 'DELETE FROM `teams` ';
 		// execute query, ignore result
 		$site->execute_query('teams', $query, $connection);
@@ -215,7 +211,7 @@
 		
 		$query = 'ALTER TABLE `static_pages` AUTO_INCREMENT = 1';
 		// execute query, ignore result
-		$site->execute_query('static_pages', $query, $connection);
+	//	$site->execute_query('static_pages', $query, $connection);
 		
 		$query = 'ALTER TABLE `teams` AUTO_INCREMENT = 1';
 		// execute query, ignore result
@@ -807,7 +803,7 @@
 					  . ',' . sqlSafeStringQuotes($row['points_win'])
 					  . ',' . sqlSafeStringQuotes($row['points_draw'])
 					  . ',' . sqlSafeStringQuotes($row['points_lost'])
-					  . ',`yes`)');
+					  . ',' . sqlSafeStringQuotes('yes') . ')' );
 			// execute query, ignore result
 			@$site->execute_query('seasons', $query, $connection);
 		}
@@ -955,9 +951,14 @@
 		global $site;
 		global $connection;
 		
+		//we put that date cause old data are not so useful and whole import takes very long here. 
+		$import_start_date = '2010-11-01';
+		
 		// get a rough max estimate of entries to be updated
 		$query = 'SELECT COUNT(*) AS `n` FROM `visits` WHERE `host`=' . sqlSafeStringQuotes('') 
-		. ' AND `ip-address` <> ' . sqlSafeStringQuotes('NULL')	;
+		. ' AND `ip-address` <> ' . sqlSafeStringQuotes('NULL')
+		
+		. ' AND timestamp > ' .	sqlSafeStringQuotes($import_start_date);
 		if (!($result = @$site->execute_query('visits', $query, $connection)))
 		{
 			$site->dieAndEndPage('Could not get list of entries where hostname is empty');
@@ -973,7 +974,10 @@
 		{
 			// select only 1 entry
 			$query = 'SELECT `ip-address` FROM `visits` WHERE `host`=' . sqlSafeStringQuotes('') 
-			. ' AND `ip-address` <> ' . sqlSafeStringQuotes('NULL') . ' LIMIT 1';
+			. ' AND `ip-address` <> ' . sqlSafeStringQuotes('NULL') 
+			//we put that date cause old data are not so useful 
+			. ' AND timestamp > ' .	sqlSafeStringQuotes($import_start_date) 
+			. ' LIMIT 1';
 			if (!($result = @$site->execute_query('visits', $query, $connection)))
 			{
 				$site->dieAndEndPage('Could not get list of entries where hostname is empty');
@@ -1015,7 +1019,7 @@
 	$deleted_players['0']['dummy'] = true;
 	
 	//this should be set with initial import on clear database;
-	//clear_current_tables();
+	clear_current_tables();
 	
 	reset_auto_increment();
 	import_players();
@@ -1025,7 +1029,7 @@
 	import_visits_log();
 	import_news();
 	import_bans(); 
-	import_seasons();
+	import_seasons(); 
 	
 	// lookup array no longer needed
 	unset($deleted_players);
@@ -1036,7 +1040,7 @@
 	
 	// (should take about 3 minutes to import the data until this point)
 	// disable this when not doing the final import because this last step would take 90 minutes
-//	resolve_visits_log_hosts();
+	resolve_visits_log_hosts();
 	
 	// done
 ?>
