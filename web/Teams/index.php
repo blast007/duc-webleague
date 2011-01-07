@@ -1693,7 +1693,7 @@
 			if (!(strcmp(($row['logo_url']), '') === 0))
 			{
 				// user entered a logo
-				$site->write_self_closing_tag('img class="team_logo" src="' . htmlent($row['logo_url']) . '" style="max-width:300px; max-height:200px" alt="team logo"');
+				$site->write_self_closing_tag('img class="team_logo" src="' . htmlent($row['logo_url']) . '" alt="team logo"');
 			}
 			echo '		<span class="team_score"><span class="label">Rating: </span>';
 			rankingLogo($row['score']);
@@ -1732,8 +1732,8 @@
 			if ($row['num_matches_played'] > 0) {
 				
 				$won_ratio = number_format(($row['num_matches_won'] / $row['num_matches_played']) * 100,1);
-				$tie_ratio = number_format(($row['num_matches_lost'] / $row['num_matches_played']) * 100,1);
-				$loss_ratio = number_format(($row['num_matches_draw'] / $row['num_matches_played']) * 100,1);
+				$tie_ratio = number_format(($row['num_matches_draw'] / $row['num_matches_played']) * 100,1);
+				$loss_ratio = number_format(($row['num_matches_lost'] / $row['num_matches_played']) * 100,1);
 			
 					?>
 		<div id="chart-summary"></div>
@@ -2446,7 +2446,7 @@
 					$chart_losses .= ',';
 					$chart_ties .= ','; 
 				}
-				$chart_teams .= '\'' . $match_stats[$match_stats_keys[$i]]['name'] . '\'';
+				$chart_teams .= '\'' . addslashes($match_stats[$match_stats_keys[$i]]['name']) . '\'';
 				$chart_wins .= $match_stats[$match_stats_keys[$i]]['won'];
 				$chart_losses .= $match_stats[$match_stats_keys[$i]]['lost'];
 				$chart_ties .= $match_stats[$match_stats_keys[$i]]['tied'];
@@ -2465,10 +2465,11 @@
 		      chart1 = new Highcharts.Chart({
 		         chart: {
 		            renderTo: 'chart-container-1',
-		            defaultSeriesType: 'bar'
+		            defaultSeriesType: 'bar',
+		            height: <?php echo (($n_teams * 20) + 150);?>
 		         },
 		         title: {
-		            text: 'Opponents summary for <?php echo $team_name; ?>'
+		            text: 'Opponents summary for <?php echo addslashes($team_name); ?>'
 		         },
 		         xAxis: {
 						categories: [<?php echo $chart_teams; ?>]
@@ -2483,7 +2484,7 @@
 					align: 'right',
 					x: -100,
 					verticalAlign: 'top',
-					y: 20,
+					y: 10,
 					floating: true,
 					backgroundColor: '#121212',
 					borderColor: '#CCC',
@@ -2492,7 +2493,7 @@
 				},
 				tooltip: {
 					formatter: function() {
-						return '<b>' + '<?php echo $team_name; ?>' + ' vs ' + this.x +'</b><br/>'+
+						return '<b>' + '<?php echo addslashes($team_name); ?>' + ' vs ' + this.x +'</b><br/>'+
 							 this.series.name +': '+ this.y +'<br/>'+
 							 'Total: '+ this.point.stackTotal;
 					}

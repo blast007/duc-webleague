@@ -753,7 +753,7 @@
 				// user entered a logo
 				$site->write_self_closing_tag('img class="player_logo" src="'
 											  . htmlentities($row['logo_url'])
-											  . '" style="max-width:200px; max-height:150px" alt="player logo"');
+											  . '" alt="player logo"');
 			}
 			echo '		<h2 class="user_profile_name">' . $player_name . '</h2> ';
 			if (strcmp($suspended_status, 'deleted') === 0)
