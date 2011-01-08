@@ -937,7 +937,7 @@ div.author
 	color:white;
 }
 
-div.article p
+div.article .news_body
 {
 	margin-bottom: 0;
 	margin-top: 0.5em;

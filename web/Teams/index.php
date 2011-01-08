@@ -2446,7 +2446,7 @@
 					$chart_losses .= ',';
 					$chart_ties .= ','; 
 				}
-				$chart_teams .= '\'' . addslashes($match_stats[$match_stats_keys[$i]]['name']) . '\'';
+				$chart_teams .= '\'' . addslashes(htmlent_decode($match_stats[$match_stats_keys[$i]]['name'])) . '\'';
 				$chart_wins .= $match_stats[$match_stats_keys[$i]]['won'];
 				$chart_losses .= $match_stats[$match_stats_keys[$i]]['lost'];
 				$chart_ties .= $match_stats[$match_stats_keys[$i]]['tied'];
@@ -2469,7 +2469,7 @@
 		            height: <?php echo (($n_teams * 20) + 150);?>
 		         },
 		         title: {
-		            text: 'Opponents summary for <?php echo addslashes($team_name); ?>'
+		            text: 'Opponents summary for <?php echo addslashes(htmlent_decode($team_name)); ?>'
 		         },
 		         xAxis: {
 						categories: [<?php echo $chart_teams; ?>]
@@ -2493,7 +2493,7 @@
 				},
 				tooltip: {
 					formatter: function() {
-						return '<b>' + '<?php echo addslashes($team_name); ?>' + ' vs ' + this.x +'</b><br/>'+
+						return '<b>' + '<?php echo addslashes(htmlent_decode($team_name)); ?>' + ' vs ' + this.x +'</b><br/>'+
 							 this.series.name +': '+ this.y +'<br/>'+
 							 'Total: '+ this.point.stackTotal;
 					}
