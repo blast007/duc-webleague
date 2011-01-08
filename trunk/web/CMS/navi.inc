@@ -270,7 +270,8 @@
 	// run the update script:
 	// >/dev/null pipes output to nowhere
 	// & lets the script run in the background
-	exec('php ' . dirname(__FILE__) . '/cli/servertracker_query_backend.php >/dev/null &');
+	//moved to cron
+//	exec('php ' . dirname(__FILE__) . '/cli/servertracker_query_backend.php >/dev/null &');
 	echo '</span>';
 	
 	if (!$online_users_page_viewed)
