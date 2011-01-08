@@ -19,7 +19,7 @@
 		echo '<p class="first_p">' . "\n";
 		if ($site->force_external_login_when_trying_local_login())
 		{
-			$site->write_self_closing_tag('input type="submit" name="local_login_wanted" value="Upgrade my old accoung and connect it to global one'"');
+			$site->write_self_closing_tag('input type="submit" name="local_login_wanted" value="Upgrade my old accoung and connect it to global one"');
 		} else
 		{
 			$site->write_self_closing_tag('input type="submit" name="local_login_wanted" value="Local login"');
