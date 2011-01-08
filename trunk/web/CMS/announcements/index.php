@@ -466,9 +466,9 @@
 					}
 					echo '</div>' . "\n";
 					echo '</div>' . "\n";
-					echo '<p>';
+					echo '<div class="news_body">';
 					echo $row['announcement'];
-					echo '</p>' . "\n";
+					echo '</div>' . "\n";
 					echo "</div>\n\n";
 					$current_row++;
 				}
