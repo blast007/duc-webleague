@@ -134,6 +134,7 @@ if ( (isset($_GET['bzbbauth'])) && ($_GET['bzbbauth']) )
 		allow_edit_any_user_profile();
 		allow_add_admin_comments_to_user_profile();
 		allow_ban_any_user();
+		allow_assign_user_bbid();
 		
 		// visits log permissions
 		allow_view_user_visits();
