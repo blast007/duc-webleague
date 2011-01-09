@@ -216,9 +216,18 @@
 					{
 						echo '<p>Error: Skipping logo setting: Not allowed URL or extension.</p>';
 					}
+					else 
+					{
+						$query = "UPDATE `players_profile` SET `logo_url` = ''";
+						$query .= " WHERE `playerid` = $profile";
+						if (!($result = $site->execute_query('players_profile', $query, $connection)))
+						{
+							// query was bad, error message was already given in $site->execute_query(...)
+							$site->dieAndEndPage('');
+						}
+					}
 				}
 			}
-			
 			
 			if (isset($_POST['player_bzbbid']))
 			{
