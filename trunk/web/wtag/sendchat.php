@@ -70,9 +70,10 @@ if (isset($_SESSION['username'])
     $msg = mysql_real_escape_string($msg);
       
     }
-
+	date_default_timezone_set($site->used_timezone());
+    $timestamp = date('Y-m-d H:i:s');
     // Insert a new message into database
-    $sql->query("INSERT INTO wtagshoutbox SET name= '$name', message= '$msg', ip='$converted_address', date=now()");
+    $sql->query("INSERT INTO wtagshoutbox SET name= '$name', message= '$msg', ip='$converted_address', date='$timestamp'");
 
     // Get the id for the last inserted message
     $lastid = $sql->get_id();
