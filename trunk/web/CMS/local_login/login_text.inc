@@ -15,14 +15,17 @@
 	
 	if (!(isset($_POST['local_login_wanted']) && $_POST['local_login_wanted']))
 	{
+		echo '<p>If it\'s your first visit on new site and you had account in old version, you need to connect your old account with global one.</p>';
+		echo '<p>To do it, you need to log in with option below:</p>' ;
+		
 		echo '<form action="' . baseaddress() . 'Login/'. '" method="post">' . "\n";
 		echo '<p class="first_p">' . "\n";
 		if ($site->force_external_login_when_trying_local_login())
 		{
-			$site->write_self_closing_tag('input type="submit" name="local_login_wanted" value="Upgrade my old account and connect it to global one"');
+			$site->write_self_closing_tag('input type="submit" name="local_login_wanted" id="local_login_wanted" value="Upgrade my old account and connect it to global one"');
 		} else
 		{
-			$site->write_self_closing_tag('input type="submit" name="local_login_wanted" value="Local login"');
+			$site->write_self_closing_tag('input type="submit" name="local_login_wanted" id="local_login_wanted" value="Local login"');
 		}
 		echo '</p>' . "\n";
 		echo '</form>' . "\n";
