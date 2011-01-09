@@ -80,8 +80,8 @@
 	
 		 
 </div>
-<div class="footer">Ducati layout by <a href="/Players/?search_string=osta&search_type=player&search_result_included=all&search=Search">osta</a>; 
-tank drawing by <a href="http://www.newgrounds.com/art/view/underarock/08-tank">UnderARock</a>; 
+<div class="footer">Webleague engine by <a href="/Players/?profile=1996">ts</a>; Improvements &amp; ducati layout by <a href="/Players/?profile=5343">osta</a>; 
+Tank drawing by <a href="http://www.newgrounds.com/art/view/underarock/08-tank">UnderARock</a>; 
 Shoutbox script - <a href="http://spacegirlpippa.co.uk" title="A free mini chat (shoutbox) script"> wTag </a>
 </div>
 
