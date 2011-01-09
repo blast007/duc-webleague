@@ -227,7 +227,13 @@
 		
 	if (!$logged_in)
 	{
-		writeLink('Login/', 'Login', (strcmp($name, 'Login') == 0));
+		echo '<li><a href=';
+		$url = urlencode(baseaddress() . 'Login/' . '?bzbbauth=%TOKEN%,%USERNAME%');
+		echo '"' . htmlspecialchars('http://my.bzflag.org/weblogin.php?action=weblogin&url=') . $url;
+		echo '" class="login">Login</a></li>' . "\n";
+		
+		
+		//writeLink('Login/', 'Login', (strcmp($name, 'Login') == 0));
 	} else 
 	{
 		writeLink('Logout/', 'Logout', (strcmp($name, 'Logout') == 0));		

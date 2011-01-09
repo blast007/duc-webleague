@@ -431,7 +431,13 @@
 						{
 							$msg .= 'external logins';
 						}
-						$msg .= ' for this account.' . "\n";
+						$msg .= ' for this account.<br/><br/>' . "\n";
+						$msg .= ' Please now ';
+						$msg .= '<a href=';
+						$url = urlencode(baseaddress() . 'Login/' . '?bzbbauth=%TOKEN%,%USERNAME%');
+						$msg .= '"' . htmlspecialchars('http://my.bzflag.org/weblogin.php?action=weblogin&url=') . $url;
+						$msg .= '" class="login">LOG IN</a> ';
+						$msg .= 'with your updated account.' . "\n";
 					} else
 					{
 						$msg = ('Unfortunately the bzidtools2.php script failed'
@@ -444,10 +450,9 @@
 					}
 				}
 				
-				echo $msg;
 				if ($site->force_external_login_when_trying_local_login())
 				{
-					die_with_no_login('');
+					die_with_no_login($msg, $msg);
 				}
 			}
 		}
