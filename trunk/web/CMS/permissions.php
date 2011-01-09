@@ -56,6 +56,7 @@
 		$_SESSION['allow_edit_any_user_profile'] = false;
 		$_SESSION['allow_add_admin_comments_to_user_profile'] = false;
 		$_SESSION['allow_ban_any_user'] = false;
+		$_SESSION['allow_assign_user_bbid'] = false;
 		
 		// visits log permissions
 		$_SESSION['allow_view_user_visits'] = false;
@@ -282,6 +283,14 @@
 		if (!($_SESSION['allow_add_admin_comments_to_user_profile']))
 		{
 			$_SESSION['allow_add_admin_comments_to_user_profile'] = true;
+		}
+	}
+	
+	function allow_assign_user_bbid()
+	{
+		if (!($_SESSION['allow_assign_user_bbid']))
+		{
+			$_SESSION['allow_assign_user_bbid'] = true;
 		}
 	}
 	

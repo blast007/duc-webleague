@@ -56,6 +56,18 @@
 		}
 	}
 	
+	$allow_assign_user_bbid = false;
+	if (isset($_GET['profile']) || isset($_GET['edit']))
+	{
+		if (isset($_SESSION['allow_assign_user_bbid']))
+		{
+			if (($_SESSION['allow_assign_user_bbid']) === true)
+			{
+				$allow_assign_user_bbid = true;
+			}
+		}
+	}
+	
 	
 	if ((isset($_GET['edit'])) || (isset($_GET['invite'])))
 	{

@@ -25,6 +25,7 @@
 		}
 		
 		$suspended_status = 'deleted';
+		$bzbbid = ''; 
 		if (!(isset($_POST['user_suspended_status_id'])))
 		{
 			// get entire suspended status, including maintenance-deleted
@@ -34,6 +35,12 @@
 				// the ones who can ban, can also change a user's callsign
 				$query .= ',`name`';
 //			}
+
+			if ($allow_assign_user_bbid)
+			{
+				// fi we can set bzbbid
+				$query .= ',`external_playerid`';
+			}
 			$query .= ' FROM `players` WHERE `id`=' . "'" . (urlencode($profile)) ."'";
 			// only information about one player needed
 			$query .= ' LIMIT 1';
@@ -47,6 +54,7 @@
 			{
 				$suspended_status = $row['status'];
 				$callsign = htmlent($row['name']);
+				$bzbbid = $row['external_playerid'];
 			}
 			mysql_free_result($result);
 			
@@ -211,6 +219,24 @@
 				}
 			}
 			
+			
+			if (isset($_POST['player_bzbbid']))
+			{
+				// only admins can edit their comments
+				if ($allow_add_admin_comments_to_user_profile)
+				{
+					$query = 'UPDATE `players` SET `external_playerid`=' . sqlSafeStringQuotes($site->bbcode($_POST['player_bzbbid']));
+					$query .= ' WHERE `id`=' . sqlSafeStringQuotes($profile);
+					if (!($result = @$site->execute_query('players', $query, $connection)))
+					{
+						// query was bad, error message was already given in $site->execute_query(...)
+						$site->dieAndEndPage('');
+					}
+				}
+			}
+			
+			
+			
 			if (isset($_POST['admin_comments']))
 			{
 				// only admins can edit their comments
@@ -353,6 +379,14 @@
 		$site->write_self_closing_tag('input id="edit_avatar_url" type="text" name="logo_url" maxlength="200" size="60" value="'.$logo_url.'"');
 		echo '</div>';
 		
+		//connecting bzbb ID for troubleshooting.
+		if ($allow_assign_user_bbid === true)
+		{
+			echo '<div class="formrow"><label class="player_bzbbid" for="player_bbid">BZBB ID: </label>';
+			$site->write_self_closing_tag('input id="player_bzbbid" type="text" name="player_bzbbid" maxlength="20" size="20" value="'.$bzbbid.'"');
+			echo '</div>';
+		}
+		
 		// admin comments, these should only be set by an admin
 		if ($allow_add_admin_comments_to_user_profile === true)
 		{
@@ -373,6 +407,8 @@
 			echo $admin_comments;
 			echo '</textarea></span></div>' . "\n";
 		}
+		
+		
 		
 		echo '<div><input type="submit" name="edit_user_profile_data" value="Change user profile" id="send" class="button l15"></div>' . "\n";
 		echo '</form>' . "\n";
