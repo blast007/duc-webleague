@@ -63,7 +63,7 @@
 		jQuery('#moreD').show().toggle(function(){
 			jQuery(this).text('show less ^');
 			jQuery('#article').animate({
-				'height':jQuery('#article_body').height()
+				'height':jQuery('#article_body').height()+20
 			},100);
 		},function(){
 			jQuery('#article').animate({
