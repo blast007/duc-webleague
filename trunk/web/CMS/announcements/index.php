@@ -261,7 +261,17 @@
 	// handle deleting item
 	if ((isset($_SESSION[$entry_delete_permission]) && ($_SESSION[$entry_delete_permission])) && (isset($_GET['delete'])) && (!(isset($_GET['add']))) && (!(isset($_GET['edit']))))
 	{
+		require_once('msgUtils.php');
 		require_once('delete.php');
+		
+	}
+	
+	// handle deleting item
+	if ((isset($_SESSION[$entry_delete_permission]) && ($_SESSION[$entry_delete_permission])) && (isset($_POST['delete_all'])) && (!(isset($_GET['add']))) && (!(isset($_GET['edit']))))
+	{
+		require_once('msgUtils.php');
+		require_once('delete.php');
+		
 	}
 	
 	if ((!(isset($_GET['add']))) && (!(isset($_GET['edit']))) && (!(isset($_GET['delete']))))
