@@ -51,6 +51,9 @@ if (isset($_SESSION['username'])
     $msg=$_POST['message'];
  
 
+    $num_messages_to_show = 30;
+    $stored_messages_limit = 500;
+    
     // Get a sender IP (it will be in use in the next wTag version)
     $remote = $_SERVER["REMOTE_ADDR"];
     // Store it converted
@@ -79,14 +82,14 @@ if (isset($_SESSION['username'])
     $lastid = $sql->get_id();
    
     // Delete oldest messages
-    if ($lastid > 300) {
+    if ($lastid > $stored_messages_limit) {
 	
-    $sql->query("DELETE FROM wtagshoutbox WHERE messageid <($lastid-20)");
+    $sql->query("DELETE FROM wtagshoutbox WHERE messageid <($lastid-$stored_messages_limit)");
     
     }
 
     // Retrieve last 20 messages
-    $sql->query("SELECT date, name, url, message FROM wtagshoutbox WHERE messageid <= $lastid ORDER BY messageid DESC LIMIT 20");
+    $sql->query("SELECT date, name, url, message FROM wtagshoutbox WHERE messageid <= $lastid ORDER BY messageid DESC LIMIT $num_messages_to_show");
 
     }
 
@@ -94,7 +97,7 @@ if (isset($_SESSION['username'])
 
     {
     // Just retrieve last 20 messages
-    $sql->query("SELECT date, name, url, message FROM wtagshoutbox ORDER BY messageid DESC LIMIT 20");
+    $sql->query("SELECT date, name, url, message FROM wtagshoutbox ORDER BY messageid DESC LIMIT $num_messages_to_show");
        
     }
 
