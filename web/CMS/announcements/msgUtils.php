@@ -125,7 +125,7 @@
 	}
 	
 	// read the array using helper function
-	function displayMessageSummary(&$result)
+	function displayMessageSummary(&$result, $mode = 'simple')
 	{
 		global $site;
 		global $connection;
@@ -191,7 +191,16 @@
 			}
 			echo (implode('<span class="msg_recipient_seperator">, </span>', $recipients));
 			
+			if ($mode == 'deleting')
+			{
+				echo '<input type="hidden" value="' . $currentId . '" name="delete[]" />' . "\n";
+			} 
 			echo '</td>' . "\n";
+			if ($mode == 'mailbox')
+			{
+				echo '<td> <input type="checkbox" value="' . $currentId . '" name="delete[]" /></td>' . "\n";
+			} 		
+			
 			echo '</tr>' . "\n\n";
 			
 		}
@@ -355,6 +364,8 @@
 					mysql_free_result($result);
 				} else
 				{
+					
+					echo '<form name="msg_box" method="post" action="?folder=' . $folder . '">';
 					// table of messages
 					echo "\n" . '<table id="table_msg_overview" class="big">' . "\n";
 					echo '<caption>Messages in ' . $folder . '</caption>' . "\n";
@@ -363,12 +374,14 @@
 					echo '	<th>Subject</th>' . "\n";
 					echo '	<th>Date</th>' . "\n";
 					echo '	<th>Recipient(s)</th>' . "\n";
+					echo '	<th><input type="submit" class="button" name="delete_all" value="Delete marked" /></th>' . "\n";
 					echo '</tr>' . "\n\n";
 					
 					// display message overview
-					displayMessageSummary($result);
+					displayMessageSummary($result, 'mailbox');
 					
 					echo '</table>' . "\n";
+					echo '</form>';
 					// look up if next and previous buttons are needed to look at all messages in overview
 					if ($show_next_messages_button || ($view_range !== (int) 0))
 					{
@@ -398,4 +411,65 @@
 			}
 		}
 	}
+	
+	function deleteMessage($currentId, $showmsg = true) 
+	{
+		
+		global $site;
+		global $connection;
+		global $folder;
+		
+		// the request string contains the playerid, which takes care of permissions
+		$user_id = 0;
+		$box_name = sqlSafeString('in_' . $folder);
+		$user_id = sqlSafeString(getUserID());
+		
+		// delete the message in the user's folder by his own request
+		// example query: DELETE FROM `messages_users_connection` WHERE `playerid`='1194' `msgid`='66' AND `in_inbox`='1'
+		$query = 'DELETE FROM `messages_users_connection` WHERE `playerid`=' . "'" . ($user_id) . "'";
+		$query .= ' AND `msgid`=' . sqlSafeStringQuotes($currentId) . ' AND `' . $box_name . '`=' . "'" . 1 . "'";
+		$result = $site->execute_query('messages_users_connection', $query, $connection);
+		if ($result && $showmsg)
+		{
+			// give feedback, the user might want to know deleting was successfull so far
+			echo '<p>The chosen message was deleted from your ' . htmlentities($folder) . '.</p>';
+		}
+		
+		// IMPORTANT: Do the query _after_ the deletion of the message entry or resubmitting the form will break the script!
+		// get the list of messages, we need to know if more than one user stores the message
+		// example query: SELECT `id` FROM `messages_users_connection` WHERE `msgid`='66' LIMIT 0,1
+		$message_is_stored_several_times = true;
+		$query = 'SELECT `id` FROM `messages_users_connection` WHERE `msgid`=' . sqlSafeStringQuotes($currentId) . ' LIMIT 0,1';
+		$result = $site->execute_query('messages_users_connection', $query, $connection);
+		if ($result)
+		{
+			$rows = (int) mysql_num_rows($result);
+			if ($rows < 1)
+			{
+				$message_is_stored_several_times = false;
+			}
+		}
+		
+		// if the message was only saved by one user we can actually delete the message itself now
+		if (!$message_is_stored_several_times)
+		{
+			if ($site->debug_sql())
+			{
+				echo '<p>This message was owned by only one player. Deleting the actual message now.</p>';
+			}
+			// example query: DELETE FROM `messages_storage` WHERE `id`='11'
+			$query = 'DELETE FROM `messages_storage` WHERE `id`=' . sqlSafeStringQuotes($currentId);
+			$result = $site->execute_query('messages_storage', $query, $connection);
+			if ($result)
+			{
+				if ($site->debug_sql())
+				{
+					// give feedback, the user might want to know deleting was entirely successful
+					echo '<p>The actual message was deleted successfully!</p>';
+				}
+			}
+		}
+	}	
+		
+	
 ?>
