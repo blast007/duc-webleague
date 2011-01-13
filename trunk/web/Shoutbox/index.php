@@ -36,11 +36,11 @@
 	}
 	
 	
-	//Season deactivation
+	//Delete shout!
 	if (isset($_GET['delete']) && $allow_moderate_shoutbox)
 	{
-		$seasonid =  intval($_GET['delete']);
-		$query = ('DELETE FROM `wtagshoutbox` WHERE `messageid` =' . sqlSafeStringQuotes($seasonid));
+		$shoutid =  intval($_GET['delete']);
+		$query = ('DELETE FROM `wtagshoutbox` WHERE `messageid` =' . sqlSafeStringQuotes($shoutid));
 			
 		if (!($result = $site->execute_query('wtagshoutbox', $query, $connection)))
 		{
