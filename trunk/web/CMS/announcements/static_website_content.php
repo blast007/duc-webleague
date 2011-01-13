@@ -351,7 +351,7 @@ function put_shoutbox()
 <form id="cform" name="cform" action="#" >
 <div id='field_set'>
 <input type='hidden' id='token' name='token' value='<?php echo $token; ?>' />
-<textarea rows='4' cols='10' id='message'  name='message' >message</textarea>
+<textarea rows='1' id='message'  name='message' >message</textarea>
 <div id="chat_menu">
 
 <div id='emo'>

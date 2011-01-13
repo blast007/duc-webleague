@@ -373,54 +373,57 @@ function displayChatData(reqObj) {
   
   for (i = 0; i < message_nodes.length; i++) {
   
-  var date = message_nodes[i].getElementsByTagName('date');
-  var name = message_nodes[i].getElementsByTagName('name');
-  var message = message_nodes[i].getElementsByTagName('message');
- 
-  var user = document.createElement('div');
-  
-  user.className = 'user';
-  
-  var sname = document.createElement('span');
-  sname.className = 'name';
-  
-  var name = document.createTextNode(name[0].firstChild.nodeValue+":");
-  sname.appendChild(name);
-
-  slink = sname;
-  
-  var maintext = document.createElement('span');
-  maintext.className='text';
-  if (sm_options == 'yes')
-  {
-  var text = splitMsg(filterBW(autoLinks(replaceSmileys(message[0].firstChild.nodeValue))));
+	  var date = message_nodes[i].getElementsByTagName('date');
+	  var name = message_nodes[i].getElementsByTagName('name');
+	  var message = message_nodes[i].getElementsByTagName('message');
+	 
+	  var user = document.createElement('div');
+	  
+	  user.className = 'user';
+	  
+	  var sname = document.createElement('span');
+	  sname.className = 'name';
+	  
+	  var name = document.createTextNode(name[0].firstChild.nodeValue+":");
+	  sname.appendChild(name);
+	
+	  slink = sname;
+	  
+	  var maintext = document.createElement('span');
+	  maintext.className='text';
+	  if (sm_options == 'yes')
+	  {
+	  var text = splitMsg(filterBW(autoLinks(replaceSmileys(message[0].firstChild.nodeValue))));
+	  }
+	  else
+	  {
+	  var text = splitMsg(filterBW(autoLinks(message[0].firstChild.nodeValue)));
+	  }
+	  
+	  maintext.innerHTML += text;
+	  
+	  var sdate = document.createElement('span');
+	  sdate.className='date';
+	  
+	  var spl=date[0].firstChild.nodeValue.split(" ");
+	  var nd = spl[0].substring(0,10);
+	  var nt = spl[1].substring(0,5);
+	  var newtime= document.createTextNode(nt);
+	  
+	  sdate.title = "Posted on "+nd;
+	  sdate.appendChild(newtime);
+	  
+	  user.appendChild(sdate);
+	  user.appendChild(slink);
+	  user.appendChild(maintext);                   
+	  
+	  post.appendChild(user);
+	  
+	 
   }
-  else
-  {
-  var text = splitMsg(filterBW(autoLinks(message[0].firstChild.nodeValue)));
-  }
-  
-  maintext.innerHTML += text;
-  
-  var sdate = document.createElement('span');
-  sdate.className='date';
-  
-  var spl=date[0].firstChild.nodeValue.split(" ");
-  var nd = spl[0].substring(0,10);
-  var nt = spl[1].substring(0,5);
-  var newtime= document.createTextNode(nt);
-  
-  sdate.title = "Posted on "+nd;
-  sdate.appendChild(newtime);
-  
-  user.appendChild(sdate);
-  user.appendChild(slink);
-  user.appendChild(maintext);                   
-  
-  post.appendChild(user);
-  
- 
-}
+  var archiveLink = document.createElement('div');
+  archiveLink.innerHTML = '<a id="shoutbox_archive" href="/Shoutbox/archive.php">Show older messages >></a>';
+  post.appendChild(archiveLink);
 
 }
 

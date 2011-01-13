@@ -25,7 +25,7 @@
 	// in any case you need to be logged in to view the visits log
 	if ($viewerid === 0)
 	{
-		echo '<p class="first_p">You need to login in order to manage the shoudbox!</p>';
+		echo '<p class="first_p">You need to login in order to manage the shoutbox!</p>';
 		$site->dieAndEndPageNoBox();
 	}
 	
@@ -58,7 +58,7 @@
 	echo '<h1 class="tools">Shoutbox management</h1>';
 	
 	
-	$query = ('SELECT * FROM wtagshoutbox ORDER BY date DESC LIMIT 0,100');
+	$query = ('SELECT * FROM wtagshoutbox ORDER BY date DESC');
 			
 	if (!($result = @$site->execute_query('wtagshoutbox', $query, $connection)))
 	{

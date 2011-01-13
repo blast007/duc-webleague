@@ -1430,12 +1430,22 @@ background: #1f1f1f;
 border:1px solid #2f2f2f;
 position:relative;
 }
+#chat.main-box
+{
+	height:auto;
+	background: url(Ducati_misc/bg_dark_box.png) repeat;
+}
 
+#shoutbox_archive 
+{
+	font-size:0.8em;
+	padding:2px 10px;
+}
 
 #cform textarea 
 {
 	height:1.2em;	
-	width: 70%;
+	width: 68%;
 	float:left;
 }
 
