@@ -201,6 +201,12 @@
 		writeLink('Shoutbox/', 'Shoutbox', (strcmp($name, 'Shoutbox') == 0));
 	}
 	
+	if ($logged_in && isset($_SESSION['allow_manage_sitebans']) && $_SESSION['allow_manage_sitebans'])
+	{
+		writeLink('Bans/sitebans.php', 'Sitebans', (strcmp($name, 'Sitebans') == 0));
+	}
+	
+	
 ?>
 
 	</ul> 
