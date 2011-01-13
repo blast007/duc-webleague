@@ -1025,9 +1025,9 @@
 		$query .= sqlSafeStringQuotes('(teamless)') . ') AS `team_name`';
 	}
 	// player first joined date
-	$query .= ',`players_profile`.`joined`';
+	$query .= ',`players_profile`.`joined`, `countries`.`name` as `country_name`, `countries`.`flagfile`';
 	// tables involved
-	$query .= ' FROM `players`, `players_profile`';
+	$query .= ' FROM `players`, `players_profile`, `countries`';
 	// include table teams if team search performed
 	if ($search_team_sort && (strcmp($search_expression, '(teamless)') !== 0))
 	{
@@ -1067,6 +1067,7 @@
 	}
 	// the profile id of the player must match the actual player id (profile must belong to the same player)
 	$query .= ' AND `players_profile`.`playerid`=`players`.`id`';
+	$query .= ' AND `players_profile`.`location`=`countries`.`id`';
 	// sort the result
 	if ($search_player_sort)
 	{
@@ -1102,6 +1103,7 @@
 		echo '<thead><tr>' . "\n";
 		echo '	<th>Name</th>' . "\n";
 		echo '	<th>Team</th>' . "\n";
+		echo '	<th>Location</th>' . "\n";		
 		echo '	<th>Joined</th>' . "\n";
 		echo '</tr></thead>' . "\n\n";
 		
@@ -1123,6 +1125,15 @@
 				echo '</a>';
 			}
 			echo '</td>'. "\n";
+			
+			echo '	<td>';
+				if (!(strcmp($row['flagfile'], '') === 0))
+				{
+					$site->write_self_closing_tag('img alt="country flag" class="country_flag" src="../Flags/' . $row['flagfile'] . '"');
+				}
+				echo '<span class="user_profile_location">' . htmlent($row['country_name']) . '</span></div>' . "\n";
+			echo '</td>'. "\n";
+			
 			echo '	<td class="players_overview_joined">';
 			echo htmlent($row['joined']);
 			echo '</td>' . "\n";
@@ -1144,7 +1155,7 @@
 						"bPaginate": false,
 						"bLengthChange": false,
 						"bInfo": false,
-						"aoColumns": [{ "sType": "html" }, { "sType": "html" }, null],
+						"aoColumns": [{ "sType": "html" }, { "sType": "html" }, { "sType": "html" }, null],
 						"aaSorting": [[ 1, "asc" ]],										
 						"bAutoWidth": false					
 					}
