@@ -4,6 +4,14 @@ if ( (isset($_GET['bzbbauth'])) && ($_GET['bzbbauth']) )
 	require '../CMS/bzbb_login/checkToken.php';
 	require_once '../CMS/permissions.php';
 	
+	if ($banned_user)
+	{
+		require_once '../CMS/navi.inc';
+		echo '<div class="static_page_box">' . "\n";
+		$error_msg = '<p class="first_p">Login failed: The returned values could not be validated!</p>' . "\n";
+		$site->dieAndEndPage($error_msg);
+	}
+	
 	// initialise permissions
 	no_permissions();
 	
@@ -73,12 +81,16 @@ if ( (isset($_GET['bzbbauth'])) && ($_GET['bzbbauth']) )
 		{
 			echo '<p>DUC league referee detected</p>';
 		}
-		// DUCATI.ADMIN group
+		// DUCATI.REFEREE group
 		
 		// match permissions
 		allow_add_match();
 		allow_edit_match();
 		
+		// permissions for news page
+		allow_add_news();
+		allow_edit_news();
+		allow_delete_news();
 	}
 	
 	// test only for DUCATI.ADMINS group
@@ -122,6 +134,9 @@ if ( (isset($_GET['bzbbauth'])) && ($_GET['bzbbauth']) )
 		allow_add_bans();
 		allow_edit_bans();
 		allow_delete_bans();
+		
+		// sitebans
+		allow_manage_sitebans();
 		
 		// permissions for team page
 		allow_kick_any_team_members();

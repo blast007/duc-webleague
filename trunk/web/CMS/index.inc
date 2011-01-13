@@ -2,6 +2,7 @@
 	require_once 'siteinfo.php';
 	$site = new siteinfo();
 	
+	require_once (dirname(dirname(__FILE__)) . '/Bans/sitebans.inc');
 	
 	if ($site->use_xtml())
 	{
