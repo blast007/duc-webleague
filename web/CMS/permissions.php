@@ -38,6 +38,10 @@
 		$_SESSION['allow_edit_bans'] = false;
 		$_SESSION['allow_delete_bans'] = false;
 		
+		// permission for site bans
+		$_SESSION['allow_manage_sitebans'] = false;
+		
+		
 		// permissions for private messages
 		$_SESSION['allow_add_messages'] = false;
 		// private messages are never supposed to be edited at all by a 3rd person
@@ -197,6 +201,15 @@
 		if (!($_SESSION['allow_delete_bans']))
 		{
 			$_SESSION['allow_delete_bans'] = true;
+		}
+	}
+	
+	
+	function allow_manage_sitebans()
+	{
+		if (!($_SESSION['allow_manage_sitebans']))
+		{
+			$_SESSION['allow_manage_sitebans'] = true;
 		}
 	}
 	

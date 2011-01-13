@@ -10,6 +10,7 @@
 	ob_start();
 	require '../CMS/index.php';
 	
+	
 	// as the navigation is different for a logged in user output buffering will be used
 	// buffer the text into the $msg variable
 	$msg = '';
@@ -630,6 +631,7 @@
 			$site->execute_query('visits', $query, $connection);
 		}
 	}
+	
 	
 	// $user_id is not set in case no login/registration was performed
 	if (getUserID() > 0)

@@ -27,6 +27,9 @@
 	
 	$connection = $site->connect_to_db();
 	
+	
+	
+	
 	// remove expired sessions from the list of online users
 	$query ='SELECT `playerid`, `last_activity` FROM `online_users`';
 	if (!($result = @$site->execute_silent_query('online_users', $query, $connection)))
