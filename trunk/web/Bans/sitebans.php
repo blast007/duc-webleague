@@ -50,7 +50,7 @@
 		
 		$ip_mask = $_POST['ip_mask'];
 		$reason  = $_POST['reason'];
-		if (!preg_match('/^([0-9.*\/]*)$/',$ip_mask))
+		if (!preg_match('/^([0-9]+)\.([0-9\.\*\/]*)$/',$ip_mask))
 		{
 			$site->dieAndEndPage('Wrong ip mask!');
 			
