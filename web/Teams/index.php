@@ -1656,6 +1656,10 @@
 		// opponent stats
 		echo '<a class="button" href="./?opponent_stats=' . urlencode($profile) . '">opponent stats</a>' . "\n";
 		
+		// activity stats
+		echo '<a class="button" href="./?activity_stats=' . urlencode($profile) . '">activity stats</a>' . "\n";
+		
+		
 		echo '</div>';
 		
 		// join the tables `teams`, `teams_overview` and `teams_profile` using the team's id
@@ -2131,6 +2135,139 @@
 	}
 	
 	// someone wants to look at a team profile
+	if (isset($_GET['activity_stats']))
+	{
+		$profile = intval($_GET['activity_stats']);
+		echo '<div class="simple-paging">';
+		echo '<a class="button" href="./">overview</a>' . "\n";
+		echo '<a class="button" href="./?profile=' . strval($profile) . '">back to team profile</a>' . "\n";
+		echo '</div>';
+		
+		echo '<div class="static_page_box">' . "\n";
+		
+			$team_name = '(no name)';
+			$query = 'SELECT `name` FROM `teams` WHERE `id`=' . sqlSafeStringQuotes($profile) . ' LIMIT 0,1';
+			if (!($result = @$site->execute_query('teams', $query, $connection)))
+			{
+				$site->dieAndEndPage('Could not find out name for team with id ' . sqlSafeString($profile));
+			}
+			while($row = mysql_fetch_array($result))
+			{
+				$team_name = $row['name'];
+			}
+			mysql_free_result($result);
+		
+			
+			$query = 'SELECT MONTH(timestamp) as month, YEAR(timestamp) as year, count(id) as match_number'
+			. ' FROM matches WHERE team1_teamid = ' . sqlSafeStringQuotes($profile) 
+			. ' OR team2_teamid = ' . sqlSafeStringQuotes($profile) 
+			. '	GROUP BY month, year ORDER BY year asc, month asc';
+			
+			if (!($result = @$site->execute_query('matches', $query, $connection)))
+			{
+				$site->dieAndEndPage('Could not find matches played.');
+			}
+			
+			$n_rows = (int) mysql_num_rows($result);
+			if ($n_rows < (int) 1)
+			{
+				mysql_free_result($result);
+				echo '<p class="first_p">This team has not played a match yet.</p>';
+				$site->dieAndEndPage();
+			}
+			$match_stats = array();
+			$i = 0;
+			$chart_periods = '';
+			$chart_values = '';
+			while ($row = mysql_fetch_array($result))
+			{
+				$match_stats[$i]['period'] = $row['month'] . '/' . $row['year'];
+				$match_stats[$i]['match_number'] = $row['match_number'];
+				
+				if ($i != 0)
+				{
+					$chart_periods .= ',';
+					$chart_values .= ',';
+				}
+				$chart_periods .= "'" . $row['month'] . (($row['month'] === '6')? '<br/>' . $row['year']:'')  . "'";
+				$chart_values .=  $match_stats[$i]['match_number'] ;
+				
+				$i++;
+			}
+			echo '<h2>Activity statistics for team ' . $team_name . '</h2>' . "\n";
+			echo '<div id="chart-container-1"></div>' . "\n";
+			
+			echo '<table class="small" id="activity_stats">' . "\n";
+			
+			echo '<tr>' . "\n";
+			echo '<th>Month</th>' . "\n";
+			echo '<th>Played matches</th>' . "\n";
+			echo '</tr>';
+			
+			
+			for ($i = 0; $i < $n_rows; $i++)
+			{
+				echo '<tr>';
+				echo '<td>' . $match_stats[$i]['period'] . '</td>';
+				echo '<td>' . $match_stats[$i]['match_number'] . '</td>';
+				echo '</tr>' . "\n";
+			}
+			
+			echo '</table>' . "\n";
+		echo '</div>';
+		
+		?>
+		<script src="/js/highcharts.js" type="text/javascript"></script>
+		<script type="text/javascript" src="../js/themes/gray.js"></script>
+		<script type="text/javascript">
+		var chart1; // globally available
+		$(document).ready(function() {
+		      chart1 = new Highcharts.Chart({
+		         chart: {
+		            renderTo: 'chart-container-1',
+		            defaultSeriesType: 'line',
+		         },
+		         title: {
+		            text: 'Activity stats for <?php echo addslashes(htmlent_decode($team_name)); ?>'
+		         },
+		         xAxis: {
+						categories: [<?php echo $chart_periods; ?>]
+				},
+				yAxis: {
+					min: 0,
+					title: {
+						text: 'Amount of matches'
+					}
+				},
+				legend: {
+					enabled: false
+				},
+				tooltip: {
+					formatter: function() {
+						return '<b>'+ this.y + '</b>';
+					}
+				},
+				plotOptions: {
+					series: {
+						stacking: 'normal'
+					}
+				},
+			    series: [{ title: '',
+					data: [<?php echo $chart_values; ?>]
+				}]
+		      });
+		   });	
+		</script>
+		<?php 
+		
+		
+		$site->dieAndEndPageNoBox();
+			
+			
+			
+	}
+	
+	// someone wants to look at a team profile
 	if (isset($_GET['opponent_stats']))
 	{
 		$profile = intval($_GET['opponent_stats']);
@@ -2279,8 +2416,8 @@
 			echo '<caption>Opponent statistics for team ' . $team_name . '</caption>' . "\n";
 			echo '<tr>' . "\n";
 			
-			// find out of table is to be sorted
-			$sortBy = '';
+			// find out of table is to be sorted default - Name
+			$sortBy = 'Name';
 			if (isset($_GET['sort']))
 			{
 				// allowed sorting columns
@@ -2364,10 +2501,11 @@
 	
 				if ($orderAsc)
 				{
+					
 					return strcmp($a[$sortBy], $b[$sortBy]);
 				} else
 				{
-					return !(strcmp($a[$sortBy], $b[$sortBy]));
+					return (strcmp($b[$sortBy], $a[$sortBy]));
 				}
 			}
 			
