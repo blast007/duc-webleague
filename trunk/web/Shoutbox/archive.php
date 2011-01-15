@@ -29,20 +29,23 @@
 		$site->dieAndEndPageNoBox();
 	}
 	
-	// only allow looking when having the permission
-	if ($allow_moderate_shoutbox === false)
-	{
-		$site->dieAndEndPageNoBox('You (id=' . sqlSafeString($viewerid) . ') have no permissions to manage the shoutbox!');
-	}
 	
 	
-	
+	echo '<h1 class="tools">Shoutbox archive</h1>';
 	
 		
 	echo '<div class="toolbar">';
+	
+	// only allow looking when having the permission
+	if ($allow_moderate_shoutbox === true)
+	{
+		echo '<a href="/Shoutbox/" class="button">Shoutbox management</a>';
+	}
+	
+	
 	echo '</div>';
 	
-	echo '<h1 class="tools">Shoutbox archive</h1>';
+	
 	
 	
 	$query = ('SELECT * FROM wtagshoutbox ORDER BY date ASC LIMIT 0,500');
