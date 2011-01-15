@@ -1435,6 +1435,11 @@ position:relative;
 	height:auto;
 	background: url(Ducati_misc/bg_dark_box.png) repeat;
 }
+#chat.home-box
+{
+	height:226px;
+}
+
 
 #shoutbox_archive 
 {
