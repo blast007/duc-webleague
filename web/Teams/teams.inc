@@ -587,6 +587,8 @@ function showTeamActivityStats($profile)
 		$i = 0;
 		$chart_periods = '';
 		$chart_values = '';
+		$total_match_num = 0;
+		$start_month;
 		$startyear = 2000;
 		while ($row = mysql_fetch_array($result))
 		{
@@ -594,6 +596,7 @@ function showTeamActivityStats($profile)
 			$match_stats[$i]['match_number'] = $row['match_number'];
 			$match_stats[$i]['month_number'] = (12 * ($row['year']-$startyear)) + $row['month']; 
 			
+			$total_match_num += $row['match_number'];
 			
 			if ($i != 0)
 			{
@@ -617,10 +620,19 @@ function showTeamActivityStats($profile)
 		}
 		
 		
+		
 		echo '<h2>Activity statistics for team ' . $team_name . '</h2>' . "\n";
+		
+		$months = $match_stats[$i-1]['month_number'] - $match_stats[0]['month_number'];
+		echo '<table class="small" id="activity_summary">' . "\n";
+		echo '<tr><td>Total match played: </td><td>' . $total_match_num . '</td></tr>' . "\n";
+		echo '<tr><td>Average per month: </td><td>' . round($total_match_num / $months,2) . '</td></tr>' . "\n";
+		echo '</table>';
+		
+		
 		echo '<div id="chart-container-1"></div>' . "\n";
 		
-		echo '<table class="small" id="activity_stats">' . "\n";
+		echo '<table class="small team-activity" id="activity_stats">' . "\n";
 		
 		echo '<tr>' . "\n";
 		echo '<th>Month</th>' . "\n";
@@ -630,13 +642,21 @@ function showTeamActivityStats($profile)
 		
 		for ($i = 0; $i < $n_rows; $i++)
 		{
+		if ($i>0 && (substr($match_stats[$i]['period'],-2) != substr($match_stats[$i-1]['period'],-2)))
+			{
+				echo '</table>' . "\n";
+				echo '<table class="small team-activity" id="activity_stats">' . "\n";
+				echo '<tr> <th>Month</th><th>Matches played</th></tr>' . "\n";
+			}
 			echo '<tr>';
 			echo '<td>' . $match_stats[$i]['period'] . '</td>';
 			echo '<td>' . $match_stats[$i]['match_number'] . '</td>';
-			echo '</tr>' . "\n";
+			echo '</tr>' . "\n";			
 		}
 		
 		echo '</table>' . "\n";
+		
+		
 	echo '</div>';
 	
 	?>
