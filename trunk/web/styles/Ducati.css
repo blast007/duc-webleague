@@ -1239,6 +1239,7 @@ div.edit_user_suspended_status_send
 	margin:5px 0px;
 	height: 2em;
 	line-height:1.8em;
+	clear:both;
 }
 
 .match-form label
