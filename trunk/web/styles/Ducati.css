@@ -19,6 +19,10 @@ body
 	font-family: Verdana, sans-serif;
 }
 
+.clear
+{
+	clear:both;
+}
 .footer 
 {
 	clear: both;
@@ -370,6 +374,20 @@ table.big
 {
 	display: block;
 	width:100%;
+}
+
+table.team-activity
+{
+	display-like:table-cell;
+	vertical-align:top;
+	margin:10px 5px 10px 0px;
+}
+
+#activity_summary
+{
+	clear:both;
+	display:block;
+	margin:5px 0px 20px;
 }
 
 .home-right #article_body
@@ -1408,6 +1426,9 @@ table a.button:after
 	position:absolute;
 	right:1px;
 	text-transform: lowercase;
+	white-space: nowrap;
+	width: 50%;
+	text-align:right;
 }
 .dataTables_filter:before
 { 
