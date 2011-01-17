@@ -5,7 +5,7 @@ html
 	height:100%;
 	padding:0px;
 }
-	
+
 
 body
 {
@@ -100,7 +100,9 @@ ul.navigation, ul.small-navigation
 	list-style: none;
 	color:white;
 	text-transform: uppercase;
+	
 }	
+
 
 ul.navigation
 {
@@ -118,6 +120,7 @@ ul.navigation li
 	display: block;
 	float:left;
 	position:relative;
+	z-index:10;
 }
 
 ul.navigation li ul 
@@ -127,10 +130,10 @@ ul.navigation li ul
 	position:absolute;
 	top:110px;
 	left:0px;
+	margin:0px;
 	padding:0px;
-	z-index:10;
+	z-index:100;
 	border-top:1px solid #AAAAAA;
-	
 }
 	
 ul.navigation li:hover ul 
@@ -485,6 +488,7 @@ div.content
 	color: white;
 	text-align: left;
 	padding:1em 2em;
+	
 }
 
 .simpleform
@@ -614,19 +618,24 @@ div.online_user
 	margin-bottom:10px;
 }	
 	
+.homepage 
+{
+	clear:both;
+}			
 .home-left
 {
 	width:55%;
 	float: left;
 	margin-right:2%;
+	clear:both;
+	
 }	
 
 .home-right 
 {
 	margin-top: -40px;
 	float: right;
-	width: 40%;
-		
+	width: 40%;		
 }
 
 
@@ -678,6 +687,10 @@ div.online_user
 {
 	outline: none;
 } 
+.tabs .main-box
+{
+	margin-top:-10px;
+}
 
 
 a.teams { background-image: url(Ducati_misc/ico_teams_small.png) 	 }
@@ -696,9 +709,10 @@ a.players{ background-image: url(Ducati_misc/ico_players_small.png)  }
 	color: #ddaf08;
 	height:25px;
 	margin:10px 0px 5px;
-	padding:0px 25px 0px 35px;
+	padding:0px 10px 0px 5px;
 	float:left;
-	position:relative;
+	white-space: nowrap;
+	z-index:0;
 	-webkit-border-radius: 0.5em 0.5em 0.5em 0.5em;
 	-moz-border-radius: 0.5em 0.5em 0.5em 0.5em;
 	/* Don't know what the final CSS 3 spec will be */
@@ -709,16 +723,11 @@ a.players{ background-image: url(Ducati_misc/ico_players_small.png)  }
 {
 	color: #FFF;
 }
-.home-right h2:before 
+.home-right h2.news span
 {
-	content: " ";
-	display:block;
-	position:absolute;
-	top:0px;
-	left:5px;
-	height:24px;
-	width:25px;
-	margin-right:5px;	
+	background: url(Ducati_misc/ico_news_small.png) 0% 50% no-repeat;
+	color: #ddad08;	
+	padding-left:30px;
 }	
 
 .home-right h2:after 
@@ -729,11 +738,6 @@ a.players{ background-image: url(Ducati_misc/ico_players_small.png)  }
     clear: both;
     visibility: hidden;
 }
-
-.home-right h2.teams:before { background: url(Ducati_misc/ico_teams_small.png) 50% 50% no-repeat;	 }
-.home-right h2.matches:before { background: url(Ducati_misc/ico_matches_small.png) 50% 50% no-repeat;	 }
-.home-right h2.news:before { background: url(Ducati_misc/ico_news_small.png) 50% 50% no-repeat;	 }
-.home-right h2.players:before { background: url(Ducati_misc/ico_players_small.png) 50% 50% no-repeat;	 }
 
 .home-right .button 
 {

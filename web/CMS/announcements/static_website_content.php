@@ -289,6 +289,7 @@
 		{
 			case 'home'  : 
 			{
+				echo '<div class="homepage">';
 				echo '<div class="home-left">'; 
 				if ($logged_in) 
 				{
@@ -303,6 +304,7 @@
 				echo '</div>';	
 				echo '</div>';
 				include dirname(dirname(dirname(__FILE__))) . '/right_column.php';
+				echo '</div>';
 				
 			} break;
 			default: 
