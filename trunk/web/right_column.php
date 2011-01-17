@@ -1,6 +1,6 @@
 <div class="home-right">
 	<div id="latest-news">
-		<h2 class="news">Latest news</h2>
+		<h2 class="news"><span>Latest news</span></h2>
 		<div class="main-box article">
 			<?php
 				display_last_news(1);
