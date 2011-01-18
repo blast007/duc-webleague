@@ -48,7 +48,7 @@
 	
 	
 	
-	$query = ('SELECT * FROM wtagshoutbox ORDER BY date ASC LIMIT 0,500');
+	$query = ('SELECT * FROM wtagshoutbox WHERE published = \'yes\' ORDER BY date ASC LIMIT 0,500');
 			
 	if (!($result = @$site->execute_query('wtagshoutbox', $query, $connection)))
 	{

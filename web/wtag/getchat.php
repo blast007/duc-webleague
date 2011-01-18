@@ -10,7 +10,7 @@ header("Content-Type: text/xml; charset=UTF-8");
 require_once("conf.php");
 
 // Retrieve last 20 messages from database and order them in descending order 
-$sql->query("SELECT date, name, message FROM wtagshoutbox ORDER BY messageid DESC LIMIT 20");
+$sql->query("SELECT date, name, message FROM wtagshoutbox WHERE published = 'yes' ORDER BY messageid DESC LIMIT 20");
 
 include_once("response.php");
 ?>

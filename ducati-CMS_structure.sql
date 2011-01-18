@@ -436,6 +436,7 @@ CREATE TABLE `visits` (
   `host` varchar(100) DEFAULT NULL,
   `forwarded_for` varchar(200) DEFAULT NULL,
   `timestamp` varchar(20) NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `login_failed` set('yes','no') NOT NULL default 'no',	
   PRIMARY KEY (`id`),
   KEY `playerid` (`playerid`),
   KEY `ip-address` (`ip-address`),
@@ -452,6 +453,7 @@ CREATE TABLE wtagshoutbox (
              `messageid`    int(11) not null auto_increment PRIMARY KEY,
              `name`         varchar(50) not null,
              `message`      text not null,
+             `published`	set('yes','no') NOT NULL default 'yes',	
              `ip`           int(11) not null,
              `date`         datetime not null default '0000-00-00 00:00:00'
  ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

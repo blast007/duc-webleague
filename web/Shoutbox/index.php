@@ -49,6 +49,31 @@
 		}		
 	}
 	
+	//Publish shout!
+	if (isset($_GET['publish']) && $allow_moderate_shoutbox)
+	{
+		$shoutid =  intval($_GET['publish']);
+		$query = ('UPDATE `wtagshoutbox` SET `published` = \'yes\' WHERE `messageid` =' . sqlSafeStringQuotes($shoutid));
+			
+		if (!($result = $site->execute_query('wtagshoutbox', $query, $connection)))
+		{
+		
+			$site->dieAndEndPage('The message could not be published due to a sql problem!');
+		}		
+	}
+	
+	//Block shout!
+	if (isset($_GET['block']) && $allow_moderate_shoutbox)
+	{
+		$shoutid =  intval($_GET['block']);
+		$query = ('UPDATE `wtagshoutbox` SET `published` = \'no\' WHERE `messageid` =' . sqlSafeStringQuotes($shoutid));
+			
+		if (!($result = $site->execute_query('wtagshoutbox', $query, $connection)))
+		{
+		
+			$site->dieAndEndPage('The message could not be blocked due to a sql problem!');
+		}		
+	}
 	
 	
 		
@@ -96,6 +121,7 @@
 		$results_list[$id]['name'] = $row['name'];
 		$results_list[$id]['message'] = $row['message'];
 		$results_list[$id]['id'] = $row['messageid'];		
+		$results_list[$id]['published'] = $row['published'];
 	}
 	unset($results_list[0]);
 	
@@ -106,7 +132,7 @@
 	// walk through the array values
 	foreach($results_list as $result_entry)
 	{
-		echo '<tr>' . "\n";
+		echo '<tr ' . (($result_entry['published'] === 'no')? 'class="deleted"' : '') . '>' . "\n";
 		echo '<td>' . $result_entry['date'] . '</td>' . "\n";
 		echo '<td>' . $result_entry['name'] . '</td>' . "\n";
 		echo '<td>' . $result_entry['message'] . '</td>' . "\n";
@@ -115,6 +141,12 @@
 		if ($allow_moderate_shoutbox)
 		{
 			echo '<td>';
+			if ($result_entry['published'] === 'no')
+			{
+				echo '<a class="button" href="./?publish=' . htmlspecialchars($result_entry['id']) . '" >Publish</a> ';
+			}
+			else echo '<a class="button" href="./?block=' . htmlspecialchars($result_entry['id']) . '" >Block</a> ';
+			
 			echo '<a class="button" href="./?delete=' . htmlspecialchars($result_entry['id']) . '" 
 			onclick="return confirm(\'Are you sure you want to delete this message?\')" >Delete message</a> ';
 			echo '</td>' . "\n";
