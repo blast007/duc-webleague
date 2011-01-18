@@ -3,7 +3,7 @@ if ( (isset($_GET['bzbbauth'])) && ($_GET['bzbbauth']) )
 {
 	require '../CMS/bzbb_login/checkToken.php';
 	require_once '../CMS/permissions.php';
-	
+		
 	if ($banned_user)
 	{
 		require_once '../CMS/navi.inc';
@@ -11,6 +11,11 @@ if ( (isset($_GET['bzbbauth'])) && ($_GET['bzbbauth']) )
 		$error_msg = '<p class="first_p">Login failed: The returned values could not be validated!</p>' . "\n";
 		$site->dieAndEndPage($error_msg);
 	}
+	
+	define('RBL_DIRECTORY', '../CMS/proxies');  // Do not add trailing slashes here
+	require_once(RBL_DIRECTORY . '/rbl.php');
+	
+	
 	
 	// initialise permissions
 	no_permissions();

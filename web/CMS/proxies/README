@@ -1,0 +1,75 @@
+ RBL Extension for Anything
+ T. Tornevall 2008-01-30 [thorne@tornevall.net]
+
+ This extension adds RBL Checking on any webpage you want to use it on.
+ Some of the source has been borrowed from a local script engine. This one: http://www.tornevall.net/engine/
+
+ Databases needed by this script is rbl_cache (blacklisted cache) and rbl_config (used just to be sure that
+ the database really was created). If everything works as it should, the tables will be created automatically.
+ If not, look below, to see what to create. If you need to change something, you may do it there.
+
+ Usage:
+
+	Copy rbl.php and rblconfig.php to a directory you want to use it in.
+	Edit rblconfig.php
+	Edit a file of your choice and add
+
+		define('RBL_DIRECTORY', '/root/web/directory/or/wherever/you/put/this');  // Do not add trailing slashes here
+		require_once(RBL_DIRECTORY . '/rbl.php');
+
+	Edit the template, blacklisted.html, to show a message to blacklisted users.
+
+	***
+
+	The writer of this script will not be held responsible for any damage it
+	may cause to your site.
+
+	On emergencies, look at the rblconfig.php and change this line:
+
+		define('RBL_ENABLE', true);
+
+	to this
+
+		define('RBL_ENABLE', false);
+
+	Only contact the author of this script if you want to say anything that
+	makes sense. Like bugs or other IMPORTANT things.
+	Example of unimportant things is: "You suck", "Remove me from your damn list" or "Remove your fucking script!"
+
+	In short: Read the rules and disclaimer below.
+
+
+ ==== RULES, DISCLAIMER AND TERMS OF USAGE ====
+
+	- Modifications and bugfixes
+
+		Use this script. Modify it. But if you find bugs, things that should be changed,
+		etc, feel free to contact me, so I can add your wishes to the official version.
+
+				Thanks!
+
+	- Translation and understanding of this README?
+
+		Do it yourself. If you don't understand english, ask someone who does.
+
+	- Feel free to NOT send complaints about this script
+
+		It has been written, it works, and that annoys some people out there.
+		I don't care. Admins may use it or not. That is not my problem.
+
+	- IP-Removal
+
+		You should consider NOT to contact me about anything regarding IP-removal.
+		The script still works, and it is based on databases on the Big Internet, that is
+		not stored locally by me. If you are blacklisted, it's not my fault - it's
+		probably someone elses problem. And I don't care.
+
+	- Questions
+
+		If you have ANY questions, go to http://dnsbl.tornevall.org/, RTFM and get yourself helped
+		from there. I am not mean, but still - on complaints, it's not me you should
+		talk with!
+
+	- Feedback
+
+		Coming Soon!
