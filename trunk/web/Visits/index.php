@@ -197,7 +197,8 @@
 		$search_expression = str_replace('*', '%', $search_expression);
 		
 		// get list of last 200 visits
-		$query = 'SELECT `visits`.`id`,`visits`.`playerid`,`players`.`name`,`visits`.`ip-address`,`visits`.`host`,`visits`.`timestamp`,`visits`.`forwarded_for` FROM `visits`,`players` ';
+		$query = 'SELECT `visits`.`id`,`visits`.`playerid`,`players`.`name`,`visits`.`ip-address`'
+		. ',`visits`.`host`,`visits`.`timestamp`,`visits`.`forwarded_for`, `visits`.`login_failed` FROM `visits`,`players` ';
 		$query .= 'WHERE `visits`.`playerid`=`players`.`id`';
 		
 		if (!($search_name))
@@ -257,7 +258,7 @@
 		//				  FROM `visits`,`players` WHERE `visits`.`playerid`='16' AND `players`.`id`='16'
 		//				  ORDER BY `visits`.`id` DESC LIMIT 0,201
 		$query = ('SELECT `players`.`name`,`visits`.`ip-address`, `visits`.`host`, `visits`.`timestamp`,`visits`.`forwarded_for`'
-				  . ' FROM `visits`,`players` WHERE `visits`.`playerid`='
+				  . ',`visits`.`login_failed` FROM `visits`,`players` WHERE `visits`.`playerid`='
 				  . sqlSafeStringQuotes($profile) . ' AND `players`.`id`=' . sqlSafeStringQuotes($profile));
 	}
 	
@@ -271,7 +272,7 @@
 			$query = ('SELECT `visits`.`playerid`,'
 					  . '(SELECT `name` FROM `players` WHERE `id`=`visits`.`playerid`) AS `name`,'
 					  . '`visits`.`ip-address`,`visits`.`host`,`visits`.`timestamp`,`visits`.`forwarded_for`'
-					  . ' FROM `visits`');
+					  . ',`visits`.`login_failed` FROM `visits`');
 		}
 	}
 	$query .= ' ORDER BY `visits`.`id` DESC LIMIT ';
@@ -344,6 +345,7 @@
 		$visits_list[$id]['name'] = $row['name'];
 		$visits_list[$id]['ip-address'] = $row['ip-address'];
 		$visits_list[$id]['host'] = $row['host'];
+		$visits_list[$id]['login_failed'] = $row['login_failed'];
 		$visits_list[$id]['timestamp'] = $row['timestamp'];
 		$visits_list[$id]['forwarded_for'] = $row['forwarded_for'];
 		$id++;
@@ -396,7 +398,7 @@
 			echo '<a href="../Players/?profile=' . strval($visits_entry['playerid']) . '">';
 		}
 		echo $visits_entry['name'];
-		echo '</a></td>' . "\n";
+		echo '</a>' . (($visits_entry['login_failed']==='yes')?' (failed)':'') .' </td>' . "\n";
 		echo '	<td>' . $visits_entry['ip-address'] . '</td>' . "\n";
 		echo '	<td>' . $visits_entry['host'] . '</td>' . "\n";
 		echo '	<td>' . $visits_entry['timestamp'] . '</td>' . "\n";

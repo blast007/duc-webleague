@@ -235,6 +235,7 @@ ul.navigation .tools a, ul.navigation .tools span {background-image: url(Ducati_
 	position:absolute;
 	top:0.5em;
 	right:2em;	
+	z-index: 100;
 }
 
 .small-navigation li
@@ -1096,6 +1097,13 @@ table.nested_table td
 {
 	padding-right: 1em;
 }
+
+tr.deleted td
+{
+	color:#f33;
+	font-style: italic;
+}
+
 
 div.team_profile_box
 {

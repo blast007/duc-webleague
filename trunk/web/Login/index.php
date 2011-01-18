@@ -19,6 +19,8 @@
 	{
 		global $site;
 		
+		$user = $_SESSION['viewerid'];
+		
 		$_SESSION['user_logged_in'] = false;
 		$_SESSION['viewerid'] = -1;
 		
@@ -32,6 +34,26 @@
 		{
 			echo '<p class="first_p">' . $message . '</p>' . "\n";
 		}
+		
+		
+//write a visit
+		$ip_address = getenv('REMOTE_ADDR');
+		
+		$query = ('INSERT INTO `visits` (`playerid`,`ip-address`,`forwarded_for`,`timestamp`,`login_failed`) VALUES ('
+				  . sqlSafeStringQuotes($user)
+				  . ', ' . sqlSafeStringQuotes(htmlent($ip_address))
+				   // try to detect original ip-address in case proxies are used
+				  . ',' . sqlSafeStringQuotes(htmlent(getenv('HTTP_X_FORWARDED_FOR')))
+				  . ', now(), \'yes\')');
+		$site->execute_query('visits', $query, $connection);
+		
+		//to avoid timeouts, i put host resolver out of that insert.
+		$host = gethostbyaddr($ip_address);
+		$query = ('UPDATE `visits` SET `host` = ' . sqlSafeStringQuotes(htmlent($host))
+		. 'WHERE `ip-address` =' . sqlSafeStringQuotes(htmlent($ip_address)));
+		$site->execute_query('visits', $query, $connection);
+	
+		
 		
 		if (strcmp($message, $logged_string) === 0)
 		{
@@ -631,7 +653,6 @@
 			$site->execute_query('visits', $query, $connection);
 		}
 	}
-	
 	
 	// $user_id is not set in case no login/registration was performed
 	if (getUserID() > 0)
