@@ -288,9 +288,8 @@
 		
 		function base_name()
 		{
-			$path = (pathinfo(realpath('./')));
-			$name = $path['basename'];
-			return $name;
+			$name =  $_SERVER['SCRIPT_NAME'];
+			return str_replace('index.php','',$name);
 		}
 				
 		function dieAndEndPage($message='')

@@ -100,14 +100,15 @@
 		// nothing else to do
 		// stop silently
 		unlock_tables_maint();
-		die();
+		
+	}	else 
+	{ // do the maintenance
+	
+		
+		$maint = new maintenance();
+		$maint->do_maintenance($site, $connection);
+		update_activity();
 	}
-	
-	// do the maintenance
-	$maint = new maintenance();
-	$maint->do_maintenance($site, $connection);
-	update_activity();
-	
 	
 	function update_activity($teamid=false)
 	{

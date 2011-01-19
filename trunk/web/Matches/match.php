@@ -61,7 +61,6 @@
 		
 		require_once ('../CMS/maintenance/index.php');
 		update_activity();
-		
 		update_seasons($timestamp);
 		
 		echo '<p>The match was entered successfully.</p>' . "\n";
@@ -213,6 +212,8 @@
 		
 		require_once ('../CMS/maintenance/index.php');
 		update_activity();
+		update_seasons($timestamp);
+		
 		
 		echo '<p>The match was edited successfully.</p>' . "\n";
 		$site->dieAndEndPage();
@@ -351,6 +352,8 @@
 		
 		require_once ('../CMS/maintenance/index.php');
 		update_activity();
+		update_seasons($timestamp);
+		
 		
 		echo '<p>The match was deleted successfully.</p>' . "\n";
 		$site->dieAndEndPage();
