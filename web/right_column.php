@@ -141,7 +141,7 @@ function display_last_news($limit)
 		echo '<div id="article_body">';
 		echo $row['announcement'];
 		echo '</div>' . "\n";
-		echo '<a href="javascript:void(0);" id="moreD" style="display: inline;">show more v</a>';
+		echo '<a href="javascript:void(0);" id="moreD" >show more v</a>';
 		echo '<p class="simple-paging p0"><a href="/News/" class="button next">More news</a></p>';
 	}
 }

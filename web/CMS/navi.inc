@@ -140,15 +140,15 @@
 		echo '<li class="home"><a href="' . BASEPATH . '">Home</a></li>' . "\n";
 	}
 	
-	writeLink('News/', 'News', (strcmp($name, 'News') == 0), 'news');
+	writeLink('News/', 'News', (strcmp($name, '/News/') == 0), 'news');
 	
-	writeLink('Players/', 'Players', (strcmp($name, 'Players') == 0), 'players');
+	writeLink('Players/', 'Players', (strcmp($name, '/Players/') == 0), 'players');
 	
-	writeLink('Teams/', 'Teams', (strcmp($name, 'Teams') == 0), 'teams');
+	writeLink('Teams/', 'Teams', (strcmp($name, '/Teams/') == 0), 'teams');
 	
-	writeLink('Matches/', 'Matches', (strcmp($name, 'Matches') == 0), 'matches');
+	writeLink('Matches/', 'Matches', (strcmp($name, '/Matches/') == 0), 'matches');
 		
-	writeLink('Season/', 'Seasons', (strcmp($name, 'Season') == 0), 'seasons');
+	writeLink('Season/', 'Seasons', (strcmp($name, '/Season/') == 0), 'seasons');
 	
 ?>	
 <li class="info">
@@ -156,15 +156,15 @@
 	<ul>
 <?php 
 	
-	writeLink('Rules/', 'Rules', (strcmp($name, 'Rules') == 0));
+	writeLink('Rules/', 'Rules', (strcmp($name, '/Rules/') == 0));
 	
-	writeLink('FAQ/', 'FAQ', (strcmp($name, 'FAQ') == 0));
+	writeLink('FAQ/', 'FAQ', (strcmp($name, '/FAQ/') == 0));
 	
-	writeLink('Links/', 'Links', (strcmp($name, 'Links') == 0));
+	writeLink('Links/', 'Links', (strcmp($name, '/Links/') == 0));
 	
-	writeLink('Bans/', 'Bans', (strcmp($name, 'Bans') == 0));
+	writeLink('Bans/', 'Bans', (strcmp($name, '/Bans/') == 0));
 	
-	writeLink('Contact/', 'Contact', (strcmp($name, 'Contact') == 0));
+	writeLink('Contact/', 'Contact', (strcmp($name, '/Contact/') == 0));
 	
 ?>
 	</ul>
@@ -176,7 +176,7 @@
 	
 	if ($logged_in && (isset($_SESSION['allow_watch_servertracker'])) && ($_SESSION['allow_watch_servertracker']))
 	{
-		writeLink('Servertracker/', 'Servers', (strcmp($name, 'Servertracker') == 0));
+		writeLink('Servertracker/', 'Servers', (strcmp($name, '/Servertracker/') == 0));
 	}
 	
 	if ($logged_in && isset($_SESSION['viewerid']))
@@ -186,24 +186,24 @@
 	
 	if ($logged_in && isset($_SESSION['viewerid']))
 	{
-		writeLink('Spawnlist/', 'Spawnlist', (strcmp($name, 'Spawnlist') == 0));
+		writeLink('Spawnlist/', 'Spawnlist', (strcmp($name, '/Spawnlist/') == 0));
 	}
 	
-	writeLink('Config/', 'Config', (strcmp($name, 'Config') == 0));
+	writeLink('Config/', 'Config', (strcmp($name, '/Config/') == 0));
 	
 	if ($logged_in && (isset($_SESSION['allow_view_user_visits'])) && ($_SESSION['allow_view_user_visits']))
 	{
-		writeLink('Visits/', 'Visits', (strcmp($name, 'Visits') == 0));
+		writeLink('Visits/', 'Visits', (strcmp($name, '/Visits/') == 0));
 	}
 	
 	if ($logged_in && isset($_SESSION['allow_moderate_shoutbox']) && $_SESSION['allow_moderate_shoutbox'])
 	{
-		writeLink('Shoutbox/', 'Shoutbox', (strcmp($name, 'Shoutbox') == 0));
+		writeLink('Shoutbox/', 'Shoutbox', (strcmp($name, '/Shoutbox/') == 0));
 	}
 	
 	if ($logged_in && isset($_SESSION['allow_manage_sitebans']) && $_SESSION['allow_manage_sitebans'])
 	{
-		writeLink('Bans/sitebans.php', 'Sitebans', (strcmp($name, 'Sitebans') == 0));
+		writeLink('Bans/sitebans.php', 'Sitebans', (strcmp($name, '/Bans/sitebans.php') == 0));
 	}
 	
 	

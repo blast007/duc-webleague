@@ -623,7 +623,7 @@ function showTeamActivityStats($profile)
 		
 		echo '<h2>Activity statistics for team ' . $team_name . '</h2>' . "\n";
 		
-		$months = $match_stats[$i-1]['month_number'] - $match_stats[0]['month_number'];
+		$months = $match_stats[$i-1]['month_number'] - $match_stats[0]['month_number'] + 1;
 		echo '<table class="small" id="activity_summary">' . "\n";
 		echo '<tr><td>Total match played: </td><td>' . $total_match_num . '</td></tr>' . "\n";
 		echo '<tr><td>Average per month: </td><td>' . round($total_match_num / $months,2) . '</td></tr>' . "\n";
