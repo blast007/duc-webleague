@@ -31,6 +31,9 @@
 		echo $site->write_self_closing_tag('link rel="icon" type="image/png" href="' . $site->favicon_path() . '"');
 	}
 	
+	echo '<link rel="alternate" type="application/rss+xml" title="Ducati League" href="/rss/" />';
+	
+	
 	echo '	<title>';
 	// display the title specified in $page_title
 	// the latter is defined in the script that includes this file
