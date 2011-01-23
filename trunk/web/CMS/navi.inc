@@ -174,6 +174,13 @@
 	<ul>
 <?php 
 	
+	
+	
+	if ($logged_in && isset($_SESSION['viewerid']))
+	{
+		writeLink('Players/?profile=' . $_SESSION['viewerid'], 'My profile', (strcmp($name, 'My profile') == 0));
+	}
+	
 	if ($logged_in && (isset($_SESSION['allow_watch_servertracker'])) && ($_SESSION['allow_watch_servertracker']))
 	{
 		writeLink('Servertracker/', 'Servers', (strcmp($name, '/Servertracker/') == 0));
@@ -181,19 +188,7 @@
 	
 	if ($logged_in && isset($_SESSION['viewerid']))
 	{
-		writeLink('Players/?profile=' . $_SESSION['viewerid'], 'My profile', (strcmp($name, 'My profile') == 0));
-	}
-	
-	if ($logged_in && isset($_SESSION['viewerid']))
-	{
 		writeLink('Spawnlist/', 'Spawnlist', (strcmp($name, '/Spawnlist/') == 0));
-	}
-	
-	writeLink('Config/', 'Config', (strcmp($name, '/Config/') == 0));
-	
-	if ($logged_in && (isset($_SESSION['allow_view_user_visits'])) && ($_SESSION['allow_view_user_visits']))
-	{
-		writeLink('Visits/', 'Visits', (strcmp($name, '/Visits/') == 0));
 	}
 	
 	if ($logged_in && isset($_SESSION['allow_moderate_shoutbox']) && $_SESSION['allow_moderate_shoutbox'])
@@ -201,10 +196,22 @@
 		writeLink('Shoutbox/', 'Shoutbox', (strcmp($name, '/Shoutbox/') == 0));
 	}
 	
+	if ($logged_in && isset($_SESSION['allow_manage_polls']) && $_SESSION['allow_manage_polls'])
+	{
+		writeLink('Polls/', 'Polls', (strcmp($name, '/Polls/') == 0));
+	}
+	
+	if ($logged_in && (isset($_SESSION['allow_view_user_visits'])) && ($_SESSION['allow_view_user_visits']))
+	{
+		writeLink('Visits/', 'Visits', (strcmp($name, '/Visits/') == 0));
+	}
+	
 	if ($logged_in && isset($_SESSION['allow_manage_sitebans']) && $_SESSION['allow_manage_sitebans'])
 	{
 		writeLink('Bans/sitebans.php', 'Sitebans', (strcmp($name, '/Bans/sitebans.php') == 0));
 	}
+		
+	writeLink('Config/', 'Config', (strcmp($name, '/Config/') == 0));
 	
 	
 ?>

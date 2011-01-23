@@ -179,6 +179,7 @@ if ( (isset($_GET['bzbbauth'])) && ($_GET['bzbbauth']) )
 		// aux permissions
 		is_admin();
 		allow_moderate_shoutbox();
+		allow_manage_polls();
 	}
 	
 	if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'])

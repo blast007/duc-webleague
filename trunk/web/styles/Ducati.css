@@ -577,7 +577,7 @@ h1.players:before { background: url(Ducati_misc/ico_players.png) 50% 50% no-repe
 h1.info:before { background: url(Ducati_misc/ico_info.png) 50% 50% no-repeat;	 }
 h1.tools:before { background: url(Ducati_misc/ico_tools.png) 50% 50% no-repeat;	 }
 h1.news:before { background: url(Ducati_misc/ico_news.png) 50% 50% no-repeat;	 }
-
+h1.polls:before { background: url(Ducati_misc/ico_polls.png) 50% 50% no-repeat;	 }
 
 
 
@@ -730,7 +730,12 @@ a.players{ background-image: url(Ducati_misc/ico_players_small.png)  }
 	color: #ddad08;	
 	padding-left:30px;
 }	
-
+.home-right h2.polls span
+{
+	background: url(Ducati_misc/ico_polls_small.png) 0% 50% no-repeat;
+	color: #ddad08;	
+	padding-left:30px;
+}	
 .home-right h2:after 
 {
 	content: ".";
@@ -752,7 +757,46 @@ a.players{ background-image: url(Ducati_misc/ico_players_small.png)  }
 	margin:5px 0px 0px;
 }
 	
-	
+.home-right h3 
+{
+	margin:0px 5px;
+}
+.home-right form
+{
+	margin:0px;
+}
+
+/* polls */
+
+#poll ul 
+{
+	list-style-type: none;
+	margin:3px 3px 10px;
+	padding:0px;
+}
+#poll li 
+{
+	margin:3px 0px 0px;
+}
+#poll .votes
+{
+	float:right;
+	color: #ddaf08;
+}
+
+#poll li .pbar span
+{
+	display:block;
+	height:6px;
+	background-color: #88DF08;
+}
+
+#poll li:nth-child(4n) .pbar span {background-color: #88DF08;}
+#poll li:nth-child(4n+1) .pbar span {background-color: #BBDF08;}
+#poll li:nth-child(4n+2) .pbar span {background-color: #00DF08;}
+#poll li:nth-child(4n+3) .pbar span {background-color: #FFDF08;}
+
+
 
 /* private messages */
 
@@ -899,13 +943,7 @@ textarea#msg_send_announcement
 }
 
 /* news announcements */
-a#new_entry.button + br +br + span
-{
-	display: block;
-	text-align: right;
-	margin-bottom: 0.15em;
-	margin-top: -2.6em;
-}
+
 
 .edit_and_delete_links
 {
