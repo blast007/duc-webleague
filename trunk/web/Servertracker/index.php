@@ -73,9 +73,13 @@
 		
 		formatbzfquery("studpups.bzflag.net:59998", $connection);
 		
+		formatbzfquery("bzexcess.com:5432", $connection);
+		
 		formatbzfquery("brl.arpa.net:59998", $connection);
 		
 		formatbzfquery("brl.arpa.net:59999", $connection);
+		
+		
 				
 		echo '<h2>Public servers</h2>';
 		
