@@ -88,6 +88,10 @@
 		// shoutbox permissions
 		$_SESSION['allow_moderate_shoutbox'] = false;
 		
+		// shoutbox permissions
+		$_SESSION['allow_manage_polls'] = false;
+		
+		
 	}
 	
 	function allow_change_debug_sql()
@@ -400,6 +404,14 @@
 		if (!($_SESSION['allow_moderate_shoutbox']))
 		{
 			$_SESSION['allow_moderate_shoutbox'] = true;
+		}
+	}
+	
+	function allow_manage_polls()
+	{
+		if (!($_SESSION['allow_manage_polls']))
+		{
+			$_SESSION['allow_manage_polls'] = true;
 		}
 	}
 

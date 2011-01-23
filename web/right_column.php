@@ -1,4 +1,7 @@
 <div class="home-right">
+	
+	<?php require_once(dirname(__FILE__) .'/Polls/showpoll.php'); ?>
+	
 	<div id="latest-news">
 		<h2 class="news"><span>Latest news</span></h2>
 		<div class="main-box article">
