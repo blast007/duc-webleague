@@ -32,3 +32,9 @@ CREATE TABLE IF NOT EXISTS `polls_votes` (
    
   
 );
+
+
+INSERT INTO servertracker (servername, serveraddress, owner) VALUES ('bzexcess' , 'bzexcess.com:5432', 'blast');
+
+
+
