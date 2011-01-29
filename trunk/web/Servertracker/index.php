@@ -92,7 +92,7 @@
 		echo '<h2>Match servers</h2>';
 		
 		$query = ('SELECT `id`, `servername`, `serveraddress`, `description` FROM `servertracker`'
-				  . ' WHERE `type` = \'match\' ORDER BY `id`');
+				  . ' WHERE `type` = \'match\' ORDER BY `serveraddress`');
 		if (!($result = $site->execute_query('servertracker', $query, $connection)))
 		{
 			die('Error during getting servers list.');
@@ -120,7 +120,7 @@
 		echo '<h2>Public servers</h2>';
 		
 		$query = ('SELECT `id`, `servername`, `serveraddress`, `description` FROM `servertracker`'
-				  . ' WHERE `type` = \'public\' ORDER BY `id`');
+				  . ' WHERE `type` = \'public\' ORDER BY `serveraddress`');
 		if (!($result = $site->execute_query('servertracker', $query, $connection)))
 		{
 			die('Error during getting servers list.');
@@ -147,7 +147,7 @@
 		echo '<h2>Replay servers</h2>';
 		
 		$query = ('SELECT `id`, `servername`, `serveraddress`, `description` FROM `servertracker`'
-				  . ' WHERE `type` = \'replay\' ORDER BY `id`');
+				  . ' WHERE `type` = \'replay\' ORDER BY `serveraddress`');
 		if (!($result = $site->execute_query('servertracker', $query, $connection)))
 		{
 			die('Error during getting servers list.');
