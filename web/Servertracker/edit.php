@@ -18,7 +18,7 @@
 	echo '<h1 class="tools">Servers management</h1>';
 	
 	echo '<div class="simple-paging">';
-	echo '<a class="button" href="/Severtracker/">Overview</a>' . "\n";
+	echo '<a class="button" href="/Servertracker/">Overview</a>' . "\n";
 	echo '</div>' . "\n";
 	
 	echo '<div class="main-box">' . "\n";

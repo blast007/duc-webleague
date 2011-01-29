@@ -81,8 +81,7 @@
 	
 	require 'list.php';
 	
-	$connection = $object->loudless_pconnect_to_db();
-	
+	$connection = $site->connect_to_db();
 	if (isset($_GET['server']))
 	{
 		echo '<p class="simple-paging"><a class="button previous" href="./">overview</a></p>' . "\n";
@@ -117,28 +116,7 @@
 			}
 			$i++;
 		}
-	/*			  
-		formatbzfquery("dub.bzflag.net:59998", $connection, "Germany");
-		
-		formatbzfquery("dub.bzflag.net:59999", $connection, "Germany");
-		
-		formatbzfquery("001.bzflag.fr:59998", $connection, "France");		
-		
-		formatbzfquery("quol.bzflag.bz:59998", $connection, "Canada");
-				
-		formatbzfquery("studpups.bzflag.net:59998", $connection, "USA, Florida");
-		
-		formatbzfquery("bzexcess.com:5432", $connection, "USA, Ohio");
-		
-		formatbzfquery("brl.arpa.net:59998", $connection, "USA, California");
-		
-		formatbzfquery("brl.arpa.net:59999", $connection, "USA, California");
-		
-		formatbzfquery("bzflag.enuffsaid.co.nz:59998", $connection, "New Zealand");
-		*/
-		
-		
-		
+			
 		echo '<h2>Public servers</h2>';
 		
 		$query = ('SELECT `id`, `servername`, `serveraddress`, `description` FROM `servertracker`'
@@ -184,10 +162,10 @@
 		{
 			if ($i == $last)
 			{
-				formatbzfquery_last($row['serveraddress'], $connection,$row['description']);
+				formatshowserver_last($row['serveraddress'],$row['description']);
 			} else 
 			{
-				formatbzfquery($row['serveraddress'], $connection,$row['description']);
+				formatshowserver($row['serveraddress'], $row['description']);
 			}
 			$i++;
 		}
