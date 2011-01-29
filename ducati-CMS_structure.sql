@@ -286,6 +286,8 @@ CREATE TABLE `servertracker` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `servername` tinytext,
   `serveraddress` tinytext NOT NULL,
+  `description` tinytext NULL,
+  `type` set('match','replay','public') NOT NULL default 'match',
   `owner` tinytext NOT NULL,
   `cur_players_total` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)

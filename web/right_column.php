@@ -289,13 +289,25 @@ function display_last_matches($limit)
 		echo '<tr>' . "\n";
 		echo '<td>' . ago($row['timestamp']) . '</td>';
 		echo '<td>' ;
-			team_name_from_id($row['team1_teamid'], $row['team1_name']);
-			echo ' - ';
-			team_name_from_id($row['team2_teamid'], $row['team2_name']);
-		echo '</td><td>';
-			echo htmlentities($row['team1_points']);
-			echo ' - ';
-			echo htmlentities($row['team2_points']);
+		if ($row['team1_points'] >= $row['team2_points'])
+		{
+				team_name_from_id($row['team1_teamid'], $row['team1_name']);
+				echo ' - ';
+				team_name_from_id($row['team2_teamid'], $row['team2_name']);
+			echo '</td><td>';
+				echo htmlentities($row['team1_points']);
+				echo ' - ';
+				echo htmlentities($row['team2_points']);
+		} else
+		{
+				team_name_from_id($row['team2_teamid'], $row['team2_name']);
+				echo ' - ';
+				team_name_from_id($row['team1_teamid'], $row['team1_name']);
+			echo '</td><td>';
+				echo htmlentities($row['team2_points']);
+				echo ' - ';
+				echo htmlentities($row['team1_points']);
+		}
 		echo '</td>' . "\n";
 		echo '</tr>' . "\n";
 				

@@ -77,6 +77,7 @@
 		
 		// server tracker permissions
 		$_SESSION['allow_watch_servertracker'] = false;
+		$_SESSION['allow_manage_servers'] = false;
 		
 		// TODO permissions
 		$_SESSION['allow_view_todo'] = false;
@@ -380,6 +381,14 @@
 		if (!($_SESSION['allow_watch_servertracker']))
 		{
 			$_SESSION['allow_watch_servertracker'] = true;
+		}
+	}
+	
+	function allow_manage_servers()
+	{
+		if (!($_SESSION['allow_manage_servers']))
+		{
+			$_SESSION['allow_manage_servers'] = true;
 		}
 	}
 	

@@ -109,15 +109,15 @@ function marke($markierung, $name)
     echo '<' . $markierung . ' class=' . "\x22" . $name . "\x22" . '>';
 }
 
-function formatbzfquery($server, $connection)
+function formatbzfquery($server, $connection, $description)
 {
 	global $site;
 	
-	formatbzfquery_last($server, $connection);
+	formatbzfquery_last($server, $connection,  $description);
 	$site->write_self_closing_tag('hr');
 }
 
-function formatbzfquery_last($server, $connection)
+function formatbzfquery_last($server, $connection,  $description = '')
 {
 	global $site;
 	global $connection;
@@ -136,10 +136,12 @@ function formatbzfquery_last($server, $connection)
 	
     if (isset($_GET['server']))
     {
-        echo '<p>' . $server . '</p>' . "\n";
+        echo '<p>' . $server . '<span class="description">' . $description . '</span></p>' . "\n";
     } else
     {
-        echo '<p><a href="?server=' . urlencode($server) . '">' . $server . '</a></p>' . "\n";
+        echo '<p><a href="?server=' . urlencode($server) . '">' . $server . '</a>';
+        if ($description != '') echo ' <span class="description">(' . $description . ')</span>';
+        echo '</p>' . "\n";
     }
     // Query the server
 	if (!function_exists('pcntl_fork'))
