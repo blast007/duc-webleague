@@ -109,6 +109,27 @@ function marke($markierung, $name)
     echo '<' . $markierung . ' class=' . "\x22" . $name . "\x22" . '>';
 }
 
+function formatshowserver($server,  $description = '')
+{
+	formatshowserver_last($server,  $description);
+	$site->write_self_closing_tag('hr');
+}
+
+
+function formatshowserver_last($server,  $description = '')
+{
+	if (isset($_GET['server']))
+    {
+        echo '<p>' . $server . '<span class="description">' . $description . '</span></p>' . "\n";
+    } else
+    {
+        echo '<p><a href="?server=' . urlencode($server) . '">' . $server . '</a>';
+        if ($description != '') echo ' <span class="description">(' . $description . ')</span>';
+        echo '</p>' . "\n";
+    }
+}
+
+
 function formatbzfquery($server, $connection, $description)
 {
 	global $site;
