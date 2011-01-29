@@ -108,7 +108,7 @@
 		global $connection;
 		
 		$query = ('SELECT `id`, `servername`, `serveraddress` FROM `servertracker`'
-				  . ' ORDER BY `id`');
+				  . ' WHERE `type` = \'match\' ORDER BY `id`');
 		if (!($result = $site->execute_query('servertracker', $query, $connection)))
 		{
 			die('Could not find out servername and serveraddress to be updated.');

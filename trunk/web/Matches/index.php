@@ -386,21 +386,37 @@
 		echo $match_entry['timestamp'] . ' [' . $match_entry['duration'] . ']';
 		echo '</td>' . "\n" . '<td>';
 		
-		// get name of first team
-		team_name_from_id($match_entry['team1_teamid'], $match_entry['team1_name']);
+		if ($match_entry['team1_points'] >= $match_entry['team2_points'])
+		{
 		
-		// seperator showing that opponent team will be named soon
-		echo ' - ';
+			// get name of first team
+			team_name_from_id($match_entry['team1_teamid'], $match_entry['team1_name']);
+			
+			// seperator showing that opponent team will be named soon
+			echo ' - ';
+			
+			// get name of second team
+			team_name_from_id($match_entry['team2_teamid'], $match_entry['team2_name']);
+			
+			// done with the table field, go to next field
+			echo '</td>' . "\n" . '<td>';
+			
+			echo htmlentities($match_entry['team1_points']);
+			echo ' - ';
+			echo htmlentities($match_entry['team2_points']);
+		} else
+		{
+			team_name_from_id($match_entry['team2_teamid'], $match_entry['team2_name']);
+			echo ' - ';
+			team_name_from_id($match_entry['team1_teamid'], $match_entry['team1_name']);
+			
+			echo '</td>' . "\n" . '<td>';
+			
+			echo htmlentities($match_entry['team2_points']);
+			echo ' - ';
+			echo htmlentities($match_entry['team1_points']);
+		}
 		
-		// get name of second team
-		team_name_from_id($match_entry['team2_teamid'], $match_entry['team2_name']);
-		
-		// done with the table field, go to next field
-		echo '</td>' . "\n" . '<td>';
-		
-		echo htmlentities($match_entry['team1_points']);
-		echo ' - ';
-		echo htmlentities($match_entry['team2_points']);
 		echo '</td>' . "\n";
 		
 		echo '<td>';

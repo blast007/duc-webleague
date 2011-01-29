@@ -797,6 +797,8 @@ a.players{ background-image: url(Ducati_misc/ico_players_small.png)  }
 #poll li:nth-child(4n+3) .pbar span {background-color: #FFDF08;}
 
 
+.serveraddform input[type="text"] {width: 15em;}
+
 
 /* private messages */
 

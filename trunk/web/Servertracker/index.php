@@ -28,6 +28,16 @@
 	
 	require '../stylesheet.inc';
 	
+	// display favicon, if specified
+	if (!(strcmp($site->favicon_path(), '') === 0))
+	{
+		echo '	';
+		echo $site->write_self_closing_tag('link rel="icon" type="image/png" href="' . $site->favicon_path() . '"');
+	}
+	
+	echo '<link rel="alternate" type="application/rss+xml" title="Ducati League" href="/rss/" />';
+	
+	
 	$site->write_self_closing_tag('link rel="stylesheet" media="all" href="players.css" type="text/css"');
 	// perhaps exclude email string, depending on browser
 	$object = new siteinfo();
@@ -42,7 +52,24 @@
 	
 	require '../CMS/navi.inc';
     
+	
+	$allow_manage_servers = false;
+	if (isset($_SESSION['allow_manage_servers']))
+	{
+		if (($_SESSION['allow_manage_servers']) === true)
+		{
+			$allow_manage_servers = true;
+		}
+	}
+	
 	echo '<h1 class="tools">Servers</h1>';
+	$viewerid = (int) getUserID();
+	if ($allow_manage_servers && $viewerid)
+	{
+		echo '<div class="toolbar"> <a href="edit.php" class="button">Manage servers list</a></div>';	
+	}
+	
+	
 	
 	echo '<div class="static_page_box">' . "\n";
 	if (!($logged_in && (isset($_SESSION['allow_watch_servertracker'])) && ($_SESSION['allow_watch_servertracker'])))
@@ -65,33 +92,105 @@
 	{
 		echo '<h2>Match servers</h2>';
 		
-		formatbzfquery("dub.bzflag.net:59998", $connection);
+		$query = ('SELECT `id`, `servername`, `serveraddress`, `description` FROM `servertracker`'
+				  . ' WHERE `type` = \'match\' ORDER BY `id`');
+		if (!($result = $site->execute_query('servertracker', $query, $connection)))
+		{
+			die('Error during getting servers list.');
+		}
 		
-		formatbzfquery("dub.bzflag.net:59999", $connection);
+		$last = mysql_num_rows($result);
 		
-		formatbzfquery("quol.bzflag.bz:59998", $connection);
+		if ($last == 0)
+		{
+			echo '<p>No servers found.</p>';			
+		}
+		$i = 1;
+		while ($row = mysql_fetch_array($result))
+		{
+			if ($i == $last)
+			{
+				formatbzfquery_last($row['serveraddress'], $connection,$row['description']);
+			} else 
+			{
+				formatbzfquery($row['serveraddress'], $connection,$row['description']);
+			}
+			$i++;
+		}
+	/*			  
+		formatbzfquery("dub.bzflag.net:59998", $connection, "Germany");
 		
-		formatbzfquery("studpups.bzflag.net:59998", $connection);
+		formatbzfquery("dub.bzflag.net:59999", $connection, "Germany");
 		
-		formatbzfquery("bzexcess.com:5432", $connection);
+		formatbzfquery("001.bzflag.fr:59998", $connection, "France");		
 		
-		formatbzfquery("brl.arpa.net:59998", $connection);
-		
-		formatbzfquery("brl.arpa.net:59999", $connection);
-		
-		
+		formatbzfquery("quol.bzflag.bz:59998", $connection, "Canada");
 				
+		formatbzfquery("studpups.bzflag.net:59998", $connection, "USA, Florida");
+		
+		formatbzfquery("bzexcess.com:5432", $connection, "USA, Ohio");
+		
+		formatbzfquery("brl.arpa.net:59998", $connection, "USA, California");
+		
+		formatbzfquery("brl.arpa.net:59999", $connection, "USA, California");
+		
+		formatbzfquery("bzflag.enuffsaid.co.nz:59998", $connection, "New Zealand");
+		*/
+		
+		
+		
 		echo '<h2>Public servers</h2>';
 		
-		formatbzfquery("dub.bzflag.net:5157", $connection);
+		$query = ('SELECT `id`, `servername`, `serveraddress`, `description` FROM `servertracker`'
+				  . ' WHERE `type` = \'public\' ORDER BY `id`');
+		if (!($result = $site->execute_query('servertracker', $query, $connection)))
+		{
+			die('Error during getting servers list.');
+		}
+		$last = mysql_num_rows($result);
+		if ($last == 0)
+		{
+			echo '<p>No servers found.</p>';			
+		}
+		$i = 1;
+		while ($row = mysql_fetch_array($result))
+		{
+			if ($i == $last)
+			{
+				formatbzfquery_last($row['serveraddress'], $connection,$row['description']);
+			} else 
+			{
+				formatbzfquery($row['serveraddress'], $connection,$row['description']);
+			}
+			$i++;
+		}
 		
-		formatbzfquery("dub.bzflag.net:5154", $connection);
 		
-		formatbzfquery("quol.bzflag.bz:5162", $connection);
+		echo '<h2>Replay servers</h2>';
 		
-		formatbzfquery("studpups.bzflag.net:5156", $connection);
-		
-		formatbzfquery_last("brl.arpa.net:5157", $connection);
+		$query = ('SELECT `id`, `servername`, `serveraddress`, `description` FROM `servertracker`'
+				  . ' WHERE `type` = \'replay\' ORDER BY `id`');
+		if (!($result = $site->execute_query('servertracker', $query, $connection)))
+		{
+			die('Error during getting servers list.');
+		}
+		$last = mysql_num_rows($result);
+		if ($last == 0)
+		{
+			echo '<p>No servers found.</p>';			
+		}
+		$i = 1;
+		while ($row = mysql_fetch_array($result))
+		{
+			if ($i == $last)
+			{
+				formatbzfquery_last($row['serveraddress'], $connection,$row['description']);
+			} else 
+			{
+				formatbzfquery($row['serveraddress'], $connection,$row['description']);
+			}
+			$i++;
+		}
 		
 	}
 ?>

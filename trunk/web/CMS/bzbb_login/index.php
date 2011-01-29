@@ -171,6 +171,7 @@ if ( (isset($_GET['bzbbauth'])) && ($_GET['bzbbauth']) )
 		
 		// server tracker permissions
 		allow_watch_servertracker();
+		allow_manage_servers();
 		
 		// TODO permissions
 		allow_view_todo();
