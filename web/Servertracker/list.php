@@ -111,6 +111,8 @@ function marke($markierung, $name)
 
 function formatshowserver($server,  $description = '')
 {
+	global $site;
+	
 	formatshowserver_last($server,  $description);
 	$site->write_self_closing_tag('hr');
 }
