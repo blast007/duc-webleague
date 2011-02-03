@@ -81,14 +81,29 @@ function updatePollPresentation($id, $view_results)
 }	
 
 	
-function showPollsList($allow_manage_polls)
+function updatePollQuestion($id, $question)
+{
+	global $site;
+	global $connection;
+		
+	$query = ('UPDATE `polls_questions` SET `question` = ' . sqlSafeStringQuotes($question) 
+		. ' WHERE id = ' . sqlSafeStringQuotes($id));
+	
+	if (!($result = $site->execute_query('polls_questions', $query, $connection)))
+	{
+		$site->dieAndEndPage('The poll could not be updated due to a sql problem!');
+	}	
+}
+
+
+function showPollsList($allow_manage_polls, $editedid)
 {	
 	global $site;
 	global $connection;
 	
-	$query = ('SELECT pq.*, COUNT(pa.id) as answers, COUNT(pv.id) as votes FROM polls_questions pq '
+	$query = ('SELECT pq.*, COUNT(pa.id) as answers, '
+	. ' (SELECT COUNT(pv.id) FROM polls_votes pv WHERE pv.question_id = pq.id GROUP BY pq.id) as votes  FROM polls_questions pq '
 	. ' LEFT JOIN polls_answers pa ON (pa.question_id = pq.id)'
-	. ' LEFT JOIN polls_votes pv ON (pv.answer_id = pa.id)'
 	. ' GROUP BY pq.id, pq.question, pq.timeof, pq.published, pq.view_results'
 	. ' ORDER BY pq.id DESC');
 			
@@ -161,7 +176,17 @@ function showPollsList($allow_manage_polls)
 	{
 		echo '<tr ' . (($result_entry['published'] === 'no')? 'class="deleted"' : '') . '>' . "\n";
 		echo '<td>' . $result_entry['timeof'] . '</td>' . "\n";
-		echo '<td>' . $result_entry['question'] . '</td>' . "\n";
+		if ($result_entry['id'] == $editedid) 
+		{
+			echo '<td><form name="edit_question" method="post" action="./">';
+			$site->write_self_closing_tag('input type="hidden" name="pollid" value="' . $result_entry['id'] . '" ');
+			$site->write_self_closing_tag('input type="text" title="Poll question" id="poll_question" name="poll_question" value="' . $result_entry['question'] . '"');
+			$site->write_self_closing_tag('input type="submit" name="update" value="Update" id="send" class="button"');
+			echo '</form></td>';
+		} else
+		{
+			echo '<td>' . $result_entry['question'] . '</td>' . "\n";
+		}
 		echo '<td>' . $result_entry['answers'] . '</td>' . "\n";
 		echo '<td>' . $result_entry['votes'] . '</td>' . "\n";
 		echo '<td>';
@@ -181,6 +206,7 @@ function showPollsList($allow_manage_polls)
 			
 			
 			echo '<a class="button" href="./edit.php?poll=' . htmlspecialchars($result_entry['id']) . '">Answers</a> ';
+			echo '<a class="button" href="./?edit=' . htmlspecialchars($result_entry['id']) . '">Edit</a> ';
 			
 			echo '<a class="button" href="./?delete=' . htmlspecialchars($result_entry['id']) . '" 
 			onclick="return confirm(\'Are you sure you want to delete this poll?\')" >Delete</a> ';

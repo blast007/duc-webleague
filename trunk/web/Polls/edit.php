@@ -15,7 +15,7 @@
 	$viewerid = (int) getUserID();
 	$pollid = 0;
 	
-	echo '<h1 class="polls">Pools management</h1>';
+	echo '<h1 class="polls">Polls management</h1>';
 	
 	echo '<div class="simple-paging">';
 	echo '<a class="button" href="/Polls/">Overview</a>' . "\n";

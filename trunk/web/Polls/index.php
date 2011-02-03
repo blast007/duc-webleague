@@ -23,7 +23,7 @@
 		}
 	}
 	
-	echo '<h1 class="polls">Pools management</h1>';
+	echo '<h1 class="polls">Polls management</h1>';
 	echo '<div class="main-box">' . "\n";
 	
 	// in any case you need to be logged in to view the visits log
@@ -74,11 +74,24 @@
 		if (isset($_POST['view_results']) && $_POST['view_results'] > 0 ) $view_results = 1;
 		updatePollPresentation($id, $view_results);	
 	}
+	$editedid = null;
+	//edit poll
+	if (isset($_GET['edit']) && $allow_manage_polls)
+	{
+		$editedid =  intval($_GET['edit']);
+	}
+	
+	if (isset($_POST['update']) && isset($_POST['pollid'])  && isset($_POST['poll_question']) && $allow_manage_polls)
+	{
+		$id =  intval($_POST['pollid']);
+		$question = $_POST['poll_question'];
+		updatePollQuestion($id, $question);	
+	}
 	
 	
 	
 	
-	showPollsList($allow_manage_polls);
+	showPollsList($allow_manage_polls, $editedid);
 	
 ?>
 	</div>
