@@ -1,0 +1,11 @@
+Options Includes Indexes +FollowSymLinks MultiViews
+# AllowOverride None
+RewriteEngine On
+RewriteBase /
+
+RewriteCond %{QUERY_STRING} ^link=playerinfo&id=([0-9]+)$ [NC]
+RewriteRule ^index\.php$ /Players/?profile=%1 [R=301,NC,L]
+
+
+RewriteCond %{QUERY_STRING} ^link=teaminfo&id=([0-9]+)$ [NC]
+RewriteRule ^index\.php$ /Teams/?profile=%1 [R=301,NC,L]
