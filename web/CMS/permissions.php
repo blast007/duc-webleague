@@ -87,9 +87,11 @@
 		$_SESSION['IsAdmin'] = false;
 		
 		// shoutbox permissions
+		$_SESSION['allow_use_shoutbox'] = false;
 		$_SESSION['allow_moderate_shoutbox'] = false;
 		
 		// shoutbox permissions
+		$_SESSION['allow_vote_polls'] = false;
 		$_SESSION['allow_manage_polls'] = false;
 		
 		
@@ -408,6 +410,14 @@
 		}
 	}
 	
+	function allow_use_shoutbox()
+	{
+		if (!($_SESSION['allow_use_shoutbox']))
+		{
+			$_SESSION['allow_use_shoutbox'] = true;
+		}
+	}
+	
 	function allow_moderate_shoutbox()
 	{
 		if (!($_SESSION['allow_moderate_shoutbox']))
@@ -415,6 +425,17 @@
 			$_SESSION['allow_moderate_shoutbox'] = true;
 		}
 	}
+	
+	
+	function allow_vote_polls()
+	{
+		if (!($_SESSION['allow_vote_polls']))
+		{
+			$_SESSION['allow_vote_polls'] = true;
+		}
+	}
+
+	
 	
 	function allow_manage_polls()
 	{

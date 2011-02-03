@@ -2,7 +2,7 @@
 
 	$viewerid = (int) getUserID();
 
-	if ($viewerid === 0)
+	if ($viewerid === 0 || !isset($_SESSION['allow_vote_polls']) || !($_SESSION['allow_vote_polls'] === true))
 	{
 		// not logged		
 	} else 
