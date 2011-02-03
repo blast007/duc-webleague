@@ -188,7 +188,14 @@ function showPollsList($allow_manage_polls, $editedid)
 			echo '<td>' . $result_entry['question'] . '</td>' . "\n";
 		}
 		echo '<td>' . $result_entry['answers'] . '</td>' . "\n";
-		echo '<td>' . $result_entry['votes'] . '</td>' . "\n";
+		echo '<td>' . $result_entry['votes'];
+		if ($allow_manage_polls) 
+		{
+		
+			echo ' <a class="button" href="./voters.php?poll=' . htmlspecialchars($result_entry['id']) . '">Voters list</a> ';
+		}
+		
+		echo '</td>' . "\n";
 		echo '<td>';
 			showResultsForm($result_entry['id'], $result_entry['view_results']);
 		echo '</td>' . "\n";
@@ -532,4 +539,72 @@ function answerPosition( $pollid, $answerid,  $position, $last)
 
 
 
+
+	
+function showVotersList($allow_manage_polls, $pollid)
+{	
+	global $site;
+	global $connection;
+	
+	$query = ('SELECT pv.timeof, pv.user_id,  p.name, pv.id FROM polls_votes pv '
+	. ' LEFT JOIN players p ON p.id = pv.user_id '
+	. ' WHERE pv.question_id = '. sqlSafeStringQuotes($pollid));
+
+				
+	if (!($result = @$site->execute_query('polls_questions', $query, $connection)))
+	{
+		$site->dieAndEndPageNoBox('The list of voters could not be displayed because of an SQL/database connectivity problem.');
+	}
+	
+	$rows = (int) mysql_num_rows($result);
+
+	
+	if ($rows === (int) 0)
+	{
+		echo '<p class="message">No votes for this poll.</p>' . "\n";
+		$site->dieAndEndPageNoBox();
+	}
+	
+	
+	
+	
+	echo '<table id="shouts" class="big">' . "\n";
+	echo '<thead><tr>' . "\n";
+	echo '	<th>Time</th>' . "\n";
+	echo '	<th>Player</th>' . "\n";
+	echo '</tr></thead>' . "\n\n";
+	
+	// display message overview
+	$results_list = Array (Array ());
+	// read each entry, row by row
+	while ($row = mysql_fetch_array($result))
+	{
+		$id = (int) $row['id'];
+		$results_list[$id]['timeof'] = $row['timeof'];
+		$results_list[$id]['playerid'] = $row['user_id'];
+		$results_list[$id]['name'] = $row['name'];
+		$results_list[$id]['id'] = $row['id'];		
+	}
+	unset($results_list[0]);
+	
+	// query result no longer needed
+	mysql_free_result($result);
+		
+	// walk through the array values
+	foreach($results_list as $result_entry)
+	{
+		echo '<tr><td>' . $result_entry['timeof'] . '</td>' . "\n";
+		echo '<td><a href="/Players/?profile=' . $result_entry['playerid'] . '">' . $result_entry['name'] . '</a></td></tr>' . "\n";
+	
+			}
+	unset($results_list);
+	unset($result_entry);
+	unset($rows);
+	
+	
+	// no more matches to display
+	echo '</table>' . "\n";
+}
+	
+	
 ?>
