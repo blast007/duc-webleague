@@ -548,7 +548,7 @@ function showVotersList($allow_manage_polls, $pollid)
 	
 	$query = ('SELECT pv.timeof, pv.user_id,  p.name, pv.id FROM polls_votes pv '
 	. ' LEFT JOIN players p ON p.id = pv.user_id '
-	. ' WHERE pv.question_id = '. sqlSafeStringQuotes($pollid));
+	. ' WHERE pv.question_id = '. sqlSafeStringQuotes($pollid) . ' ORDER BY timeof');
 
 				
 	if (!($result = @$site->execute_query('polls_questions', $query, $connection)))
