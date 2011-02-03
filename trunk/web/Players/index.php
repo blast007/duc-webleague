@@ -517,7 +517,10 @@
 			} elseif ($suspended_status === 2)
 			{
 				$suspended_status = 'login disabled';
-			} else
+			} elseif ($suspended_status === 666)
+			{
+				$suspended_status = 'deleted';
+			}else
 			{
 				$suspended_status = 'banned';
 			}
@@ -588,6 +591,13 @@
 			echo '" selected="selected';
 		}
 		echo '">banned';
+		echo '</option>' . "\n";
+		echo '<option value="666';
+		if (strcmp($suspended_status, 'deleted') === 666)
+		{
+			echo '" selected="selected';
+		}
+		echo '">deleted';
 		echo '</option>' . "\n";
 		
 		echo '</select></span></p>' . "\n";			
