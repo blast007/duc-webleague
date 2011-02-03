@@ -549,6 +549,25 @@
 			echo htmlent($suspended_status);			
 			echo '.</p>';
 			
+			if ($suspended_status === 'deleted')
+			{
+				$query = 'UPDATE `players` SET `teamid`=0';
+				$query .= ' WHERE `id`=' . sqlSafeStringQuotes($profile);
+				if (!($result = @$site->execute_query('players', $query, $connection)))
+				{
+					$site->dieAndEndPage('');
+				}		
+				
+				
+				require_once ('../CMS/maintenance/index.php');
+				$maint = new maintenance();
+				$maint->do_maintenance($site, $connection);
+				// date of 2 months in past will help during maintenance
+				$two_months_in_past = strtotime('-3 months');
+				$two_months_in_past = strftime('%Y-%m-%d %H:%M:%S', $two_months_in_past);
+				$maint->deleteAccount($profile, $two_months_in_past);
+				
+			}
 			// done with setting account status
 			$site->dieAndEndPage('');
 		}

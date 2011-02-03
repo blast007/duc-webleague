@@ -226,7 +226,7 @@
 			
 			
 			// teams cleanup
-			if ($settings->maintain_teams_not_matching_anymore())
+			if (!$settings->maintain_teams_not_matching_anymore())
 			{
 				// in settings it was specified not to maintain inactive teams
 				echo '<p>Skipped maintaining inactive teams (by config option)!</p>';
@@ -324,16 +324,16 @@
 				if (!$cur_team_active && $curTeamNew)
 				{
 					// delete (for real) the new team
-					$query = 'DELETE FROM `teams` WHERE `id`=' . "'" . ($teamid) . "'";
+					$query = 'DELETE FROM `teams` WHERE `id`=' . "'" . ($curTeam) . "'";
 					// execute query, ignore result
 					@$site->execute_query('teams', $query, $connection);
-					$query = 'DELETE FROM `teams_overview` WHERE `teamid`=' . "'" . ($teamid) . "'";
+					$query = 'DELETE FROM `teams_overview` WHERE `teamid`=' . "'" . ($curTeam) . "'";
 					// execute query, ignore result
 					@$site->execute_query('teams_overview', $query, $connection);
-					$query = 'DELETE FROM `teams_permissions` WHERE `teamid`=' . "'" . ($teamid) . "'";
+					$query = 'DELETE FROM `teams_permissions` WHERE `teamid`=' . "'" . ($curTeam) . "'";
 					// execute query, ignore result
 					@$site->execute_query('teams_permissions', $query, $connection);
-					$query = 'DELETE FROM `teams_profile` WHERE `teamid`=' . "'" . ($teamid) . "'";
+					$query = 'DELETE FROM `teams_profile` WHERE `teamid`=' . "'" . ($curTeam) . "'";
 					// execute query, ignore result
 					@$site->execute_query('teams_profile', $query, $connection);						
 				}
@@ -521,113 +521,7 @@
 			foreach ($inactive_players as $one_inactive_player)
 			{
 				// delete account data:
-				
-				// user entered comments
-				$query = 'UPDATE `players_profile` SET `user_comment`=' . "'" . "'";
-				$query .= ', logo_url=' . "'" . "'";
-				$query .= ' WHERE `playerid`=' . sqlSafeStringQuotes($one_inactive_player);
-				// only one player needs to be updated
-				$query .= ' LIMIT 1';
-				// execute query, ignore result
-				@$site->execute_query('players_profile', $query, $connection);
-				
-				// visits log (ip-addresses and host data)
-				$query = 'DELETE FROM `visits` WHERE `playerid`=' . sqlSafeStringQuotes($one_inactive_player);
-				@$site->execute_query('visits', $query, $connection);
-				
-				// private messages connection
-				
-				// get msgid first!
-				$query = 'SELECT `msgid` FROM `messages_users_connection` WHERE `playerid`=' . sqlSafeStringQuotes($one_inactive_player);
-				// execute query
-				if (!($result = @$site->execute_query('players, players_profile', $query, $connection)))
-				{
-					unlock_tables_maint();
-					$site->dieAndEndPage('MAINTENANCE ERROR: getting private msgid list of inactive players failed.');
-				}
-				
-				$msg_list = Array();
-				while($row = mysql_fetch_array($result))
-				{
-					$msg_list[] = $row['msgid'];
-				}
-				mysql_free_result($result);				
-				
-				// now delete the connection to mailbox
-				$query = 'DELETE FROM `messages_users_connection` WHERE `playerid`=' . sqlSafeStringQuotes($one_inactive_player);
-				@$site->execute_query('messages_users_connection', $query, $connection);				
-				
-				// delete private messages itself, in case no one else has the message in mailbox
-				foreach ($msg_list as $msgid)
-				{
-					$query = 'SELECT `msgid` FROM `messages_users_connection` WHERE `msgid`=' . sqlSafeStringQuotes($msgid);
-					$query .= ' AND `playerid`<>' . sqlSafeStringQuotes($one_inactive_player);
-					// we only need to know whether there is more than zero rows the result of query
-					$query .= ' LIMIT 1';
-					if (!($result = @$site->execute_query('messages_users_connection', $query, $connection)))
-					{
-						unlock_tables_maint();
-						$site->dieAndEndPage('MAINTENANCE ERROR: finding out whether actual private messages can be deleted failed.');
-					}
-					$rows = (int) mysql_num_rows($result);
-					mysql_free_result($result);
-					
-					if ($rows < ((int) 1))
-					{
-						// delete actual message
-						$query = 'DELETE FROM `messages_storage` WHERE `id`=' . sqlSafeStringQuotes($msgid);
-						@$site->execute_query('messages_storage', $query, $connection);								
-					}
-				}
-				unset($msgid);
-				
-				// mark account as deleted
-				$query = 'UPDATE `players` SET `status`=' . sqlSafeStringQuotes('deleted');
-				$query .= ' WHERE `id`=' . sqlSafeStringQuotes($one_inactive_player);
-				// and again only one player needs to be updated
-				$query .= ' LIMIT 1';
-				@$site->execute_query('players', $query, $connection);
-				
-				// FIXME: if user marked deleted check if he was leader of a team
-				$query = 'SELECT `id` FROM `teams` WHERE `leader_playerid`=' . sqlSafeStringQuotes($one_inactive_player);
-				// only one player was changed and thus only one team at maximum needs to be updated
-				$query .= ' LIMIT 1';
-				// execute query
-				if (!($result = @$site->execute_query('teams', $query, $connection)))
-				{
-					unlock_tables_maint();
-					$site->dieAndEndPage('MAINTENANCE ERROR: finding out if inactive player was leader of a team failed.');
-				}
-				
-				// walk through results
-				$member_count_modified = false;
-				while ($row = mysql_fetch_array($result))
-				{
-					// set the leader to 0 (no player)
-					$query = 'Update `teams` SET `leader_playerid`=' . sqlSafeStringQuotes('0');
-					$query .= ' WHERE `leader_playerid`=' . sqlSafeStringQuotes($one_inactive_player);
-					// execute query, ignore result
-					@$site->execute_query('teams', $query, $connection);
-					
-					// update member count of team
-					$member_count_modified = true;
-					$teamid = $row['id'];
-					$query = 'UPDATE `teams_overview` SET `member_count`=(SELECT COUNT(*) FROM `players` WHERE `players`.`teamid`=';
-					$query .= sqlSafeStringQuotes($teamid) . ') WHERE `teamid`=';
-					$query .= sqlSafeStringQuotes($teamid);
-					// execute query, ignore result
-					@$site->execute_query('teams', $query, $connection);
-				}
-				mysql_free_result($result);
-				
-				if ($member_count_modified)
-				{
-					// during next maintenance the team that has no leader would be deleted
-					// however the time between maintenance can be different
-					// and the intermediate state could confuse users
-					// thus force the team maintenance again
-					$this->cleanup_teams($site, $connection, $two_months_in_past);
-				}
+				$this->deleteAccount($one_inactive_player, $two_months_in_past);
 			}
 			
 			echo '<p>Maintenance performed successfully.</p>';
@@ -643,5 +537,121 @@
 			unlock_tables_maint();
 			// do not die in maintenance, let the caller do the job
 		}
+		
+		function deleteAccount($one_inactive_player, $two_months_in_past)
+		{
+			global $site;
+			global $connection;	
+		
+			// delete account data:
+						
+			// user entered comments
+			$query = 'UPDATE `players_profile` SET `user_comment`=' . "'" . "'";
+			$query .= ', logo_url=' . "'" . "'";
+			$query .= ' WHERE `playerid`=' . sqlSafeStringQuotes($one_inactive_player);
+			// only one player needs to be updated
+			$query .= ' LIMIT 1';
+			// execute query, ignore result
+			@$site->execute_query('players_profile', $query, $connection);
+			
+			// visits log (ip-addresses and host data)
+			$query = 'DELETE FROM `visits` WHERE `playerid`=' . sqlSafeStringQuotes($one_inactive_player);
+			@$site->execute_query('visits', $query, $connection);
+			
+			// private messages connection
+			
+			// get msgid first!
+			$query = 'SELECT `msgid` FROM `messages_users_connection` WHERE `playerid`=' . sqlSafeStringQuotes($one_inactive_player);
+			// execute query
+			if (!($result = @$site->execute_query('players, players_profile', $query, $connection)))
+			{
+				unlock_tables_maint();
+				$site->dieAndEndPage('MAINTENANCE ERROR: getting private msgid list of inactive players failed.');
+			}
+			
+			$msg_list = Array();
+			while($row = mysql_fetch_array($result))
+			{
+				$msg_list[] = $row['msgid'];
+			}
+			mysql_free_result($result);				
+			
+			// now delete the connection to mailbox
+			$query = 'DELETE FROM `messages_users_connection` WHERE `playerid`=' . sqlSafeStringQuotes($one_inactive_player);
+			@$site->execute_query('messages_users_connection', $query, $connection);				
+			
+			// delete private messages itself, in case no one else has the message in mailbox
+			foreach ($msg_list as $msgid)
+			{
+				$query = 'SELECT `msgid` FROM `messages_users_connection` WHERE `msgid`=' . sqlSafeStringQuotes($msgid);
+				$query .= ' AND `playerid`<>' . sqlSafeStringQuotes($one_inactive_player);
+				// we only need to know whether there is more than zero rows the result of query
+				$query .= ' LIMIT 1';
+				if (!($result = @$site->execute_query('messages_users_connection', $query, $connection)))
+				{
+					unlock_tables_maint();
+					$site->dieAndEndPage('MAINTENANCE ERROR: finding out whether actual private messages can be deleted failed.');
+				}
+				$rows = (int) mysql_num_rows($result);
+				mysql_free_result($result);
+				
+				if ($rows < ((int) 1))
+				{
+					// delete actual message
+					$query = 'DELETE FROM `messages_storage` WHERE `id`=' . sqlSafeStringQuotes($msgid);
+					@$site->execute_query('messages_storage', $query, $connection);								
+				}
+			}
+			unset($msgid);
+			
+			// mark account as deleted
+			$query = 'UPDATE `players` SET `status`=' . sqlSafeStringQuotes('deleted');
+			$query .= ' WHERE `id`=' . sqlSafeStringQuotes($one_inactive_player);
+			// and again only one player needs to be updated
+			$query .= ' LIMIT 1';
+			@$site->execute_query('players', $query, $connection);
+			
+			// FIXME: if user marked deleted check if he was leader of a team
+			$query = 'SELECT `id` FROM `teams` WHERE `leader_playerid`=' . sqlSafeStringQuotes($one_inactive_player);
+			// only one player was changed and thus only one team at maximum needs to be updated
+			$query .= ' LIMIT 1';
+			// execute query
+			if (!($result = @$site->execute_query('teams', $query, $connection)))
+			{
+				unlock_tables_maint();
+				$site->dieAndEndPage('MAINTENANCE ERROR: finding out if inactive player was leader of a team failed.');
+			}
+			
+			// walk through results
+			$member_count_modified = false;
+			while ($row = mysql_fetch_array($result))
+			{
+				// set the leader to 0 (no player)
+				$query = 'Update `teams` SET `leader_playerid`=' . sqlSafeStringQuotes('0');
+				$query .= ' WHERE `leader_playerid`=' . sqlSafeStringQuotes($one_inactive_player);
+				// execute query, ignore result
+				@$site->execute_query('teams', $query, $connection);
+				
+				// update member count of team
+				$member_count_modified = true;
+				$teamid = $row['id'];
+				$query = 'UPDATE `teams_overview` SET `member_count`=(SELECT COUNT(*) FROM `players` WHERE `players`.`teamid`=';
+				$query .= sqlSafeStringQuotes($teamid) . ') WHERE `teamid`=';
+				$query .= sqlSafeStringQuotes($teamid);
+				// execute query, ignore result
+				@$site->execute_query('teams', $query, $connection);
+			}
+			mysql_free_result($result);
+			
+			if ($member_count_modified)
+			{
+				// during next maintenance the team that has no leader would be deleted
+				// however the time between maintenance can be different
+				// and the intermediate state could confuse users
+				// thus force the team maintenance again
+				$this->cleanup_teams($site, $connection, $two_months_in_past);
+			}
+		}
+		
 	}
 ?>
