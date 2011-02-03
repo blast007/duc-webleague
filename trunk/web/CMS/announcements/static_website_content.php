@@ -289,9 +289,13 @@
 		{
 			case 'home'  : 
 			{
+				$allow_use_shoutbox = false;
+				if (isset($_SESSION['allow_use_shoutbox']) && $_SESSION['allow_use_shoutbox'] === true) $allow_use_shoutbox = true;
+				
+				
 				echo '<div class="homepage">';
 				echo '<div class="home-left">'; 
-				if ($logged_in) 
+				if ($logged_in && $allow_use_shoutbox) 
 				{
 					put_shoutbox();
 				}

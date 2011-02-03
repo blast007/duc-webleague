@@ -38,6 +38,7 @@ require_once("conf.php");
 // Check if name, url or message are not longer than the maximum length allowed
 // For security and spam protection reasons check if $_POST['token'] has the same value as $_SESSION['token']
 if (isset($_SESSION['username'])
+	&& (isset($_SESSION['allow_use_shoutbox']) && $_SESSION['allow_use_shoutbox'] === true)
     && ((isset($_POST['message']))
     && (trim($_POST['message']) !== "" )
     && (trim($_POST['message']) !== "message" )

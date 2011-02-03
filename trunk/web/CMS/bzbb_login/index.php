@@ -22,7 +22,7 @@ if ( (isset($_GET['bzbbauth'])) && ($_GET['bzbbauth']) )
 	
 	// groups used for permissions
 	// each group can use the fine grained permission system
-	$groups = Array ('VERIFIED','DUCATI.REFEREE','DUCATI.COUNCIL');
+	$groups = Array ('VERIFIED','DUC.LEAGUE','DUCATI.REFEREE','DUCATI.COUNCIL');
 	$args = explode (',', urldecode($_GET['bzbbauth']));
 	// $args[0] is token, $args[1] is callsign
 	if (!$info = validate_token ($args[0], $args[1], $groups, false))
@@ -66,8 +66,36 @@ if ( (isset($_GET['bzbbauth'])) && ($_GET['bzbbauth']) )
 	
 	
 	
-	// test only for DUCATI.ADMINS group
+		// test only for DUC.LEAGUE group
 	$group_test = array_slice($groups, 1, 1);
+	$in_group = false;
+	foreach ($info['groups'] as $one_group)
+	{
+		// case insensitive comparison
+		if (strcasecmp($one_group, $group_test[0]) === 0)
+		{
+			$in_group = true;
+			break;
+		}
+	}
+	unset($one_group);
+	
+	if ($in_group === true)
+	{
+		if ($site->debug_sql())
+		{
+			echo '<p>DUC league player detected</p>';
+		}
+		// DUC.LEAGUE group
+		allow_use_shoutbox();
+		allow_vote_polls();
+
+	}
+	
+	
+	
+	// test only for DUCATI.REFEREE group
+	$group_test = array_slice($groups, 2, 1);
 	$in_group = false;
 	foreach ($info['groups'] as $one_group)
 	{
@@ -91,14 +119,15 @@ if ( (isset($_GET['bzbbauth'])) && ($_GET['bzbbauth']) )
 		// match permissions
 		allow_add_match();
 		allow_edit_match();
-		
+		allow_use_shoutbox();
+		allow_vote_polls();
 		// permissions for news page
 		allow_add_news();
 		allow_edit_news();
 		allow_delete_news();
 	}
 	
-	// test only for DUCATI.ADMINS group
+	// test only for DUCATI.COUNCIL group
 	$in_group = false;
 	$group_test = array_slice($groups, -1, 1);
 	foreach ($info['groups'] as $one_group)
@@ -179,6 +208,8 @@ if ( (isset($_GET['bzbbauth'])) && ($_GET['bzbbauth']) )
 		
 		// aux permissions
 		is_admin();
+		allow_use_shoutbox();
+		allow_vote_polls();
 		allow_moderate_shoutbox();
 		allow_manage_polls();
 	}
