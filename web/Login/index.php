@@ -661,6 +661,9 @@
 		echo '<div class="static_page_box">' . "\n";
 		echo '<p class="first_p">Login was successful!</p>' . "\n";
 		echo '<p>Your profile page can be found <a href="../Players/?profile=' . $user_id . '">here</a>.</p>' . "\n";
+		echo '<p>You will be redirected to home page within 3 seconds</p>';
+		echo '<script type="text/javascript"> setTimeout("location.href=\'/\'", 3000); </script>';
+				
 	}
 	
 	$output_buffer .= ob_get_contents();

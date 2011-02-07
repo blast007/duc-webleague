@@ -26,8 +26,9 @@
 	echo '<h1 class="tools">Visits log</h1>';
 	
 	// need an overview button to enable navigation within the page
-	echo '<div class="simple-paging"><a href="./" class="button">Back to overview</a></div>' . "\n";
-	
+	echo '<div class="simple-paging">' . "\n";
+	echo '<a href="./" class="button">Back to overview</a>' . "\n";
+	echo '<a href="./ip_report.php" class="button">Duplicated IP report</a></div>' . "\n";
 	
 	echo '<div class="main-box">';
 	
@@ -275,7 +276,7 @@
 					  . ',`visits`.`login_failed` FROM `visits`');
 		}
 	}
-	$query .= ' ORDER BY `visits`.`id` DESC LIMIT ';
+	$query .= ' ORDER BY `visits`.`timestamp` DESC LIMIT ';
 	
 	$view_range = (int) 0;
 	// the "LIMIT 0,200" part of query means only the first 200 entries are received
