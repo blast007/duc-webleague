@@ -58,6 +58,7 @@ CREATE TABLE `invitations` (
   `invited_playerid` int(11) unsigned NOT NULL DEFAULT '0',
   `teamid` int(11) unsigned NOT NULL DEFAULT '0',
   `expiration` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `message` tinytext NULL,
   PRIMARY KEY (`id`),
   KEY `invited_playerid` (`invited_playerid`),
   KEY `teamid` (`teamid`),

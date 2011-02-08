@@ -1641,6 +1641,24 @@ font-weight:normal;
 }
 
 
+.invite_form .formrow
+{
+	margin:5px 0px;
+}
+.invite_form .formrow label
+{
+	width: 27em;
+	display:block;
+	float:left;
+}
+
+#invite_message
+{
+	width:40em;
+	height:5em;
+}
+	
+
 /*------ The CSS below this comment is for Opera only ------------------------*/
 
 html:first-child #emo li:hover>ul {
