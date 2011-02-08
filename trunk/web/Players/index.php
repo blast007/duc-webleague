@@ -244,6 +244,19 @@
 				$site->dieAndEndPage('');
 			}
 			
+			
+			$expiry_date = 7;
+			if (isset($_POST['invite_expiry']))
+			{
+				$days = (int)$_POST['invite_expiry'];
+				if ($days === 3 || $days === 7 || $days ===30) $expiry_date = $days;
+			}
+			$additional_message = '';
+			if (isset($_POST['invite_message']))
+			{
+				$additional_message = htmlentities($_POST['invite_message']);
+			}
+			
 			$invited_to_team = $leader_of_team_with_id;
 			if ($allow_invite_in_any_team)
 			{
@@ -280,9 +293,9 @@
 			// invitate the player to team
 			$query = 'INSERT INTO `invitations` (`invited_playerid`, `teamid`, `expiration`) VALUES ';
 			$query .= '(' . sqlSafeStringQuotes($profile) . ', ' . sqlSafeStringQuotes($invited_to_team);
-			$sevendayslater = strtotime('+7 days');
-			$sevendayslater = strftime('%Y-%m-%d %H:%M:%S', $sevendayslater);
-			$query .= ', ' . sqlSafeStringQuotes($sevendayslater) . ')';
+			$xdayslater = strtotime('+' . $expiry_date .'days');
+			$xdayslater = strftime('%Y-%m-%d %H:%M:%S', $xdayslater);
+			$query .= ', ' . sqlSafeStringQuotes($xdayslater) . ')';
 			if (!($result = @$site->execute_query('invitations', $query, $connection)))
 			{
 				// query was bad, error message was already given in $site->execute_query(...)
@@ -331,7 +344,8 @@
 			$query .= '(' . sqlSafeStringQuotes ('0');
 			$query .= ', ' . sqlSafeStringQuotes(('Invitation to team ' . $team_name)) . ', ' . sqlSafeStringQuotes(date('Y-m-d H:i:s'));
 			$query .= ', ' . sqlSafeStringQuotes(('Congratulations, you were invited by ' . $player_name . ' to the team ' . $team_name . '!' . "\n\n" . 
-			"[URL=\"".basepath()."Teams/?join=$invited_to_team\"]Click here to accept the invitation.[/URL]\n\nYou must leave your current team before accepting an invitation to a new team.\n\nThe invitation will expire in 7 days."));
+			(($additional_message!='')? $additional_message . "\n\n" : '') . 
+			"[URL=\"".basepath()."Teams/?join=$invited_to_team\"]Click here to accept the invitation.[/URL]\n\nYou must leave your current team before accepting an invitation to a new team.\n\nThe invitation will expire in $expiry_date days."));
 			$query .= ', ' . sqlSafeStringQuotes('0') . ', ' . sqlSafeStringQuotes($profile) . ')';
 			if (!($result = @$site->execute_query('messages_storage', $query, $connection)))
 			{
@@ -369,7 +383,7 @@
 		
 		if ($allow_invite_in_any_team || ($leader_of_team_with_id > 0))
 		{
-			echo '<form enctype="application/x-www-form-urlencoded" method="post" action="?invite=' . htmlentities(urlencode($profile)) . '">' . "\n";
+			echo '<form class="invite_form" enctype="application/x-www-form-urlencoded" method="post" action="?invite=' . htmlentities(urlencode($profile)) . '">' . "\n";
 			$site->write_self_closing_tag('input type="hidden" name="confirmed" value="1"');
 			
 			// display team picker in case the user can invite a player to any team
@@ -427,8 +441,31 @@
 				}
 				
 				echo '</select></span></div>' . "\n";			
+				
+				echo '<div class="formrow"><label class="invite" for="invite_expiry">Invitation will expire in: </label>' . "\n";
 			}
+
+			echo '<span><select id="invite_expiry" name="invite_expiry';
+			if (isset($_GET['delete']))
+			{
+				echo '" disabled="disabled';
+			}
+			echo '">' . "\n";
 			
+			echo '<option value="3">3 days</option>' . "\n";
+			echo '<option value="7" selected="selected">7 days</option>' . "\n";
+			echo '<option value="30">30 days</option>' . "\n";
+							
+			echo '</select></span></div>' . "\n";	
+			
+			echo '<div class="formrow"><p>Add your personal message:</p>' . "\n";
+			echo '<span><textarea id="invite_message" name="invite_message';
+			if (isset($_GET['delete']))
+			{
+				echo '" disabled="disabled';
+			}
+			echo '"></textarea></div>' . "\n";	
+				
 			$new_randomkey_name = $randomkey_name . microtime();
 			$new_randomkey = $site->set_key($new_randomkey_name);
 			$site->write_self_closing_tag('input type="hidden" name="key_name" value="' . htmlentities($new_randomkey_name) . '"');
