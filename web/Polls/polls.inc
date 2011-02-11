@@ -25,7 +25,7 @@ function createPoll()
 	{
 		$query = ('INSERT INTO `polls_questions` (`question`, `timeof` '
 				  . ', `published`, `view_results`)'
-				  . ' VALUES (' . sqlSafeStringQuotes($question) . ', now()'
+				  . ' VALUES (' . sqlSafeStringQuotes($question) . ', ' . sqlSafeStringQuotes(date('Y-m-d H:i:s'))
 				  . ', \'no\', ' . sqlSafeStringQuotes($view_results) . ')' );
 		
 		if (!($result = $site->execute_query('polls_questions', $query, $connection)))

@@ -24,7 +24,7 @@ function voteInPoll($poll, $answer, $viewerid)
 	if (doesUserVote($poll, $viewerid)) return;
 	
 	$query = 'INSERT INTO polls_votes (question_id, answer_id, timeof, user_id) '
-	. ' VALUES (' . sqlSafeStringQuotes($poll) . ',' . sqlSafeStringQuotes($answer) . ', now() '
+	. ' VALUES (' . sqlSafeStringQuotes($poll) . ',' . sqlSafeStringQuotes($answer) . ', ' . sqlSafeStringQuotes(date('Y-m-d H:i:s'))
 	. ',' . sqlSafeStringQuotes($viewerid) . ')'; 
 	$result = ($site->execute_query('polls_votes', $query, $connection));	
 }

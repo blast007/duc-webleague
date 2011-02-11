@@ -59,7 +59,7 @@
 	// get list of double ips in last 30 days
 	$query = 'SELECT COUNT(DISTINCT v.playerid) as num_players,v.`ip-address`, v.`host` '
 	. ' FROM `visits` v '
-	. ' WHERE v.timestamp > date_sub(now(),interval ' . $interval . ' day) '
+	. ' WHERE v.timestamp > date_sub(' . sqlSafeStringQuotes(date('Y-m-d H:i:s')) . ',interval ' . $interval . ' day) '
 	. ' GROUP BY `ip-address` HAVING num_players > 1';				
 
 	
@@ -121,7 +121,7 @@
 		
 		$query = 'SELECT DISTINCT v.playerid, p.name '
 		. ' FROM `visits` v LEFT JOIN players p ON (p.id = v.playerid)'
-		. ' WHERE v.timestamp > date_sub(now(),interval ' . $interval . ' day) '
+		. ' WHERE v.timestamp > date_sub( ' . sqlSafeStringQuotes(date('Y-m-d H:i:s')) . ',interval ' . $interval . ' day) '
 		. ' AND v.`ip-address` = ' . sqlSafeStringQuotes($row['ip-address']);	
 		if ($result_details = @$site->execute_query('visits', $query, $connection))
 		{
