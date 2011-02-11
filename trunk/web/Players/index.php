@@ -838,7 +838,11 @@
 			{
 				echo '<span class="user_description_deleted">(deleted)</span>' . "\n";
 			}
-			if ((strcmp($suspended_status, 'login disabled') === 0) || (strcmp($suspended_status, 'banned') === 0))
+			if (strcmp($suspended_status, 'login disabled') === 0)
+			{
+				echo '<span class="user_description_banned">(disabled)</span>' . "\n";
+			}
+			if (strcmp($suspended_status, 'banned') === 0)
 			{
 				echo '<span class="user_description_banned">(banned)</span>' . "\n";
 			}
@@ -1021,6 +1025,8 @@
 	$search_all = false;
 	$search_team = false;
 	$search_teamless = false;
+	$show_disabled = false;
+	
 	if (isset($_GET['search_result_included']))
 	{
 		switch ($_GET['search_result_included'])
@@ -1028,17 +1034,21 @@
 			case 'player': $search_player = true; break;
 			case 'team': $search_team = true; break;
 			case 'teamless': $search_teamless = true; break;
+			case 'disabled': 
+				{ 
+					$show_disabled = true; $search_all = true; break; 
+				}
 			default: $search_all = true;
 		}
 	}
 	
 	echo '<option';
-	if ($search_all)
+	if ($search_all && !$show_disabled)
 	{
 		$search_type = 'all';
 		echo ' selected="selected"';
 	}
-	echo '>all</option>';
+	echo '>all active</option>';
 	
 	echo '<option';
 	if ($search_team)
@@ -1056,6 +1066,14 @@
 		echo ' selected="selected"';
 	}
 	echo '>teamless</option>';
+	
+	echo '<option';
+	if ($show_disabled)
+	{
+		$search_type = 'all';
+		echo ' selected="selected"';	
+	}
+	echo ' value="disabled" >all</option>';
 	
 	echo '</select></span>';
 	echo '</div> ' . "\n";
@@ -1101,6 +1119,11 @@
 	}
 	// do not display deleted players during maintenance
 	$query .= ' WHERE `players`.`status`<>' . sqlSafeStringQuotes('deleted');
+	
+	if (!$show_disabled)
+	{
+		$query .= ' AND `players`.`status`<>' . sqlSafeStringQuotes('login disabled');
+	}
 	if ($search_teamless)
 	{
 		$query .= ' AND `players`.`teamid`=' . sqlSafeStringQuotes('0');
