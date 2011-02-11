@@ -62,7 +62,7 @@
 		{
 			$query = ('INSERT INTO `sitebans` (`timestamp`, `playerid` '
 					  . ', `ip_mask`, `reason`)'
-					  . ' VALUES (now(),' . sqlSafeStringQuotes($viewerid) . ',' . sqlSafeStringQuotes($ip_mask) 
+					  . ' VALUES (' . sqlSafeStringQuotes(date('Y-m-d H:i:s')) . ',' . sqlSafeStringQuotes($viewerid) . ',' . sqlSafeStringQuotes($ip_mask) 
 					  . ', ' . sqlSafeStringQuotes($reason) . ')' );
 			
 			if (!($result = $site->execute_query('sitebans', $query, $connection)))

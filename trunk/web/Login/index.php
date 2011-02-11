@@ -44,7 +44,7 @@
 				  . ', ' . sqlSafeStringQuotes(htmlent($ip_address))
 				   // try to detect original ip-address in case proxies are used
 				  . ',' . sqlSafeStringQuotes(htmlent(getenv('HTTP_X_FORWARDED_FOR')))
-				  . ', now(), \'yes\')');
+				  . ',' . sqlSafeStringQuotes(date('Y-m-d H:i:s')) . ', \'yes\')');
 		$site->execute_query('visits', $query, $connection);
 		
 		//to avoid timeouts, i put host resolver out of that insert.
@@ -209,15 +209,23 @@
 		
 		// cache this variable to speed up further access to the value
 		$user_id = getUserID();
-		
+	
 		
 		// suspended mode: active; deleted; login disable; banned
 		if (strcmp($suspended_mode, 'deleted') === 0)
 		{
+			$recreated = true;
 			$suspended_mode = 'active';
 			$query = 'UPDATE `players` SET `status`=' . sqlSafeStringQuotes($suspended_mode);
 			$query .= ' WHERE `id`=' . sqlSafeStringQuotes($user_id) . ' LIMIT 1';
 			if (!($result = @$site->execute_query('players', $query, $connection)))
+			{
+				$msg .= 'Could not reactivate deleted account with id ' . sqlSafeString($user_id) . '.';
+				die_with_no_login($msg, $msg);
+			}
+			$query = 'UPDATE `players_profile` SET `joined`=' . sqlSafeStringQuotes(date('Y-m-d H:i:s'));
+			$query .= ' WHERE `playerid`=' . sqlSafeStringQuotes($user_id) . ' LIMIT 1';
+			if (!($result = @$site->execute_query('players_profile', $query, $connection)))
 			{
 				$msg .= 'Could not reactivate deleted account with id ' . sqlSafeString($user_id) . '.';
 				die_with_no_login($msg, $msg);
