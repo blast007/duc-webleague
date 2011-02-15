@@ -38,7 +38,7 @@
 		$query = ('SELECT DISTINCT teams.id, seasons.startdate, seasons.enddate '
 		. ',seasons.points_win, seasons.points_lost, seasons.points_draw FROM teams '
 		. ' LEFT JOIN matches ON ( matches.team1_teamid = teams.id or matches.team2_teamid = teams.id  ) '
-		. ' LEFT JOIN seasons ON ( matches.timestamp between seasons.startdate and seasons.enddate) '
+		. ' LEFT JOIN seasons ON ( DATE(matches.timestamp) between DATE(seasons.startdate) and DATE(seasons.enddate)) '
 		. ' WHERE seasons.id = ' . sqlSafeStringQuotes($seasonid));
 		if (!($result = @$site->execute_query('seasons_results', $query, $connection)))
 		{
@@ -65,19 +65,19 @@
 			. ' VALUES (' . sqlSafeStringQuotes($seasonid) . ',' . sqlSafeStringQuotes($teamid)
 			. ' , ( ' //wins
 				. ' SELECT COUNT(matches.id) FROM `teams` LEFT JOIN matches '
-				. ' ON (`timestamp` between ' . sqlSafeStringQuotes($startdate) . ' AND ' . sqlSafeStringQuotes($enddate)
+				. ' ON (DATE(`timestamp`) between ' . sqlSafeStringQuotes($startdate) . ' AND ' . sqlSafeStringQuotes($enddate)
 				. ' AND ((team1_teamid = ' . sqlSafeStringQuotes($teamid) . ' AND team1_points > team2_points )'
 				. ' OR ( team2_teamid = ' . sqlSafeStringQuotes($teamid) . ' AND team2_points > team1_points )) )'
 				. ' WHERE `teams`.id = ' . sqlSafeStringQuotes($teamid) 
 			. ' ) , ( ' //losts
 			. ' SELECT COUNT(matches.id) FROM `teams` LEFT JOIN matches'
-				. ' ON (`timestamp` between ' . sqlSafeStringQuotes($startdate) . ' AND ' . sqlSafeStringQuotes($enddate)
+				. ' ON (DATE(`timestamp`) between ' . sqlSafeStringQuotes($startdate) . ' AND ' . sqlSafeStringQuotes($enddate)
 				. ' AND ((team1_teamid = ' . sqlSafeStringQuotes($teamid) . ' AND team1_points < team2_points )'
 				. ' OR ( team2_teamid = ' . sqlSafeStringQuotes($teamid) . ' AND team2_points < team1_points )) )'
 				. ' WHERE `teams`.id = ' . sqlSafeStringQuotes($teamid) 
 			. ' ) , ( ' //draws
 			. ' SELECT COUNT(matches.id) FROM `teams` LEFT JOIN matches '
-				. ' ON (`timestamp` between ' . sqlSafeStringQuotes($startdate) . ' AND ' . sqlSafeStringQuotes($enddate)
+				. ' ON (DATE(`timestamp`) between ' . sqlSafeStringQuotes($startdate) . ' AND ' . sqlSafeStringQuotes($enddate)
 				. ' AND ( ( team1_teamid = ' . sqlSafeStringQuotes($teamid) . ' OR team2_teamid = ' . sqlSafeStringQuotes($teamid) . ' )'
 				. ' AND team2_points = team1_points ) )'
 				. ' WHERE `teams`.id = ' . sqlSafeStringQuotes($teamid) 
