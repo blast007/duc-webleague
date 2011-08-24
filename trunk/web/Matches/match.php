@@ -64,7 +64,7 @@
 		update_seasons($timestamp);
 		
 		echo '<p>The match was entered successfully.</p>' . "\n";
-		echo '<p class="simple-paging"><a class="button" href="./">Enter another match</a></p>' . "\n";
+		echo '<p class="simple-paging"><a class="button" href="./?enter">Enter another match</a></p>' . "\n";
 		
 		$site->dieAndEndPage();
 	}
