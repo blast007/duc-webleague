@@ -331,7 +331,8 @@
 				// this should be always used in private message mode
 				$author = $_SESSION['username'];
 			}
-			
+
+			$author_id = $_SESSION['viewerid'];
 			if (!(isset($author)))
 			{
 				// no anonymous posts and therefore cancel request
@@ -568,8 +569,8 @@
 					}
 				} else
 				{
-					$query = 'INSERT INTO `' . $table_name . '` (`timestamp`, `author`, `announcement`, `raw_announcement`) VALUES (';
-					$query = $query . sqlSafeStringQuotes($timestamp) . ',' . sqlSafeStringQuotes(htmlent($author)) . ',' . sqlSafeStringQuotes($site->bbcode($announcement)) . ',' . sqlSafeStringQuotes($announcement) .')';
+					$query = 'INSERT INTO `' . $table_name . '` (`timestamp`, `author`, `author_id`, `announcement`, `raw_announcement`) VALUES (';
+					$query = $query . sqlSafeStringQuotes($timestamp) . ',' . sqlSafeStringQuotes(htmlent($author)) .  ',' . sqlSafeStringQuotes($author_id) . ',' . sqlSafeStringQuotes($site->bbcode($announcement)) . ',' . sqlSafeStringQuotes($announcement) .')';
 					if ((@$site->execute_query($table_name, $query, $connection)))
 					{
 						echo '<p>Updating: No problems occured, changes written!</p>' . "\n";
