@@ -462,17 +462,28 @@
 					if (!(strcmp($author, '') === 0))
 					{
 						echo $author;
+						echo "#";
 						// show the author to the ones who can add, edit or delete entries
 						if ((isset($_SESSION[$entry_add_permission]) && ($_SESSION[$entry_add_permission]))
 							|| ((isset($_SESSION[$entry_edit_permission])) && ($_SESSION[$entry_edit_permission]))
 							|| ((isset($_SESSION[$entry_delete_permission])) && ($_SESSION[$entry_delete_permission])))
 						{
-							echo ' (' . $row["author"] . ')';
+							echo ' (<a href="/Players/?profile=' . $row["author_id"] . '"/>' . $row["author"] . '</a>)';
+							
 						}
 							
 					} else
 					{
-						echo $row["author"];
+						if ( !(strcmp($row["author_id"], '') === 0) && 
+						
+							((isset($_SESSION[$entry_add_permission]) && ($_SESSION[$entry_add_permission]))
+							|| ((isset($_SESSION[$entry_edit_permission])) && ($_SESSION[$entry_edit_permission]))
+							|| ((isset($_SESSION[$entry_delete_permission])) && ($_SESSION[$entry_delete_permission])))
+						)
+						{ 
+							echo '<a href="/Players/?profile=' . $row["author_id"] . '"/>' . $row["author"] . '</a>'; 
+						}
+						else echo $row["author"];
 					}
 					echo '</div>' . "\n";
 					echo '</div>' . "\n";
