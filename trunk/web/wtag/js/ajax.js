@@ -407,8 +407,11 @@ function displayChatData(reqObj) {
 	  
 	  var spl=date[0].firstChild.nodeValue.split(" ");
 	  var nd = spl[0].substring(0,10);
+	  var dy = nd.substring(0,4);
+	  var dm = nd.substring(5,7);
+	  var dd = nd.substring(8,10);
 	  var nt = spl[1].substring(0,5);
-	  var newtime= document.createTextNode(nt);
+	  var newtime= document.createTextNode(dd + "/" + dm + " " + nt);
 	  
 	  sdate.title = "Posted on "+nd;
 	  sdate.appendChild(newtime);

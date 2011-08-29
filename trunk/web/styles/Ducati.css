@@ -766,6 +766,10 @@ a.players{ background-image: url(Ducati_misc/ico_players_small.png)  }
 	margin:0px;
 }
 
+
+#latest-activity h2 {margin-top:0px;}
+
+
 /* polls */
 
 #poll ul 
@@ -1499,7 +1503,7 @@ table a.button:after
 /* #chat div is nested inside the #box div and
 containing all other divs of the shoutbox layout */
 #chat {
-height: 226px;
+height: 326px;
 background: #1f1f1f;
 border:1px solid #2f2f2f;
 position:relative;
@@ -1511,7 +1515,7 @@ position:relative;
 }
 #chat.home-box
 {
-	height:226px;
+	height:326px;
 }
 
 
@@ -1545,7 +1549,7 @@ padding-bottom:3em;
 #chat #container
 {
 	overflow:auto;
-	height: 190px;
+	height: 290px;
 }
 
 #chat_menu p {

@@ -30,7 +30,7 @@
 		<div id="top-teams" class="slide">
 			<div class="main-box">
 				<?php 	
-					display_top_teams(4);
+					display_top_teams(5);
 				?>	
 			</div>
 		</div>
@@ -43,6 +43,16 @@
 			</div>
 		</div>
 	</div> 
+	
+	<div id="latest-activity">
+		<h2 class="news"><span>Activity</span></h2>
+		<div class="main-box">
+			<?php
+				display_activity(12,5);
+			?>
+		</div>
+	</div>
+	
 	<!-- END of slideshow box
 	plugin source: http://www.kevinresol.com/divslideshow/example.php
 	-->	
@@ -61,7 +71,8 @@
         });
 
                 
-      if(jQuery('#article_body').height()>195){
+    if(jQuery('a#moreD').css('font-size')!='0px' && 
+	jQuery('#article_body').height()>195){
 		jQuery('#article_body').wrap('<div id="article"/>');
 		jQuery('#moreD').show().toggle(function(){
 			jQuery(this).text('show less ^');
@@ -148,6 +159,112 @@ function display_last_news($limit)
 		echo '<p class="simple-paging p0"><a href="/News/" class="button next">More news</a></p>';
 	}
 }
+
+
+
+function display_activity($months, $topteams)
+{
+	global $site;
+	global $connection;
+		
+		$query_overall = 'SELECT MONTH(timestamp) as month, YEAR(timestamp) as year,  count(id) as match_number'
+		. ' FROM matches WHERE PERIOD_DIFF(DATE_FORMAT(CURDATE(),"%Y%m"),DATE_FORMAT(timestamp,"%Y%m")) < ' . $months
+		. ' GROUP BY month, year ORDER BY year asc, month asc';
+		
+		$query_topteams = 'SELECT t.id, count(m.id) as match_number '
+		. ' FROM teams t LEFT JOIN matches m ON (m.team1_teamid = t.id OR m.team2_teamid = t.id) '
+		. ' WHERE PERIOD_DIFF(DATE_FORMAT(CURDATE(),"%Y%m"),DATE_FORMAT(timestamp,"%Y%m")) < ' . $months
+		. ' GROUP BY t.id order by match_number DESC limit ' . $topteams;
+		
+		
+		if (!($result = @$site->execute_query('matches', $query_overall, $connection)))
+		{
+			$site->dieAndEndPage('Could not find matches played.');
+		}
+		
+		$n_rows = (int) mysql_num_rows($result);
+		if ($n_rows < (int) 1)
+		{
+			mysql_free_result($result);
+			$site->dieAndEndPage();
+		}
+		$match_stats = array();
+		$i = 0;
+		$chart_periods = '';
+		$chart_values = '';
+		$startyear = 2000;
+		while ($row = mysql_fetch_array($result))
+		{
+			$match_stats[$i]['period'] = $row['month'] . '/' . $row['year'];
+			$match_stats[$i]['match_number'] = $row['match_number'];
+			$match_stats[$i]['month_number'] = (12 * ($row['year']-$startyear)) + $row['month']; 			
+			if ($i != 0)
+			{
+				//if some team miss few months of activity
+				if ($match_stats[$i]['month_number'] > ($match_stats[$i-1]['month_number'] + 1) )
+				{
+					for ($j=1; $j < ($match_stats[$i]['month_number'] - ($match_stats[$i-1]['month_number'])); $j++)
+					{
+						$chart_periods .= ",'" . getMonth($match_stats[$i-1]['month_number'] + $j, $startyear) . "'";
+						$chart_values .= ",0";
+					}
+				} 								
+				$chart_periods .= ',';
+				$chart_values .= ',';
+			}
+			$chart_periods .= "'" . $row['month'] . (($row['month'] === '6')? '<br/>' . $row['year']:'')  . "'";
+			$chart_values .=  $match_stats[$i]['match_number'] ;
+			
+			$i++;
+		}		
+		echo '<div id="chart-container-1"></div>' . "\n";
+		echo '<p class="simple-paging p0"><a href="/Teams/stats.php" class="button next">More</a></p>';	
+	?>
+	<script src="/js/highcharts.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../js/themes/gray.js"></script>
+	<script type="text/javascript">
+	var chart1; // globally available
+	$(document).ready(function() {
+	      chart1 = new Highcharts.Chart({
+	         chart: {
+	            renderTo: 'chart-container-1',
+	            defaultSeriesType: 'line',
+	            height:  '200',
+	         },
+	         title: {
+	            text: ''
+	         },
+	         xAxis: {
+					categories: [<?php echo $chart_periods; ?>]
+			},
+			yAxis: {
+				min: 0,
+				title: {
+					text: 'Amount of matches'
+				}
+			},
+			legend: {
+				enabled: false
+			},
+			tooltip: {
+				formatter: function() {
+					return '<b>'+ this.y + '</b>';
+				}
+			},
+			plotOptions: {
+				series: {
+					stacking: 'normal'
+				}
+			},
+		    series: [{ title: '',
+				data: [<?php echo $chart_values; ?>]
+			}]
+	      });
+	   });	
+	</script>
+	<?php 
+}
+
 
 function display_top_teams($limit) 
 {
@@ -434,4 +551,17 @@ function ago($datefrom,$dateto=-1)
         return $res;
     }
 
+    
+    function getMonth($monthnum, $startyear) 
+{
+	$month = $monthnum % 12;
+	$year = '';
+	if ($month === 6) 
+	{
+		$year = '<br/>' . (floor($monthnum / 12) + $startyear);
+	}
+	return $month . $year;
+}
+    
+    
 ?>
