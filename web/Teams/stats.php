@@ -26,8 +26,8 @@
 	
 	
 	$connection = $site->connect_to_db();
-	$months = 24;
-	$topteams = 10;
+	$months = 12;
+	$topteams = 8;
 	if (isset($_GET['months']) && intval($_GET['months']) > 0 )
 	{
 		$months = intval($_GET['months']);
