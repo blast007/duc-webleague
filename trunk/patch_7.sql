@@ -1,0 +1,1 @@
+UPDATE players SET teamid = 0 WHERE teamid NOT IN (SELECT id FROM teams) AND teamid <> 0;

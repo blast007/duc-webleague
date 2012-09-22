@@ -1217,6 +1217,7 @@ function editTeam($team_leader_id)
 	global $randomkey_name;
 	global $viewerid;
 	global $logo_url;
+	global $team_description;
 	
 	if ($viewerid < 1)
 	{
