@@ -335,7 +335,13 @@
 					@$site->execute_query('teams_permissions', $query, $connection);
 					$query = 'DELETE FROM `teams_profile` WHERE `teamid`=' . "'" . ($curTeam) . "'";
 					// execute query, ignore result
-					@$site->execute_query('teams_profile', $query, $connection);						
+					@$site->execute_query('teams_profile', $query, $connection);			
+
+					// also, clear player profiles if any of them were in that team.
+					$query = 'UPDATE `players` SET `last_teamid`=' . sqlSafeStringQuotes($curTeam);
+					$query .= ', `teamid`=' . sqlSafeStringQuotes('0');
+					$query .= ' WHERE `teamid`=' . sqlSafeStringQuotes($curTeam);
+					if (!($result_update = @$site->execute_query('players', $query, $connection)))
 				}
 				
 				// if team not active but is not new, mark it as deleted
