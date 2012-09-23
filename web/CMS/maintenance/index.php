@@ -341,7 +341,7 @@
 					$query = 'UPDATE `players` SET `last_teamid`=' . sqlSafeStringQuotes($curTeam);
 					$query .= ', `teamid`=' . sqlSafeStringQuotes('0');
 					$query .= ' WHERE `teamid`=' . sqlSafeStringQuotes($curTeam);
-					if (!($result_update = @$site->execute_query('players', $query, $connection)))
+					@$site->execute_query('players', $query, $connection);
 				}
 				
 				// if team not active but is not new, mark it as deleted
