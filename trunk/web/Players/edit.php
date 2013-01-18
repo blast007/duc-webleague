@@ -58,7 +58,7 @@
 			}
 			mysql_free_result($result);
 			
-			if (strcmp($suspended_status, 'deleted') === 0)
+			if (strcmp($suspended_status, 'deleted') === 0 && !$allow_edit_any_user_profile)
 			{
 				echo '<p class="error-msg">You may not edit this user as the user was deleted during maintenance.</p>';
 				$site->dieAndEndPage('');
