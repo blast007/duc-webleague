@@ -515,7 +515,7 @@
 			$site->dieAndEndPage('');
 		}
 		
-		if (strcmp($suspended_status, 'deleted') === 0)
+		if (strcmp($suspended_status, 'deleted') === 0 && !$_SESSION['allow_ban_any_user'])
 		{
 			echo '<p>You may not set a status for this user as the user was deleted during maintenance.</p>';
 			$site->dieAndEndPage('');
