@@ -25,7 +25,7 @@
 		$diff = 0;
 		compute_scores($team_id1, $team_id2,
 					   $team1_score, $team2_score,
-					   $team1_caps, $team2_caps,
+					   $team1_caps, $team2_caps, $duration,
 					   $diff, $team_stats_changes);
 		
 		// insert new entry
@@ -173,7 +173,7 @@
 		$diff = 0;
 		compute_scores($team_id1, $team_id2,
 					   $team1_score, $team2_score,
-					   $team1_caps, $team2_caps,
+					   $team1_caps, $team2_caps, $duration,
 					   $diff, $team_stats_changes);
 		
 		// update match table (perform the actual editing)
@@ -370,7 +370,7 @@
 		$viewerid = getUserID();
 		
 		// update only newer matches
-		$query = ('SELECT `id`, `team1_teamid`, `team2_teamid`, `team1_points`, `team2_points`, `timestamp` FROM `matches`'
+		$query = ('SELECT `id`, `team1_teamid`, `team2_teamid`, `team1_points`, `team2_points`, `timestamp`, `duration` FROM `matches`'
 				  . ' WHERE `timestamp`>' . sqlSafeStringQuotes($timestamp));
 		if (!($result = $site->execute_query('matches', $query, $connection)))
 		{
@@ -386,11 +386,13 @@
 			$team1_score = get_score_at_that_time($cur_team1, $row['timestamp']);
 			$team2_score = get_score_at_that_time($cur_team2, $row['timestamp']);
 			
+			$duration = intval($row['duration']);
+			
 			// update existing entry
 			$diff = 0;
 			compute_scores($cur_team1, $cur_team2,
 						   $team1_score, $team2_score,
-						   $row['team1_points'], $row['team2_points'],
+						   $row['team1_points'], $row['team2_points'],$duration,
 						   $diff, $team_stats_changes);
 			
 			// update score if necessary
@@ -683,7 +685,7 @@
 	}
 	
 	
-	function compute_scores($team_id1, $team_id2, &$score_a, &$score_b, $caps_a, $caps_b, &$diff, &$team_stats_changes)
+	function compute_scores($team_id1, $team_id2, &$score_a, &$score_b, $caps_a, $caps_b, $duration, &$diff, &$team_stats_changes)
 	{
 		global $site;
 		
@@ -692,6 +694,7 @@
 		 score= 1 if A wins, 0.5 for draw, 0 if B wins
 		 The change in the ratings is then calculated by:
 		 diff=50*(score-prob);
+		 Then it's multiplied by a match length modifier: 1,0 fo 20 mins, 1,5 for 30 mins and 0,75 for 15 mins.
 		 After that some rounding magic to integer is applied and the new ratings are calculated:
 		 newA=oldA+diff, newB=oldB-diff; */
 		
@@ -722,6 +725,7 @@
 			$score_b = intval($score_b);
 			$prob = 1.0 / (1 + pow(10, (($score_b-$score_a)/400.0)));
 			$score = 0;
+			$duration_mod = 1;
 			
 			if ($caps_a > $caps_b) // team a wins
 			{
@@ -733,10 +737,19 @@
 			{
 				$score = 0;
 			}
+			// calculate modifier for match duration
+			switch ($duration) {
+				case 15:	 $duration_mod = 0.75; break;
+				case 30:	 $duration_mod = 1.5; break;
+				default: $duration_mod = 1;
+			}
+			
 			
 			// do not compute absolute value of rounded difference
 			// as we need a signed integer to track score changes
-			$diff=floor(50*($score-$prob));
+			$diff=floor(50*($score-$prob)*$duration_mod);
+			
+			
 			
 			// do not forget to round the values to integers
 			$score_a = $score_a + $diff;

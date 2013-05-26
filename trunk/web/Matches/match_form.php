@@ -82,7 +82,7 @@
 		{
 			// fill unknown values with zeros
 			// team id 0 is reseved and does not exist in db
-			show_form(0, 0, 0, 0, 15, $readonly=false);
+			show_form(0, 0, 0, 0, 20, $readonly=false);
 		}
 		
 		echo '<div>';
