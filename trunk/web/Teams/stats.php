@@ -41,6 +41,41 @@
 	echo '<h1 class="teams">Teams activity</h1>';
 	
 	echo '<div class="main-box">';
+	
+		echo '<form method="get" name="stats" action="" class="search_bar simpleform">
+		<label>Months:
+			<select name="months">';
+		
+		for ($i=12; $i<=60; $i=$i+12) {
+			if ($i === $months)
+			{
+				echo '<option selected="selected">'.$i.'</option>';
+			}
+			else 
+			{
+				echo '<option>'.$i.'</option>';
+			}
+		}
+		echo '</select>
+		</label>
+		<label>Teams:
+			<select name="teams">';
+		for ($i=1; $i<=20; $i++) {
+			if ($i === $topteams)
+			{
+				echo '<option selected="selected">'.$i.'</option>';
+			}
+			else 
+			{
+				echo '<option>'.$i.'</option>';
+			}
+		}
+		echo '</select>
+		</label>
+		<input type="submit" value="show" class="button"/>
+		</form>	';
+	
+	
 		$query_overall = 'SELECT MONTH(timestamp) as month, YEAR(timestamp) as year,  count(id) as match_number'
 		. ' FROM matches WHERE PERIOD_DIFF(DATE_FORMAT(CURDATE(),"%Y%m"),DATE_FORMAT(timestamp,"%Y%m")) < ' . $months
 		. ' GROUP BY month, year ORDER BY year asc, month asc';
@@ -78,6 +113,7 @@
 				for ($j=1; $j < ($match_stats[$i]['month_number'] - ($first_month)); $j++)
 				{
 					$chart_periods .= "'" . getMonth($first_month + $j, $startyear) . "',";
+					$chart_values[0] .= "0,";
 				}
 		 	
 			}
@@ -101,6 +137,7 @@
 			
 			$i++;
 		}		
+	
 		echo '<div id="chart-container-1"></div>' . "\n";
 		
 		$query_topteams = 'SELECT t.id, t.name, count(m.id) as match_number '

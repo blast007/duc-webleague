@@ -437,23 +437,44 @@ function showTeamProfile($team_description, $team_leader_id, $allow_edit_any_tea
 			echo $row['timestamp'];
 			echo '</td>' . "\n" . '<td>';
 			
-			// get name of first team
-			echo '<a href="../Teams/?profile=' . ((int) $row['team1_teamid']) . '">' . $row['team1_name'] . '</a>';
-			
-			// seperator showing that opponent team will be named soon
-			echo ' - ';
-			
-			// get name of second team
-			echo '<a href="../Teams/?profile=' . ((int) $row['team2_teamid']) . '">' . $row['team2_name'] . '</a>';
-			
-			// done with the table field, go to next field
-			echo '</td>' . "\n" . '<td>';
-			
-			echo htmlentities($row['team1_points']);
-			echo ' - ';
-			echo htmlentities($row['team2_points']);
-			echo '</td>' . "\n";
-			
+			if ($row['team1_points'] >= $row['team2_points']) 
+			{
+				// get name of first team
+				echo '<a href="../Teams/?profile=' . ((int) $row['team1_teamid']) . '">' . $row['team1_name'] . '</a>';
+				
+				// seperator showing that opponent team will be named soon
+				echo ' - ';
+				
+				// get name of second team
+				echo '<a href="../Teams/?profile=' . ((int) $row['team2_teamid']) . '">' . $row['team2_name'] . '</a>';
+				
+				// done with the table field, go to next field
+				echo '</td>' . "\n" . '<td>';
+				
+				echo htmlentities($row['team1_points']);
+				echo ' - ';
+				echo htmlentities($row['team2_points']);
+				echo '</td>' . "\n";
+			}
+			else 
+			{
+				// get name of first team
+				echo '<a href="../Teams/?profile=' . ((int) $row['team2_teamid']) . '">' . $row['team2_name'] . '</a>';
+				
+				// seperator showing that opponent team will be named soon
+				echo ' - ';
+				
+				// get name of second team
+				echo '<a href="../Teams/?profile=' . ((int) $row['team1_teamid']) . '">' . $row['team1_name'] . '</a>';
+				
+				// done with the table field, go to next field
+				echo '</td>' . "\n" . '<td>';
+				
+				echo htmlentities($row['team2_points']);
+				echo ' - ';
+				echo htmlentities($row['team1_points']);
+				echo '</td>' . "\n";
+			}
 			echo '<td>';
 			// get name of player that made last change
 			echo '<a href="../Players/?profile=' . ((int) $row['playerid']) . '">' . $row['playername'] . '</a>';
