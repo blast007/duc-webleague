@@ -320,7 +320,7 @@
 					$cur_team_active = false;
 				}
 				
-				// if team not active and is not new, delete it for real (do not mark as deleted but actually do it!)
+				// if team not active and is new, delete it for real (do not mark as deleted but actually do it!)
 				if (!$cur_team_active && $curTeamNew)
 				{
 					// delete (for real) the new team
@@ -490,8 +490,8 @@
 			}
 			
 			
-			// date of 2 months in past will help during maintenance
-			$two_months_in_past = strtotime('-3 months');
+			// date of X months in past will help during maintenance
+			$two_months_in_past = strtotime('-12 months');
 			$two_months_in_past = strftime('%Y-%m-%d %H:%M:%S', $two_months_in_past);
 			
 			// clean teams first
@@ -501,7 +501,7 @@
 			
 			// maintain players now
 			
-			// get player id of teamless players that have not been logged-in in the last 2 months
+			// get player id of teamless players that have not been logged-in in the last X months
 			$query = 'SELECT `playerid` FROM `players`, `players_profile`';
 			$query .= ' WHERE `players`.`teamid`=' . sqlSafeStringQuotes('0');
 			$query .= ' AND `players`.`status`=' . sqlSafeStringQuotes('active');
@@ -512,7 +512,7 @@
 			if (!($result = @$site->execute_query('players, players_profile', $query, $connection)))
 			{
 				unlock_tables_maint();
-				$site->dieAndEndPage('MAINTENANCE ERROR: getting list of 3 months long inactive players failed.');
+				$site->dieAndEndPage('MAINTENANCE ERROR: getting list of 6 months long inactive players failed.');
 			}
 			
 			// store inactive players in an array
