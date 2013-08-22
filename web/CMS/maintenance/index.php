@@ -320,6 +320,37 @@
 					$cur_team_active = false;
 				}
 				
+				// if team was created not earlier than 30 days ago
+				
+				if (!$cur_team_active && $curTeamNew)
+				{
+					$one_month_in_past = strtotime('-30 days');
+					$one_month_in_past = strftime('%Y-%m-%d %H:%M:%S', $one_month_in_past);			
+					$query = ('SELECT `id` '
+							  . ' FROM `teams_profile` '
+							  . ' WHERE `teamid` = ' . sqlSafeStringQuotes($curTeam)
+							  . ' AND `created`>' . sqlSafeStringQuotes($one_month_in_past)
+							  . ' LIMIT 1');
+					// execute query
+					if (!($result_brand_new_team = @$site->execute_query('teams_profiles', $query, $connection)))
+					{
+						unlock_tables_maint();
+						$site->dieAndEndPage('MAINTENANCE ERROR: getting information about creation date of a team'
+							 . sqlSafeStringQuotes($curTeam)
+							 . ' failed.');
+					}
+					if ((int) mysql_num_rows($result_brand_new_team) > 0)
+					{
+						
+						// at least one result means this team was just created
+						$cur_team_active = true;
+					}
+		
+					
+				} 
+				
+				
+				
 				// if team not active and is new, delete it for real (do not mark as deleted but actually do it!)
 				if (!$cur_team_active && $curTeamNew)
 				{
