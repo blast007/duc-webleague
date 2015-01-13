@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 // List of IPs that are allowed to report matches, any server whose IP is not in this list will be 403'd in
 // order to prevent abuse of unsanctioned matches. In other words, the IPs of all the official league servers
 // belong in here
-$ALLOWED_IPS = array('127.0.0.1','209.222.8.90','198.202.90.197','141.99.42.50');
+$ALLOWED_IPS = array('127.0.0.1','209.222.8.90','198.202.90.197','141.99.42.50','91.121.76.47');
 // The bz-owl user id of the person who will be entering the matches automatically. This is NOT their BZID but
 // instead the ID that is stored in the bz-owl database
 $AUTOREPORT_UID = 0;
