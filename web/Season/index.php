@@ -5,6 +5,16 @@
 	session_start();
 	$path = (pathinfo(realpath('./')));
 	$name = $path['basename'];
+	$randomkey_name = 'seasons_rewards';
+	
+	$allow_edit_season = false;
+	if (isset($_SESSION['allow_edit_season']))
+	{
+		if (($_SESSION['allow_edit_season']) === true)
+		{
+			$allow_edit_season = true;
+		}
+	}
 	
 	$display_page_title = $name;
 	require_once (dirname(dirname(__FILE__)) . '/CMS/index.inc');
@@ -59,6 +69,10 @@
 	{
 		$seasonid = intval($_GET['season_id']);
 	} 
+	if (isset($_GET['rewards']))
+	{
+		$seasonid = intval($_GET['rewards']);
+	}
 	$query = 'SELECT s.* FROM seasons s INNER JOIN seasons_results sr ON (s.id = sr.seasonid) ';
 	// if there was an id in query try to get that season
 	if ($seasonid != 0) 
@@ -73,6 +87,7 @@
 	}
 	$rows = (int) mysql_num_rows($result);
 	
+	$allow_rewards = false;
 	if ($rows === (int) 0)
 	{
 		echo '<p class="err_msg">No season to display.</p>' . "\n";
@@ -84,6 +99,14 @@
 		$seasonid = $row['id'];
 		$startdate = $row['startdate'];
 		$enddate = $row['enddate'];
+		$isspecial = $row['is_special'];
+		$seasonname = $row['name'];
+		$allow_rewards = false;
+		
+		if ($allow_edit_season && $seasonid !=0 && isset($_GET['rewards']) && $row['is_rewarded'] == 0) 
+		{
+			$allow_rewards = true;
+		}
 	}
 	unset($rows);
 	unset($result);
@@ -91,9 +114,8 @@
 	
 	
 	echo '<h1 class="seasons">Results for season <span class="season-date">' . $startdate . ' - ' . $enddate . '</span> </h1>';
-	
+
 	echo '<div class="simple-paging">';
-	
 	// get next season
 	$query = ('SELECT s.* FROM seasons s INNER JOIN seasons_results sr ON (s.id = sr.seasonid) '
 	. ' WHERE active = true AND startdate > ' .  sqlSafeStringQuotes($startdate) 
@@ -155,7 +177,14 @@
 	
 	
 	echo '<div class="main-box">';
-	
+	if ($seasonname != '') 
+	{
+		echo '<h2>' . $seasonname . '</h2>';
+	}
+	if ($allow_rewards)
+	{
+		echo '<form enctype="application/x-www-form-urlencoded" method="post" action="./update_season_rewards.php?rewards=' .$seasonid. '">'; 
+	}
 	echo '<table id="table_seasons_results" class="big">' . "\n";
 	echo '<tr>' . "\n";
 	echo '	<th>Pos.</th>' . "\n";
@@ -165,6 +194,10 @@
 	echo '	<th>Score</th>' . "\n";
 	echo '	<th>W/L/T</th>' . "\n";
 	echo '	<th>Rating</th>' . "\n";
+	if ($allow_rewards)
+	{
+		echo '	<th>Rewards</th>' . "\n";
+	}
 	echo '</tr>' . "\n\n";
 	
 	// display message overview
@@ -217,6 +250,13 @@
 		rankingLogo($result_entry['rating']);
 		echo '</td>' . "\n";
 
+		if ($allow_rewards)
+		{
+			echo '	<td>' . "\n";
+			$site->write_self_closing_tag('input type="text" title="" name="team_' . $result_entry['teamid'] .'" value="0" class="small_input_field"');
+			echo ' </td>' . "\n";
+		}
+		
 		
 		echo '</tr>' . "\n\n";
 		$matches_played += $result_entry['num_matches_played'];
@@ -228,7 +268,12 @@
 	
 	// no more matches to display
 	echo '</table>' . "\n";
-	
+	if ($allow_rewards)
+	{
+		generate_confirmation_key();
+		$site->write_self_closing_tag('input type="submit" name="reward" value="Submit rewards" id="send" class="button next"');
+		echo '</form>'. "\n"; 
+	}
 	echo '<table class="small">' . "\n";
 	echo '<tr> <td> Number of matches in this season: </td> <td>' . ($matches_played/2) . '</td> </tr>';
 	echo '<tr> <td> Number of active teams in this season: </td> <td>' . $teams_played . '</td> </tr>';
@@ -308,6 +353,19 @@
 		echo '</span>';
 	}	
 	
+	function generate_confirmation_key()
+	{
+		global $site;
+		global $randomkey_name;
+		
+		// generate hidden confirmation key
+		$new_randomkey_name = $randomkey_name . microtime();
+		$new_randomkey = $site->set_key($new_randomkey_name);
+		$site->write_self_closing_tag('input type="hidden" name="key_name" value="'
+									  . htmlspecialchars($new_randomkey_name) . '"');
+		$site->write_self_closing_tag('input type="hidden" name="' . htmlspecialchars($randomkey_name) . '" value="'
+									  . urlencode(($_SESSION[$new_randomkey_name])) . '"');
+	}
 	
 	
 ?>

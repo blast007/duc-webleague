@@ -90,19 +90,30 @@
 		{
 			$enddate = $_POST['enddate'];
 		}
-		
-		if (!(preg_match('/(2)(0|1|2|3|4|5|6|7|8|9){3,}-(0|1)(0|1|2|3|4|5|6|7|8|9)-(0|1|2|3)(0|1|2|3|4|5|6|7|8|9)/', $startdate)))
+		$name = '';
+		if (isset($_POST['name']))
+		{
+			$name = $_POST['name'];
+		}		
+		if (isset($_POST['is_special']))
+		{
+			$is_special = $_POST['is_special'];
+		}
+		else $is_special = 0;
+	
+		if (!(preg_match('/(2)(0|1|2|3|4|5|6|7|8|9){3,}-(0|1)(0|1|2|3|4|5|6|7|8|9)-(0|1|2|3)(0|1|2|3|4|5|6|7|8|9) (0|1|2)(0|1|2|3|4|5|6|7|8|9):(0|1|2|3|4|5|6)(0|1|2|3|4|5|6|7|8|9):(0|1|2|3|4|5|6)(0|1|2|3|4|5|6|7|8|9)/', $startdate)))
 		{
 			echo '<p>Please make sure your specified date is in correct format. Do not forget leading zeros.</p>' . "\n";	
-		} elseif (!(preg_match('/(2)(0|1|2|3|4|5|6|7|8|9){3,}-(0|1)(0|1|2|3|4|5|6|7|8|9)-(0|1|2|3)(0|1|2|3|4|5|6|7|8|9)/', $enddate)))
+		} elseif (!(preg_match('/(2)(0|1|2|3|4|5|6|7|8|9){3,}-(0|1)(0|1|2|3|4|5|6|7|8|9)-(0|1|2|3)(0|1|2|3|4|5|6|7|8|9) (0|1|2)(0|1|2|3|4|5|6|7|8|9):(0|1|2|3|4|5|6)(0|1|2|3|4|5|6|7|8|9):(0|1|2|3|4|5|6)(0|1|2|3|4|5|6|7|8|9)/', $enddate)))
 		{
 			echo '<p>Please make sure your specified date is in correct format. Do not forget leading zeros.</p>' . "\n";
 		} else 
 		{
+			$is_rewarded = ($is_special == 1)? 0:1; 
 			$query = ('INSERT INTO `seasons` (`startdate`, `enddate` '
-					  . ', `active`, `points_win`, `points_draw`, `points_lost`)'
+					  . ', `active`, `points_win`, `points_draw`, `points_lost`, `is_special`, `is_rewarded`, `name`)'
 					  . ' VALUES (' . sqlSafeStringQuotes($startdate) . ', ' . sqlSafeStringQuotes($enddate)
-					  . ', true, 4, 2, 1 )' );
+					  . ', true, 4, 2, 1,' . sqlSafeStringQuotes($is_special) . ',' . sqlSafeStringQuotes($is_rewarded) . ',' . sqlSafeStringQuotes($name) . '  )' );
 			
 			if (!($result = $site->execute_query('seasons', $query, $connection)))
 			{
@@ -175,7 +186,7 @@
 	// input string
 	echo '<div class="formrow"><label for="season_startdate">Start date:</label> ' . "\n";
 	echo '<span>';
-		$site->write_self_closing_tag('input type="text" title="Start of the season" id="season_startdate" name="startdate" value="' . date('Y-m-d') . '"');
+		$site->write_self_closing_tag('input type="text" title="Start of the season" id="season_startdate" name="startdate" value="' . date('Y-m-d 00:00:00') . '"');
 	
 	echo '</span></div> ' . "\n";
 	
@@ -183,9 +194,17 @@
 	
 	echo '<span>';
 		//by default is 45days length
-		$site->write_self_closing_tag('input type="text" title="End of the season" id="season_enddate" name="enddate" value="' . date('Y-m-d',time()+ 86400 * 45) . '"' );
+		$site->write_self_closing_tag('input type="text" title="End of the season" id="season_enddate" name="enddate" value="' . date('Y-m-d',time()+ 86400 * 45) . ' 23:59:59"' );
 	
 	echo '</span></div> ' . "\n";
+	echo '<div class="formrow">';
+	$site->write_self_closing_tag('input type="checkbox" name="is_special" value="1" id="is_special"');
+	echo '<label for="is_special">Special season</label> ' . "\n";
+	echo '</div>' . "\n";
+	echo '<div class="formrow">';
+	echo '<label for="name">Season name</label> ' . "\n";
+	$site->write_self_closing_tag('input type="text" name="name" value="" id="name" class="small_input_field"');
+	echo '</div>' . "\n";
 	echo '<div class="formrow">';
 	$site->write_self_closing_tag('input type="submit" name="create" value="Create a new season" id="send" class="button"');
 	echo '</div>' . "\n";
@@ -195,7 +214,7 @@
 	
 	
 	
-	$query = 'SELECT s.id, s.startdate, s.enddate, s.active '
+	$query = 'SELECT s.id, s.startdate, s.enddate, s.active, s.is_special, s.is_rewarded, s.name '
 	.', team_1, t1.name AS team_1_name, sr1.score AS team_1_score, sr1.num_matches_played AS team_1_matches '
 	.',	team_2, t2.name AS team_2_name, sr2.score AS team_2_score, sr2.num_matches_played AS team_2_matches '
 	.',	team_3, t3.name AS team_3_name, sr3.score AS team_3_score, sr3.num_matches_played AS team_3_matches ';
@@ -255,6 +274,9 @@
 		$seasonid_list[$id]['startdate'] = $row['startdate'];
 		$seasonid_list[$id]['enddate'] = $row['enddate'];
 		$seasonid_list[$id]['active'] = $row['active'];
+		$seasonid_list[$id]['is_special'] = $row['is_special'];
+		$seasonid_list[$id]['is_rewarded'] = $row['is_rewarded'];
+		$seasonid_list[$id]['name'] = $row['name'];
 		$seasonid_list[$id]['team_1'] = $row['team_1'];
 		$seasonid_list[$id]['team_2'] = $row['team_2'];
 		$seasonid_list[$id]['team_3'] = $row['team_3'];
@@ -282,6 +304,10 @@
 	{
 		echo '<tr class="seasons_overview">' . "\n";
 		echo '<td>';
+		if ($season_entry['name'] !== '')
+		{
+			echo '<h3 class="season-name">' . $season_entry['name'] . '</h3>';
+		}		
 		echo '<a href="/Season/?season_id=' . $season_entry['id'] . '">' . $season_entry['startdate'].' - '.$season_entry['enddate'] . '</a>' ;
 		echo '</td>' . "\n" . '<td>';
 		team_name_from_id( $season_entry['team_1'],  $season_entry['team_1_name']);
@@ -305,6 +331,11 @@
 				{
 					echo '<a class="button" href="./?deactivate=' . htmlspecialchars($season_entry['id']) . '">Deactivate season</a> ';
 					echo '<a class="button" href="./?recalc=' . htmlspecialchars($season_entry['id']) . '">Recalculate season</a> ';
+					if ($season_entry['is_special'] && !$season_entry['is_rewarded'] && strtotime($season_entry['enddate']) < time())
+					{
+						echo '<a class="button" href="/Season/?rewards=' . htmlspecialchars($season_entry['id']) . '">Reward winners</a> ';
+					}
+					
 				} else
 				echo '<a class="button" href="./?activate=' . htmlspecialchars($season_entry['id']) . '">Activate season</a> ';
 				
