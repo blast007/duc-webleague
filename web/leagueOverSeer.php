@@ -63,7 +63,7 @@ $REPORT_METHOD = $_POST;
 // Create an object to access the bz-owl database
 require_once 'CMS/siteinfo.php';
 $site = new siteinfo();
-$dbc = $site->connect_to_db();
+$connection = $site->connect_to_db();
 // After the first major rewrite of the league overseer plugin, the API was introduced in order to provided backwards
 // compatibility for servers that have not updated to the latest version of the plugin.
 $API_VERSION = (isset($REPORT_METHOD['apiVersion'])) ? $REPORT_METHOD['apiVersion'] : 0;
@@ -101,7 +101,7 @@ if ($API_VERSION == 1)
 $teamArray = array();
 // Create a merged table of team names and BZID list
 $getTeams = "SELECT teams.name, GROUP_CONCAT(players.external_playerid separator ',') AS members FROM players, teams WHERE players.teamid = teams.id AND teams.leader_playerid != 0 AND players.external_playerid != '' GROUP BY teams.name";
-$getTeamsQuery = @$site->execute_query('players, teams', $getTeams,$dbc);
+$getTeamsQuery = @$site->execute_query('players, teams', $getTeams,$connection);
 // Store the team name and member list in the array we just created
 while ($entry = mysql_fetch_array($getTeamsQuery))
 {
@@ -246,20 +246,20 @@ $insertNewMatchQuery = "INSERT INTO matches (playerid, timestamp, team1_teamid, 
 "'" . $losingTeamNewELO . "', " .
 "'" . $duration . "');";
 // Execute the query we just formed so we can actually insert the match into the database
-@$site->execute_query("matches", $insertNewMatchQuery,$dbc);
+@$site->execute_query("matches", $insertNewMatchQuery,$connection);
 // Now we have to update the number of matches both teams have played
-@$site->execute_query("teams_overview", "UPDATE teams_overview SET score = " . $winningTeamNewELO . ", num_matches_played = num_matches_played + 1 WHERE teamid = " . $winningTeamID . ";",$dbc);
-@$site->execute_query("teams_overview", "UPDATE teams_overview SET score = " . $losingTeamNewELO . ", num_matches_played = num_matches_played + 1 WHERE teamid = " . $losingTeamID . ";",$dbc);
+@$site->execute_query("teams_overview", "UPDATE teams_overview SET score = " . $winningTeamNewELO . ", num_matches_played = num_matches_played + 1 WHERE teamid = " . $winningTeamID . ";",$connection);
+@$site->execute_query("teams_overview", "UPDATE teams_overview SET score = " . $losingTeamNewELO . ", num_matches_played = num_matches_played + 1 WHERE teamid = " . $losingTeamID . ";",$connection);
 // Now we need to check if the match was a draw in order to update the 'matches draw' count or the 'matches won/lost' count
 if ($winningTeamPoints == $losingTeamPoints)
 {
-@$site->execute_query("teams_profile", "UPDATE teams_profile SET num_matches_draw = num_matches_draw + 1 WHERE teamid = " . $winningTeamID . ";",$dbc);
-@$site->execute_query("teams_profile", "UPDATE teams_profile SET num_matches_draw = num_matches_draw + 1 WHERE teamid = " . $losingTeamID . ";",$dbc);
+@$site->execute_query("teams_profile", "UPDATE teams_profile SET num_matches_draw = num_matches_draw + 1 WHERE teamid = " . $winningTeamID . ";",$connection);
+@$site->execute_query("teams_profile", "UPDATE teams_profile SET num_matches_draw = num_matches_draw + 1 WHERE teamid = " . $losingTeamID . ";",$connection);
 }
 else
 {
-@$site->execute_query("teams_profile", "UPDATE teams_profile SET num_matches_won = num_matches_won + 1 WHERE teamid = " . $winningTeamID . ";",$dbc);
-@$site->execute_query("teams_profile", "UPDATE teams_profile SET num_matches_lost = num_matches_lost + 1 WHERE teamid = " . $losingTeamID . ";",$dbc);
+@$site->execute_query("teams_profile", "UPDATE teams_profile SET num_matches_won = num_matches_won + 1 WHERE teamid = " . $winningTeamID . ";",$connection);
+@$site->execute_query("teams_profile", "UPDATE teams_profile SET num_matches_lost = num_matches_lost + 1 WHERE teamid = " . $losingTeamID . ";",$connection);
 }
 writeToDebug("--------------------------------------");
 writeToDebug("End of Match Report");
@@ -267,6 +267,8 @@ writeToDebug("End of Match Report");
 echo "(+/- " . abs($eloDifference) . ") " . $winningTeamName . " [" . $winningTeamPoints . "] vs [" . $losingTeamPoints . "] " . $losingTeamName;
 // Have the league site perform maintainence as it sees fit
 ob_start();
+require_once ('Seasons/seasons.inc');
+update_seasons($timestamp);
 require_once ('CMS/maintenance/index.php');
 ob_end_clean();
 }
@@ -295,9 +297,9 @@ writeToDebug(" (" . $player . ") " . getPlayerCallsign($player));
 */
 function getPlayerCallsign($bzid)
 {
-global $site, $dbc;
+global $site, $connection;
 $query = "SELECT name FROM players WHERE external_playerid = " . sqlSafeString($bzid) . " LIMIT 1";
-$execution = @$site->execute_query('players', $query, $dbc);
+$execution = @$site->execute_query('players', $query, $connection);
 $results = mysql_fetch_array($execution);
 return $results[0];
 }
@@ -309,9 +311,9 @@ return $results[0];
 */
 function getTeamELO($teamID)
 {
-global $site, $dbc;
+global $site, $connection;
 $query = "SELECT score FROM teams_overview WHERE teamid = " . $teamID . " LIMIT 1";
-$execution = @$site->execute_query('teams', $query, $dbc);
+$execution = @$site->execute_query('teams', $query, $connection);
 $results = mysql_fetch_array($execution);
 return $results[0];
 }
@@ -323,9 +325,9 @@ return $results[0];
 */
 function getTeamID($players)
 {
-global $site, $dbc;
+global $site, $connection;
 $query = "SELECT teamid FROM players WHERE external_playerid IN (" . $players . ") AND status = 'active'";
-$execution = @$site->execute_query('players', $query, $dbc);
+$execution = @$site->execute_query('players', $query, $connection);
 // The specified BZIDs where not found to be in the same team, so return -1
 if (mysql_num_rows($execution) == 0)
 {
@@ -353,9 +355,9 @@ return $teamIDs[0];
 */
 function getTeamName($teamID)
 {
-global $site, $dbc;
+global $site, $connection;
 $query = "SELECT `name` FROM `teams` WHERE `id` = " . $teamID . " LIMIT 1";
-$execution = @$site->execute_query('teams', $query, $dbc);
+$execution = @$site->execute_query('teams', $query, $connection);
 $results = mysql_fetch_array($execution);
 return $results[0];
 }

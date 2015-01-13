@@ -85,7 +85,6 @@
 			
 			if (!($updateresult = $site->execute_query('seasons_results', $query, $connection)))
 			{
-				unlock_tables();
 				$site->dieAndEndPage('The seasons results match calulations could not be updated due to a sql problem!');
 			}
 			unset($teamid);
@@ -104,7 +103,6 @@
 			
 		if (!($result = $site->execute_query('seasons_results', $query, $connection)))
 			{
-				unlock_tables();
 				$site->dieAndEndPage('The seasons results points could not be updated due to a sql problem!');
 			}
 			
@@ -120,7 +118,6 @@
 		
 		if (!($result = @$site->execute_query('seasons, seasons_results', $query, $connection)))
 		{
-			unlock_tables();
 			$site->dieAndEndPage('Could not get best teams due to a sql problem!');
 		}
 		//go trough teams:	
@@ -133,12 +130,10 @@
 				
 			if (!($resultupdate = $site->execute_query('seasons', $query, $connection)))
 				{
-					unlock_tables();
 					$site->dieAndEndPage('The seasons best teams could not be updated due to a sql problem!');
 				}
 			$place_no++;
 		}
-		unlock_tables();
 	}
 	
 	function rankingLogo($score)
@@ -206,5 +201,7 @@
 		echo '</span>';
 		
 	}
+	
+	
 	
 ?>
