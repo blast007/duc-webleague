@@ -22,7 +22,7 @@ if ( (isset($_GET['bzbbauth'])) && ($_GET['bzbbauth']) )
 	
 	// groups used for permissions
 	// each group can use the fine grained permission system
-	$groups = Array ('VERIFIED','DUC.LEAGUE','DUCATI.REFEREE','DUCATI.COUNCIL');
+	$groups = Array ('VERIFIED','DUC.LEAGUE','DUCATI.REFEREE','DUCATI.COUNCIL','DUCATI.SITEADMIN');
 	$args = explode (',', urldecode($_GET['bzbbauth']));
 	// $args[0] is token, $args[1] is callsign
 	if (!$info = validate_token ($args[0], $args[1], $groups, false))
@@ -129,7 +129,7 @@ if ( (isset($_GET['bzbbauth'])) && ($_GET['bzbbauth']) )
 	
 	// test only for DUCATI.COUNCIL group
 	$in_group = false;
-	$group_test = array_slice($groups, -1, 1);
+	$group_test = array_slice($groups, 3, 1);
 	foreach ($info['groups'] as $one_group)
 	{
 		// case insensitive comparison
@@ -146,6 +146,92 @@ if ( (isset($_GET['bzbbauth'])) && ($_GET['bzbbauth']) )
 			echo '<p>DUC league council detected</p>';
 		}
 		// DUCATI.COUNCIL group
+		
+		// can change debug sql setting
+		allow_change_debug_sql();
+		
+		// permissions for news page
+		allow_add_news();
+		allow_edit_news();
+		allow_delete_news();
+		
+		
+		// permissions for spawnlist page
+		allow_add_spawnlist();
+		allow_edit_spawnlist();
+		allow_delete_spawnlist();
+		
+		// permissions for all static pages
+		allow_edit_static_pages();
+		
+		// permissions for bans page
+		allow_add_bans();
+		allow_edit_bans();
+		allow_delete_bans();
+		
+		// sitebans
+		allow_manage_sitebans();
+		
+		// permissions for team page
+		allow_kick_any_team_members();
+		allow_edit_any_team_profile();
+		allow_invite_in_any_team();
+		allow_delete_any_team();
+		allow_reactivate_teams();
+		
+		// user permissions
+		allow_edit_any_user_profile();
+		allow_add_admin_comments_to_user_profile();
+		allow_ban_any_user();
+		allow_assign_user_bbid();
+		
+		// visits log permissions
+		allow_view_user_visits();
+		
+		// match permissions
+		allow_add_match();
+		allow_edit_match();
+		allow_delete_match();
+		
+		//seasons permissions
+		allow_add_season();
+		allow_edit_season();
+		allow_delete_season();
+		
+		// server tracker permissions
+		allow_watch_servertracker();
+		allow_manage_servers();
+		
+		// TODO permissions
+		allow_view_todo();
+		allow_edit_todo();
+		
+		// aux permissions
+		is_admin();
+		allow_use_shoutbox();
+		allow_vote_polls();
+		allow_moderate_shoutbox();
+		allow_manage_polls();
+	}
+	// test only for DUCATI.SITEADMIN group
+	$in_group = false;
+	$group_test = array_slice($groups, 4, 1);
+	foreach ($info['groups'] as $one_group)
+	{
+		// case insensitive comparison
+		if (strcasecmp($one_group, $group_test[0]) === 0)
+		{
+			$in_group = true;
+			break;
+		}
+	}
+	if ($in_group === true)
+	{
+		if ($site->debug_sql())
+		{
+			echo '<p>DUC site admin detected</p>';
+		}
+		// DUCATI.SITEADMIN group
 		
 		// can change debug sql setting
 		allow_change_debug_sql();
