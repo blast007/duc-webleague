@@ -490,11 +490,11 @@ function ago($datefrom,$dateto=-1)
                 $datediff = floor($difference / 60 / 60);
                 $res = ($datediff==1) ? $datediff.' hour ago' : $datediff.' hours ago';
                 break;
-            // If difference is between 1 day and 7 days
+            // If difference is between 1 day and 10 days
             // days is a good interval               
-            case(strtotime('-1 week', $dateto) < $datefrom):
+            case(strtotime('-10 days', $dateto) < $datefrom):
                 $day_difference = 1;
-                while (strtotime('-'.$day_difference.' day', $dateto) >= $datefrom)
+                while (strtotime('-'.$day_difference.' day', $dateto) > $datefrom)
                 {
                     $day_difference++;
                 }
@@ -506,7 +506,7 @@ function ago($datefrom,$dateto=-1)
             // weeks is a good interval           
             case(strtotime('-1 month', $dateto) < $datefrom):
                 $week_difference = 1;
-                while (strtotime('-'.$week_difference.' week', $dateto) >= $datefrom)
+                while (strtotime('-'.($week_difference).' week - 4 days', $dateto) >= $datefrom)
                 {
                     $week_difference++;
                 }
@@ -521,7 +521,7 @@ function ago($datefrom,$dateto=-1)
             // the 'incorrect' value for a day
             case(strtotime('-1 year', $dateto) < $datefrom):
                 $months_difference = 1;
-                while (strtotime('-'.$months_difference.' month', $dateto) >= $datefrom)
+                while (strtotime('-'.$months_difference.' month - 2 weeks', $dateto) > $datefrom)
                 {
                     $months_difference++;
                 }
@@ -538,7 +538,7 @@ function ago($datefrom,$dateto=-1)
             // a year has gone by
             case(strtotime('-1 year', $dateto) >= $datefrom):
                 $year_difference = 1;
-                while (strtotime('-'.$year_difference.' year', $dateto) >= $datefrom)
+                while (strtotime('-'.$year_difference.' year', $dateto) > $datefrom)
                 {
                     $year_difference++;
                 }

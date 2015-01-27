@@ -331,6 +331,7 @@
 							{
 								$site->dieAndEndPageNoBox('The rewards for team season results could not be submitted because of an SQL/database connectivity problem.');
 							}											
+							update_last_match_before_for_team($teamid, $enddate, $newrank);
 							echo '<p>New rank for a team ' . $teamname . ' set to ' .$newrank .'. Old rank was ' . $oldrank . '</p>' . "\n";
 							unset($row);
 						}	
@@ -350,6 +351,39 @@
 	if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'])
 	{
 		setTableUnchanged($site, $connection);
+	}
+	
+	
+	function update_last_match_before_for_team($teamid, $timestamp, $newscore)
+	{
+		global $site;
+		global $connection;
+		
+		$query = ('SELECT `id`, `team1_teamid`, `team2_teamid` FROM `matches`'
+				  . ' WHERE `timestamp`<'
+				  . sqlSafeStringQuotes($timestamp)
+				  . ' AND (`team1_teamid`=' . sqlSafeStringQuotes($teamid)
+				  . ' OR `team2_teamid`=' . sqlSafeStringQuotes($teamid) . ')'
+				  . ' ORDER BY `timestamp` DESC LIMIT 0,1');
+		if (!($result = $site->execute_query('matches', $query, $connection)))
+		{
+			$site->dieAndEndPage('Unfortunately there seems to be a database problem'
+								 . ' and thus comparing timestamps of matches failed.');
+		}
+		while ($row = mysql_fetch_array($result))
+		{
+			if ($row['team1_teamid'] == $teamid) 
+			{
+				$query = 'UPDATE `matches` SET `team1_new_score` = ' . $newscore . ' WHERE id = ' . $row['id'];
+				$site->execute_query('matches',$query , $connection);
+			}
+			else  
+			{
+				$query = 'UPDATE `matches` SET `team2_new_score` = ' . $newscore . ' WHERE id = ' . $row['id'];
+				$site->execute_query('matches',$query , $connection);				
+			}
+		}
+	
 	}
 	
 	function rankingLogo($score)
