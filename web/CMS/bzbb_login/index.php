@@ -66,21 +66,8 @@ if ( (isset($_GET['bzbbauth'])) && ($_GET['bzbbauth']) )
 	
 	
 	
-		// test only for DUC.LEAGUE group
-	$group_test = array_slice($groups, 1, 1);
-	$in_group = false;
-	foreach ($info['groups'] as $one_group)
-	{
-		// case insensitive comparison
-		if (strcasecmp($one_group, $group_test[0]) === 0)
-		{
-			$in_group = true;
-			break;
-		}
-	}
-	unset($one_group);
-	
-	if ($in_group === true)
+	// test only for DUC.LEAGUE group
+	if (in_array($groups[1], $info['groups']))
 	{
 		if ($site->debug_sql())
 		{
@@ -95,20 +82,7 @@ if ( (isset($_GET['bzbbauth'])) && ($_GET['bzbbauth']) )
 	
 	
 	// test only for DUCATI.REFEREE group
-	$group_test = array_slice($groups, 2, 1);
-	$in_group = false;
-	foreach ($info['groups'] as $one_group)
-	{
-		// case insensitive comparison
-		if (strcasecmp($one_group, $group_test[0]) === 0)
-		{
-			$in_group = true;
-			break;
-		}
-	}
-	unset($one_group);
-	
-	if ($in_group === true)
+	if (in_array($groups[2], $info['groups']))
 	{
 		if ($site->debug_sql())
 		{
@@ -128,18 +102,7 @@ if ( (isset($_GET['bzbbauth'])) && ($_GET['bzbbauth']) )
 	}
 	
 	// test only for DUCATI.COUNCIL group
-	$in_group = false;
-	$group_test = array_slice($groups, 3, 1);
-	foreach ($info['groups'] as $one_group)
-	{
-		// case insensitive comparison
-		if (strcasecmp($one_group, $group_test[0]) === 0)
-		{
-			$in_group = true;
-			break;
-		}
-	}
-	if ($in_group === true)
+	if (in_array($groups[3], $info['groups']))
 	{
 		if ($site->debug_sql())
 		{
@@ -214,18 +177,7 @@ if ( (isset($_GET['bzbbauth'])) && ($_GET['bzbbauth']) )
 		allow_manage_polls();
 	}
 	// test only for DUCATI.SITEADMIN group
-	$in_group = false;
-	$group_test = array_slice($groups, 4, 1);
-	foreach ($info['groups'] as $one_group)
-	{
-		// case insensitive comparison
-		if (strcasecmp($one_group, $group_test[0]) === 0)
-		{
-			$in_group = true;
-			break;
-		}
-	}
-	if ($in_group === true)
+	if (in_array($groups[4], $info['groups']))
 	{
 		if ($site->debug_sql())
 		{
